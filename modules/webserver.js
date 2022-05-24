@@ -9,14 +9,14 @@ class Webserver {
     // DEFAULT CONFIG
     //
     config = {
-        hp3:  null,
         port:   5000,
-        apps:   './apps',
-        media:  null
+        apps:   './apps'
     }
 
-    constructor(config)
+    constructor(hplayer3, config)
     {
+      this.hp3 = hplayer3
+
       // APPLY CONFIG
       //
       for(var prop in config) this.config[prop]=config[prop];
@@ -28,20 +28,21 @@ class Webserver {
 
       // DEFAULT index
       this.app.get('/', function(req, res) {
-        res.set('Content-Type', 'text/html');
-        res.send(Buffer.from('HPlayer3'));
+        // res.set('Content-Type', 'text/html');
+        // res.send(Buffer.from('HPlayer3'));
+        res.redirect(307, '/controller');
       });
 
       // WEBAPPS
       this.app.use(express.static(this.config.apps))
 
       // MEDIAS
-      if (this.config.media)
-        this.app.use('/media', express.static(this.config.media.path))
+      if (this.hp3.media)
+        this.app.use('/media', express.static(this.hp3.media.path))
 
       // CONF
-      if (this.config.conf)
-        this.app.use('/conf', express.static(this.config.conf.path))
+      if (this.hp3.conf)
+        this.app.use('/conf', express.static(this.hp3.conf.path))
 
       // HTTP bind
       this.http = http.createServer(this.app)
