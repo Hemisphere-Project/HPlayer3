@@ -64,20 +64,23 @@ class HProxy {
 
 class HPlayer3 extends HModule {
 
-    config = {
-        controls: false     // enable keyboard controls
-    }
-
     constructor(config) {
         super()
 
         // CONFIG
         //
+        this.config = {
+            controls: false     // enable keyboard controls
+        }
         for(var prop in config) this.config[prop]=config[prop];  
+
+        // LOGS
+        //
+        this.logger = new Divlogger()
 
         // CONTROLS
         //
-        if (this.config.controls) this.controls()
+        // if (this.config.controls) this.controls()
 
         // SOCKET.IO
         //
@@ -130,7 +133,7 @@ class HPlayer3 extends HModule {
 
             // C / 0 : Console
             if(key == 'c' || key == '0') {
-                $('#log').toggle()
+                this.logger.toggle()
             }
             
         })
@@ -139,14 +142,44 @@ class HPlayer3 extends HModule {
 }
 
 
-// // DIV-LOGGER
-// console.log = function(...m) {
-//     message = ''
-//     for (let i=0; i<m.length; i++) message += ' '+m[i]
-//     console.olog(message);
-//     $('#log').append(message + '<br />');
+// DIV-LOGGER
+//
+class Divlogger {
 
-//     var elem = document.getElementById('log');
-//     elem.scrollTop = elem.scrollHeight;
-// };
-// print = console.error = console.debug = console.info =  console.log
+    constructor() {
+
+        // OVERLAY LOG DIV
+        //
+        this.logdiv = $('<div style="border: 1px solid green; width: 250px; right: 20px; top: 20px; max-height: 523px;" id="log"></div>').hide().appendTo('body')
+
+        // SUPERCHARGE CONSOLE.LOG
+        //
+        if (typeof console  != "undefined") 
+            if (typeof console.log != 'undefined')
+                console.olog = console.log;
+            else
+                console.olog = function() {};
+
+        console.log = function(...m) {
+            var message = ''
+            for (let i=0; i<m.length; i++) message += ' '+m[i]
+            console.olog(message);
+            $('#log').append(message + '<br />');
+
+            var elem = document.getElementById('log');
+            if (elem)
+            elem.scrollTop = elem.scrollHeight;
+        };
+        print = console.error = console.debug = console.info =  console.log
+    }
+
+    toggle(force) 
+    {
+        if (force === true) this.logdiv.show()
+        else if (force === false) this.logdiv.hide()
+        else this.logdiv.toggle()
+    }
+}
+
+
+
