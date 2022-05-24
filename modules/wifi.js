@@ -45,6 +45,8 @@ class WifiPI extends Wifi {
         if (!name) return false
         execSync('hostrename '+name)
         this.log("hostname changed to ", this.getName())
+        execSync('setnet')
+        this.log("hotspot ssid updated to", this.getName())
         return true
     }
 
