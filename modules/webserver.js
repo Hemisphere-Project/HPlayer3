@@ -52,6 +52,7 @@ class Webserver {
       }));
 
       this.app.post('/upload-files', async (req, res) => {
+
         try {
           if (!req.files) {
             res.send({
@@ -59,6 +60,9 @@ class Webserver {
               message: 'No file uploaded'
             });
           } else {
+
+            this.log('Uploading...')
+
             // if array - forEach move, if not, move
             if (Array.isArray(req.files.myfiles)) {
               req.files.myfiles.forEach((item, i) => {
@@ -67,6 +71,9 @@ class Webserver {
             } else {
               req.files.myfiles.mv( fspath.join(this.config.media.path, req.files.myfiles.name) );
             }
+
+            this.log('Upload OK')
+
             // refresh files
             this.config.media.buildTree()
 

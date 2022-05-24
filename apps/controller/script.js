@@ -232,7 +232,7 @@ $(function() {
 
 
   // define URL and for element
-  const url = "http://localhost:5000/upload-files"
+  const url = "/upload-files"
   const form = document.querySelector('form')
 
   // add event listener
@@ -261,14 +261,16 @@ $(function() {
     const xhr = new XMLHttpRequest()
     // response
     xhr.onload = () => {
-      console.log(xhr.responseText)
+      // console.log(xhr)
       $('#progressBar').removeClass('visible').addClass('invisible')
       document.querySelector('[name=fileInput]').value='';
+      console.log('Upload OK')
       refreshTree()
     }
     // error
-    xhr.onerror = () => {
+    xhr.onerror = (err) => {
       $('#progressBar').removeClass('visible').addClass('invisible')
+      console.warn('Upload error', err)
     }
     xhr.upload.onprogress = (event) => {
       var percent = (event.loaded / event.total)*100

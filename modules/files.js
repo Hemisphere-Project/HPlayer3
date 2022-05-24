@@ -5,7 +5,7 @@ const fspath = require('path')
 const chokidar = require('chokidar')
 
 const ext_images = ['jpg', 'jpeg', 'png', 'gif']
-const ext_videos = ['mp4', 'webm', 'mov', 'ogv']
+const ext_videos = ['mp4', 'webm', 'mov', 'ogv', 'mkv']
 const ext_sounds = ['mp3', 'wav', 'aiff']
 const ext_text   = ['txt']
 
@@ -32,7 +32,7 @@ class Files {
     debounceRefresh()
     {
         clearTimeout(this.refreshTimer)
-        this.refreshTimer = setTimeout( () => {this.buildTree()}, 100)
+        this.refreshTimer = setTimeout( () => {this.buildTree()}, 3000)
 
     }
 
@@ -95,7 +95,7 @@ class Files {
         let tree = this.mytree
 
         // Dig into sub directories
-        if (relative_path !== undefined)
+        if (relative_path)
         {
             relative_path.split('/').forEach( (dir)=>{
                 tree = tree
