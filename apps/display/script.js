@@ -109,7 +109,7 @@ $(function() {
 
   
   //////////////// PLAYER ////////////////
-  hplayer3.registerPlayer( $("#videoplayer")[0], "player")
+  hplayer3.registerPlayer( "#videoplayer", "player")
 
 
   //////////////// VIDEO ////////////////
