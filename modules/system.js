@@ -1,18 +1,25 @@
+const Module = require('./module.js')
+const Audio = require('./audio.js')
+var Config = require('./config.js')
 const { execSync } = require('child_process');
 const fs = require('fs')
+const os = require("os");
 
-class System {
-
+class System extends Module 
+{
 
   constructor(hplayer3)
   {
-    this.hp3 = hplayer3
+    super('system', hplayer3)
 
     // LOAD CONFIG
-    this.config = new Config(this.hp3.conf.path+'/hplayer3.conf')
+    this.config = new Config(hplayer3)
+
+    // AUDIO
+    this.audio = new Audio(hplayer3)
+    this.audio.configure( this.config )
 
     // APPLY CONFIG
-    this.audioselect( this.config.get('audioselect') )
     this.videorotate( this.config.get('videorotate') )
     this.videoflip( this.config.get('videoflip') )
 
@@ -48,32 +55,6 @@ class System {
 
   getConf(){
     return this.config._config
-  }
-
-
-  audioselect(out){
-
-    if (out == 'hdmi') out = 'hdmi0'
-
-    // get current mode
-    try {
-      let currentOut = String(execSync("sed -n -e '/^pcm.!default/p' /etc/asound.conf")).trim().split(' ')[1]
-      if (out != currentOut) {
-        execSync("rw")
-        execSync("sed -i 's/pcm.!default .*/pcm.!default "+out+"/g' /etc/asound.conf")
-        execSync("sed -i 's/ctl.!default .*/ctl.!default "+out+"/g' /etc/asound.conf")
-        execSync("ro")
-        // TODO: move that into audioselect script in Pi-tools !
-
-        this.config.set('audioselect', out)
-        this.log('switching audio to ', out)
-        this.restartkiosk()
-      }
-    }
-    catch(err) {
-      this.log('error when selecting audio out')
-    }
-
   }
 
 
@@ -151,84 +132,7 @@ class System {
 
   }
 
-
-  log(...v) {
-    console.log(`[system]`, ...v)
-  }
-
 }
 
-
-class Config {
-
-  // DEFAULT CONFIG
-  _config = {
-    ssid: 'device_name',
-    pass: 'Museo69*',
-    wifiOff: true,
-    audioselect: 'jack',
-    audiovolume: 80,
-    videorotate: 0,
-    videoflip: false,
-    videofade: 0,
-    modules: ['tactile', 'connector'],
-    theme: 'default'
-  }
-
-  configFile = null
-
-  constructor(path)
-  {
-    this.configFile = path
-
-    // load from file
-    if (this.configFile)
-      try {
-        const data = fs.readFileSync(this.configFile);
-        var conf = JSON.parse(data)
-        for(var prop in conf) this._config[prop]=conf[prop]
-        this.log('loaded from', this.configFile);
-      }
-      catch(err) {
-        this.log('No config loaded... using default. ')
-        this.save() // save clean file if previous one was broken..
-      }
-
-  }
-
-  save()
-  {
-    if (!this.configFile) {
-      this.log('cannot save: no config file provided..')
-      return
-    }
-
-    try {
-      fs.writeFileSync(this.configFile, JSON.stringify(this._config, null, 2), 'utf8');
-      this.log('saved !');
-    }
-    catch (error) {
-      this.log('Error while saving config: ', error);
-    }
-
-  }
-
-  set(entry, value)
-  {
-    if (this._config[entry] != value) {
-      this._config[entry] = value
-      if (this.configFile) this.save()
-    }
-  }
-
-  get(entry)
-  {
-    return this._config[entry]
-  }
-
-  log(...v) {
-    console.log(`[config]`, ...v)
-  }
-}
 
 module.exports = System

@@ -3,6 +3,7 @@ var Files = require('./modules/files.js')
 var Webserver = require('./modules/webserver.js')
 var Socketio = require('./modules/socketio.js')
 var System = require('./modules/system.js')
+var Wifi = require('./modules/wifi.js')
 var isPi = require('detect-rpi');
 
 var hplayer3 = {}
@@ -12,12 +13,15 @@ var basepath = __dirname            // Default: local directory
 if (isPi()) basepath = '/data'      // On RPi: use /data
 
 // FILES
-hplayer3.media = new Files( basepath, 'media' )
-hplayer3.conf  = new Files( basepath, 'conf' ) 
+hplayer3.files = {
+    media: new Files( basepath+'/media' ),
+    conf:  new Files( basepath+'/conf' ) 
+}
 
 // SYSTEM
 //
-hplayer3.system   = new System(hplayer3)
+hplayer3.wifi   = new Wifi()
+hplayer3.system = new System(hplayer3)
 
 // FILE SERVER
 //

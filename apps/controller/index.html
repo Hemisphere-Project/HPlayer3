@@ -47,7 +47,8 @@
           </div>
           <div class="fader" id="scrollbar">
             <div class="faderContainer"><div class="faderFiller"></div></div>
-            <div class="faderValue">0 : 00</div>
+            <div class="faderDisplay"></div>
+            <input type="hidden" class="faderValue" value="">
           </div>
         </div>
 
@@ -94,16 +95,17 @@
           <div class="minigrid">
             <div class="minisection">
               <div class="title_small">Audio</div>
-              <input type="radio" name="audioselect" value="jack">
+              <input type="radio" name="audioout" value="jack">
               <label for="minijack">Jack</label><br>
-              <input type="radio" name="audioselect" value="hdmi0">
+              <input type="radio" name="audioout" value="hdmi0">
               <label for="hdmi0">Hdmi 0</label><br>
-              <input type="radio" name="audioselect" value="hdmi1">
+              <input type="radio" name="audioout" value="hdmi1">
               <label for="hdmi1">Hdmi 1</label><br>
               <div>Volume</div>
-              <div class="fader" id="volumeAudio" unit="%" max="100">
+              <div class="fader" name="audiovolume" unit="%" max="100">
                 <div class="faderContainer"><div class="faderFiller"></div></div>
-                <div class="faderValue">0 %</div>
+                <div class="faderDisplay"></div>
+                <input type="hidden" class="faderValue" value="">
               </div>
             </div>
             <div class="minisection">
@@ -120,7 +122,8 @@
               <div>Fade In</div>
               <div class="fader" id="fadeInVideo" unit="ms" max="200">
                 <div class="faderContainer"><div class="faderFiller"></div></div>
-                <div class="faderValue">200 ms</div>
+                <div class="faderDisplay"></div>
+                <input type="hidden" class="faderValue" value="">
               </div>
             </div>
           </div>
@@ -157,8 +160,8 @@
             </div>
             <div class="minisection">
               <div class="title_small">WIFI</div>
-              SSID: <div class="editableText deviceName">device_name</div><br>
-              PASS: <div class="editableText devicePassword">Museo69*</div><br>
+              SSID: <div class="editableText deviceName" id="wifiSsid">device_name</div><br>
+              PASS: <div class="editableText devicePassword" id="wifiPass">Museo69*</div><br>
               <input type="checkbox" name="wifiOff" id="wifiOff">
               <label for="wifiOff">Turn off wifi after 15 min </label><br>
             </div>

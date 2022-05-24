@@ -1,10 +1,10 @@
-
+const Module = require('./module.js')
 const express = require('express')
 const http = require('http')
 const fileUpload = require('express-fileupload');
 const fspath = require('path')
 
-class Webserver {
+class Webserver extends Module {
 
     // DEFAULT CONFIG
     //
@@ -15,7 +15,9 @@ class Webserver {
 
     constructor(hplayer3, config)
     {
-      this.hp3 = hplayer3
+      super('webserver', hplayer3)
+
+      
 
       // APPLY CONFIG
       //
@@ -37,12 +39,12 @@ class Webserver {
       this.app.use(express.static(this.config.apps))
 
       // MEDIAS
-      if (this.hp3.media)
-        this.app.use('/media', express.static(this.hp3.media.path))
+      if (this.hp3.files.media)
+        this.app.use('/media', express.static(this.hp3.files.media.path))
 
       // CONF
-      if (this.hp3.conf)
-        this.app.use('/conf', express.static(this.hp3.conf.path))
+      if (this.hp3.files.conf)
+        this.app.use('/conf', express.static(this.hp3.files.conf.path))
 
       // HTTP bind
       this.http = http.createServer(this.app)
@@ -93,10 +95,6 @@ class Webserver {
         }
       });
 
-    }
-
-    log(...v) {
-      console.log(`[webserver]`, ...v)
     }
 
 }
