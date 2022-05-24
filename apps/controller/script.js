@@ -271,6 +271,7 @@ $(function() {
     Array.from(files).forEach(file => {
       formData.append("myfiles", file)
     })
+    formData.append("destination", activeFolder)
     $('#progressBar').removeClass('invisible').addClass('visible')
     // post form data
     const xhr = new XMLHttpRequest()
