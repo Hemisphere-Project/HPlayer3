@@ -86,10 +86,10 @@ $(function() {
   }
 
 
-  
+
   var allFiles = new Array()
   var allVideos = new Array()
-  
+
   //////////////// HPLAYER3 ////////////////
 
   var hplayer3 = new HPlayer3({controls:true})
@@ -107,7 +107,7 @@ $(function() {
           });
         })
 
-  
+
   //////////////// VIDEO ////////////////
   function video(item){
 
