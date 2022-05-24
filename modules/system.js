@@ -132,6 +132,12 @@ class System extends Module
 
   }
 
+  selectTheme(theme){
+    this.config.set('theme', theme)
+    this.restartkiosk()
+  }
+
+
 }
 
 

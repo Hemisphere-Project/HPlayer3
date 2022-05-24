@@ -96,8 +96,8 @@ img{
   top: 15px;
   right:15px;
 }
-.overlay .codeEditor{
-}
+.CodeMirror { background: rgb(40, 40, 40, 1) !important; }
+
 .overlayReboot, .overlayGit{
   text-align: center;
 }
