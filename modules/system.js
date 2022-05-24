@@ -65,6 +65,7 @@ class System extends Module
     degree = degree % 360
     if (degree%90 == 0) {
 
+      // TODO: this is KIOSK / PI specific !
       try {
         let currentMode = String(execSync("sed -n -e '/^ROTATE/p' /boot/kiosk.conf")).trim().split('=')[1]
         let newMode = currentMode
@@ -105,6 +106,7 @@ class System extends Module
 
   setVideoflip(doFlip){
 
+    // TODO: thisi Kiosk / PI specific
     try {
       let currentMode = String(execSync("sed -n -e '/^ROTATE/p' /boot/kiosk.conf")).trim().split('=')[1]
       let newMode = currentMode
@@ -143,8 +145,33 @@ class System extends Module
   }
 
   setTheme(theme){
-    this.config.set('theme', theme)
-    this.restartkiosk()
+
+    // TODO : check if theme is valid !
+
+    // TODO : this is Kiosk / PI Specific !
+    try {
+      let currentThemeUrl = String(execSync("sed -n -e '/^URL/p' /boot/kiosk.conf")).trim().split('=')[1]
+      let newThemeUrl = `http://localhost:${this.hp3.webserver.port}/${theme}`
+
+      if (newThemeUrl != currentThemeUrl)
+      {
+        execSync("rw")
+        var cmd = "sed -i 's/URL=.*/URL="+newThemeUrl.replace(/\//g, '\\/')+"/g' /boot/kiosk.conf"
+        // this.log( cmd)
+        execSync(cmd)
+        execSync("ro")
+
+        this.config.set('theme', theme)
+        this.log('new kiosk url', newThemeUrl)
+
+        this.restartkiosk()
+      }
+
+    }
+    catch(err) {
+      this.log('error when setting theme URL')
+    }
+
   }
 
   getModuleState(module){
