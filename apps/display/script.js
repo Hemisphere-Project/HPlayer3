@@ -1,6 +1,6 @@
 
 // /media subdirectory
-var mediaFolder = "gallery1"
+var mediaSubfolder = ""
 
 $(function() {
 
@@ -92,12 +92,15 @@ $(function() {
   
   //////////////// HPLAYER3 ////////////////
 
-  var hplayer3 = new HPlayer3()
+  var hplayer3 = new HPlayer3({controls:true})
 
-  hplayer3.media.getTree('gallery1')
+
+
+  hplayer3.media.getTree(mediaSubfolder)
       .catch( error => console.warn(error) )
       .then( data => {
-          allFiles = data
+        console.log(data)
+          allFiles = data.fileTree
           $('#page_browser .grid').empty()
           allFiles.forEach((item, i) => {
             if(item.type=='video') allVideos.push(new video(item))
@@ -117,7 +120,7 @@ $(function() {
     this.thumb = $('<div class="image_wrapper"><img class="thumb" src="img/not_found.png"></div>').appendTo(this.preview)
     allFiles.forEach((item, i) => {
       if((item.raw_name==thisItem.raw_name)&&(item.type=='image')) {
-        that.thumb.find('img').attr('src', '/media/'+mediaFolder+'/'+item.name)
+        that.thumb.find('img').attr('src', '/media/'+mediaSubfolder+'/'+item.name)
       }
     });
 
@@ -125,7 +128,7 @@ $(function() {
     this.desc = $('<div class="infos">'+thisItem.name+'</div>').appendTo(this.preview)
     const textExist = allFiles.some(item => ((item.raw_name === thisItem.raw_name)&&(item.type === 'text')) );
     if (textExist) {
-      $.get('/media/'+mediaFolder+'/'+thisItem.raw_name +'.txt', function(txt) {
+      $.get('/media/'+mediaSubfolder+'/'+thisItem.raw_name +'.txt', function(txt) {
         that.desc.empty()
         that.desc.append(txt)
       }, 'text')
@@ -133,7 +136,7 @@ $(function() {
 
     // GO
     this.preview.click(function(){
-      launchVideo('/media/'+mediaFolder+'/'+thisItem.name)
+      launchVideo('/media/'+mediaSubfolder+'/'+thisItem.name)
     })
 
 

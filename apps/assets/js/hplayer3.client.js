@@ -63,8 +63,21 @@ class HProxy {
 
 
 class HPlayer3 extends HModule {
-    constructor() {
+
+    config = {
+        controls: false     // enable keyboard controls
+    }
+
+    constructor(config) {
         super()
+
+        // CONFIG
+        //
+        for(var prop in config) this.config[prop]=config[prop];  
+
+        // CONTROLS
+        //
+        if (this.config.controls) this.controls()
 
         // SOCKET.IO
         //
@@ -99,4 +112,41 @@ class HPlayer3 extends HModule {
         return new HProxy(this.sio, prop);
     }
 
+
+    //
+    // Enable keyboard/mouse control
+    //
+    controls() 
+    {
+        $(window).keypress(function(e) {
+                    
+            var key = String.fromCharCode(e.which).toLowerCase();
+            console.log('>', key, e.which)
+
+            // R / 7 : Refresh
+            if(key == 'r' || key == '7') {
+                location.reload()
+            }
+
+            // C / 0 : Console
+            if(key == 'c' || key == '0') {
+                $('#log').toggle()
+            }
+            
+        })
+    }
+
 }
+
+
+// // DIV-LOGGER
+// console.log = function(...m) {
+//     message = ''
+//     for (let i=0; i<m.length; i++) message += ' '+m[i]
+//     console.olog(message);
+//     $('#log').append(message + '<br />');
+
+//     var elem = document.getElementById('log');
+//     elem.scrollTop = elem.scrollHeight;
+// };
+// print = console.error = console.debug = console.info =  console.log
