@@ -82,6 +82,10 @@ class HPlayer3 extends HModule {
         //
         if (this.config.controls) this.controls()
 
+        // PLAYERS
+        //
+        this._players = {}
+
         // SOCKET.IO
         //
         this.sio = io()
@@ -139,7 +143,99 @@ class HPlayer3 extends HModule {
         })
     }
 
+    //
+    // Video handler -> call this to link a front video Element to the backend
+    //
+    registerPlayer(videoEl, name)
+    {
+        if( this._players.hasOwnProperty(name) ) {
+            console.error("A video player already exists with this name:", name)
+            return
+        }
+
+        this._players[name] = new VideoPlayer(videoEl, name)
+    }
+
+    //
+    // Obtain Video handler
+    //
+    getPlayer(name) 
+    {
+        return this._players[name]
+    }
+
+
 }
+
+
+// VIDEO PLAYER
+//
+class VideoPlayer {
+
+    constructor(videoEl, name) {
+        this.videoEl = $(videoEl)
+        this.name = name
+
+        this.videoEl[0].loop = false
+        this.videoEl[0].mute = false
+
+        // ENDED HARDFIX WATCHER
+        //
+        this.endWatchCounter = 0
+        this.endWatchMAX = 5
+        this.endedWatcher = setInterval(()=>{
+            if ((this.videoEl[0].duration-this.videoEl[0].currentTime < 0.04 && !this.videoEl[0].paused)) 
+                if (this.endWatchCounter < this.endWatchMAX) this.endWatchCounter += 1
+                else
+                {
+                    console.log('[VIDEO/'+this.name+'] ended (hard fix)')
+                    this.videoEl[0].pause()
+                }
+        }, 10)
+
+        this.videoEl[0].addEventListener('loadedmetadata', () => {
+            this.endWatchCounter = 0
+            console.log('[VIDEO/'+this.name+'] loaded');
+        }, false);
+
+        //  paused and playing events to control buttons
+        this.videoEl[0].addEventListener("pause", () => {
+            console.log('[VIDEO/'+this.name+'] paused');
+
+            // ENDED HARDFIX
+            if (this.endWatchCounter == this.endWatchMAX) {
+                this.endWatchCounter = 0
+                this.videoEl[0].dispatchEvent( new Event('ended') );
+            }
+        }, false);
+
+        this.videoEl[0].addEventListener("playing", () => {
+            this.endWatchCounter = 0
+            console.log('[VIDEO/'+this.name+'] playing');
+        }, false);
+
+        this.videoEl[0].addEventListener("ended", () => {
+            // BROKEN ! use hard fix instead
+            this.endWatchCounter = 0
+            console.log('[VIDEO/'+this.name+'] ended');
+        }, false);
+
+        this.videoEl[0].addEventListener("stalled", () => {
+            console.log('[VIDEO/'+this.name+'] stalled');
+        }, false);
+
+        this.videoEl[0].addEventListener("timeupdate", () => {
+            // console.log('[VIDEO/'+this.name+'] time', this.videoEl.currentTime, this.videoEl.duration, this.videoEl.paused);
+        }, false);
+
+
+        
+    }
+
+    
+
+}
+
 
 
 // DIV-LOGGER
@@ -150,7 +246,7 @@ class Divlogger {
 
         // OVERLAY LOG DIV
         //
-        this.logdiv = $('<div style="border: 1px solid green; width: 400px; right: 20px; top: 20px; max-height: 523px; position: absolute; background-color: black; color: white;" id="log">LOGS<br /></div>').hide().appendTo('body')
+        this.logdiv = $('<div style="border: 1px solid green; width: 400px; right: 20px; top: 20px; max-height: 523px; overflow:auto; position: absolute; background-color: black; color: white; z-index:1000;" id="log">LOGS<br /></div>').hide().appendTo('body')
 
         // SUPERCHARGE CONSOLE.LOG
         //

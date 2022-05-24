@@ -36,7 +36,7 @@ $(function() {
       $('.scrollbar_tick').css('margin-left', percent+'%')
       $('.scrollbar_time').text(secondsToTime(currentTime))
       // if no 'ended' event
-      if ((videoDuration-currentTime < 0.05 && !$("#videoplayer")[0].paused)){ stopVideo() }
+      // if ((videoDuration-currentTime < 0.05 && !$("#videoplayer")[0].paused)){ stopVideo() }
     }, 20)
   }
 
@@ -96,8 +96,6 @@ $(function() {
 
   var hplayer3 = new HPlayer3({controls:true})
 
-
-
   hplayer3.media.getTree(mediaSubfolder)
       .catch( error => console.warn(error) )
       .then( data => {
@@ -108,6 +106,10 @@ $(function() {
             if(item.type=='video') allVideos.push(new video(item))
           });
         })
+
+  
+  //////////////// PLAYER ////////////////
+  hplayer3.registerPlayer( $("#videoplayer")[0], "player")
 
 
   //////////////// VIDEO ////////////////
