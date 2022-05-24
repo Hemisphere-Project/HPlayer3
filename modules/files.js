@@ -13,10 +13,13 @@ const ext_text   = ['txt']
 class Files {
 
     mytree = []
-    path = fspath.join(__dirname, 'media')
+    path = null
 
-    constructor(path) {
-        this.path = path
+    constructor(basepath, folder) {
+        this.path = fspath.join(basepath, folder)
+
+        // Create dir if not existing
+        fs.mkdirSync(this.path, { recursive: true })
 
         this.watcher = chokidar.watch(this.path, {ignored: /^\./, persistent: true});
         this.watcher

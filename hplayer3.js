@@ -6,17 +6,14 @@ var System = require('./modules/system.js')
 var isPi = require('detect-rpi');
 
 var hplayer3 = {}
-var configFile
-// SYSTEM CONTROLS
-//
-// MEDIA
-//
-if (isPi()) {
-    hplayer3.media = new Files( '/data/media' )
-} else {
-    hplayer3.media = new Files( __dirname+'/media' )
-    hplayer3.conf = new Files( __dirname+'/conf' )
-}
+
+// BASEPATH
+var basepath = __dirname            // Default: local directory
+if (isPi()) basepath = '/data'      // On RPi: use /data
+
+// FILES
+hplayer3.media = new Files( basepath, 'media' )
+hplayer3.conf  = new Files( basepath, 'conf' ) 
 
 // SYSTEM
 //
@@ -24,13 +21,9 @@ hplayer3.system   = new System(hplayer3)
 
 // FILE SERVER
 //
-hplayer3.webserver  = new Webserver({
-                            hp3:    hplayer3,
-                            port:   5000,
-                            apps:   './apps',
-                            media:  hplayer3.media,
-                            conf:  hplayer3.conf,
-                        })
+var webPort = 5000
+if (isPi()) webPort = 80
+hplayer3.webserver  = new Webserver(hplayer3, {port: webPort, apps: './apps'})
 
 
 // SOCKETIO SERVER
