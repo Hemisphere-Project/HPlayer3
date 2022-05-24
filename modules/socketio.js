@@ -1,17 +1,26 @@
-
+const Module = require('./module.js')
 var socketio = require('socket.io')
+const crypto = require('crypto');
 
-class Socketio 
+class Socketio extends Module
 {    
     constructor(hplayer3) 
     {   
-        this.hp3 = hplayer3
+        super('socketio', hplayer3)
+
+        this.mute = true
+
+        this.uuid = crypto.randomUUID()
+
         this.sio = socketio(this.hp3.webserver.http)  
 
         this.sio.on('connection', (socket) => 
         {
             // start
             this.log('client connected')
+
+            // send current session UUID (allow clients to check if server did restart)
+            socket.emit('uuid', this.uuid)
 
             // on disconnect
             socket.on('disconnect', () => {
@@ -46,9 +55,6 @@ class Socketio
         
     }
 
-    log(...v) {
-      console.log(`[socketio]`, ...v)
-    }
 }
 
 module.exports = Socketio

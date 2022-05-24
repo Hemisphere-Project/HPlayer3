@@ -91,21 +91,22 @@ class HPlayer3 extends HModule {
         // SOCKET.IO
         //
         this.sio = io()
+        this.serverUUID = null
 
         this.sio.onAny((event, ...args) => {
-            console.log(`got ${event}`);
+            console.log(`got ${event}`, args);
         });
 
         this.sio.on("connect", () => {
             this.emit('connect')
         });
+        this.sio.on("uuid", (uuid) => {
+            if (!this.serverUUID) this.serverUUID = uuid
+            else if (this.serverUUID != uuid) location.reload()
+        });
         this.sio.on("disconnect", () => {
             this.emit('disconnect')
         });
-
-        // socket.on('reset', (data) => {
-        //   location.reload()
-        // })
 
         return new Proxy(this, this);
     }
@@ -248,7 +249,7 @@ class Divlogger {
 
         // OVERLAY LOG DIV
         //
-        this.logdiv = $('<div style="border: 1px solid green; width: 400px; right: 20px; top: 20px; max-height: 523px; overflow:auto; position: absolute; background-color: black; color: white; z-index:1000;" id="log">LOGS<br /></div>').hide().appendTo('body')
+        this.logdiv = $('<div style="border: 1px solid green; width: 800px; right: 20px; top: 20px; max-height: 523px; overflow:auto; position: absolute; background-color: black; color: white; z-index:1000;" id="log">LOGS<br /></div>').hide().appendTo('body')
 
         // SUPERCHARGE CONSOLE.LOG
         //

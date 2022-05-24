@@ -1,4 +1,4 @@
-
+const Module = require('./module.js')
 const fs = require('fs')
 const { get } = require('http')
 const fspath = require('path')
@@ -10,24 +10,27 @@ const ext_sounds = ['mp3', 'wav', 'aiff']
 const ext_text   = ['txt']
 
 
-class Files {
+class Files extends Module {
 
     mytree = []
     path = null
 
-    constructor(basepath, folder) {
-        this.path = fspath.join(basepath, folder)
+    constructor(path) 
+    {
+      super('files')
 
-        // Create dir if not existing
-        fs.mkdirSync(this.path, { recursive: true })
+      this.mute = true
 
-        this.watcher = chokidar.watch(this.path, {ignored: /^\./, persistent: true});
-        this.watcher
-            .on('add',    path => {this.debounceRefresh()})
-            .on('change', path => {this.debounceRefresh()})
-            .on('unlink', path => {this.debounceRefresh()})
+      this.path = fspath.resolve(path)
 
+      // Create dir if not existing
+      fs.mkdirSync(this.path, { recursive: true })
 
+      this.watcher = chokidar.watch(this.path, {ignored: /^\./, persistent: true});
+      this.watcher
+          .on('add',    path => {this.debounceRefresh()})
+          .on('change', path => {this.debounceRefresh()})
+          .on('unlink', path => {this.debounceRefresh()})
     }
 
     // Watcher debounce -> rebuild tree
@@ -178,10 +181,6 @@ class Files {
         this.log('Error while saving file: ', error);
       }
     }
-
-    log(...v) {
-        console.log(`[files]`, ...v)
-      }
 
 }
 

@@ -40,9 +40,16 @@ $(function() {
     }
   }
 
-  // AUDIOSELECT
-  $('input[type=radio][name=audioselect]').change(function() {
-    hplayer3.system.audioselect(this.value).then(data => {
+  // AUDIOOUT
+  $('input[type=radio][name=audioout]').change(function() {
+    hplayer3.system.audio.setOutput(this.value).then(data => {
+      refreshConfig()
+    })
+  })
+
+  // AUDIOVOLUME
+  $('div[name=audiovolume] > .faderValue').change(function() {
+    hplayer3.system.audio.setVolume(this.value).then(data => {
       refreshConfig()
     })
   })
@@ -61,6 +68,22 @@ $(function() {
     })
   })
 
+  // WIFI SSID
+  $('#wifiSsid').change(function() {
+    var newName = $('#wifiSsid > input').val()
+    hplayer3.wifi.setName(newName).then(data => {
+      refreshWifi()
+    })
+  })
+
+  // WIFI PASS
+  $('#wifiPass').change(function() {
+    var newPass = $('#wifiPass > input').val()
+    hplayer3.wifi.setPass(newPass).then(data => {
+      refreshWifi()
+    })
+  })
+
   // PLAYERTYPE
   // $('input[type=radio][name=playerType]').change(function(){
   //   var playerType = this.value
@@ -68,6 +91,7 @@ $(function() {
   //     $('.'+playerType).fadeIn(200)
   //   })
   // })
+
   // PLAYERMODULES
   $('.moduleSelect').change(function(){
     var module = $(this).val()
@@ -109,25 +133,30 @@ $(function() {
     }, 20000)
   })
 
-  // FADERS CTRL
+  // FADERS CLICK
   $('.faderContainer').click(function(e){
-    var name = $(this).parent().attr('id')
     var offset = $(this).offset()
     var relX = e.pageX - offset.left
     var percent = ( relX / $(this).width() )*100
     if (percent<5) percent = 0
     if (percent>95) percent = 100
-    // CSS
-    $(this).find('.faderFiller').css('width', percent+'%')
-    // VAL
-    var unit = $(this).parent().attr('unit')
-    if((unit=='%')||(unit=='ms')){
-      var max = $(this).parent().attr('max')
-      var val = percent * max/100
-      $(this).parent().find('.faderValue').text(val.toString().split(".")[0]+unit)
-    }
-
+    faderSet(this, percent, true)
   })
+
+  // FADER SET
+  function faderSet(el, percent, trigger) {
+    // CSS
+    $(el).find('.faderFiller').css('width', percent+'%')
+    // VAL
+    var unit = $(el).parent().attr('unit')
+    if((unit=='%')||(unit=='ms')){
+      var max = $(el).parent().attr('max')
+      var val = percent * max/100
+      $(el).parent().find('.faderDisplay').text(val.toString().split(".")[0]+unit)
+      if (trigger)
+        $(el).parent().find('.faderValue').val(Math.floor(val)).trigger('change')
+    }
+  }
 
   var activeFolder
   var baseFolder = '/data'
@@ -137,6 +166,8 @@ $(function() {
   var hplayer3 = new HPlayer3()
 
   hplayer3.on('connect', ()=>{
+
+    // Connect status
     $('.connectionInfo').removeClass('disconnected').addClass('connected')
 
     // Tree
@@ -145,9 +176,14 @@ $(function() {
     // Config
     refreshConfig()
 
+    // Wifi
+    refreshWifi()
+
   })
 
-  hplayer3.on('disconnect', ()=>{
+  hplayer3.on('disconnect', ()=>
+  {
+    // Connect status
     $('.connectionInfo').removeClass('connected').addClass('disconnected')
   })
 
@@ -156,16 +192,17 @@ $(function() {
   function refreshConfig()
   {
     hplayer3.system.getConf()
-      .catch(data => {
-        console.warn(data)
-      })
+      .catch(data => { console.warn(data) })
       .then(data => {
         console.log('APPLY CONFIG')
         console.log(data)
 
-        // AUDIOSELECT
-        $('input:radio[name="audioselect"]').prop('checked', false);
-        $('input:radio[name="audioselect"]').filter('[value="'+data.audioselect+'"]').prop('checked', true);
+        // AUDIOOUT
+        $('input:radio[name="audioout"]').prop('checked', false);
+        $('input:radio[name="audioout"]').filter('[value="'+data.audioout+'"]').prop('checked', true);
+
+        // AUDIOVOLUME
+        faderSet('div[name=audiovolume] > .faderContainer', data.audiovolume)
 
         // VIDEOFLIP
         $('#videoflip').prop('checked', data.videoflip);
@@ -176,6 +213,20 @@ $(function() {
       })
   }
 
+  //////////////// WIFI CONFIG ////////////////
+  function refreshWifi()
+  {
+    hplayer3.wifi.getName()
+      .then(data => {
+        $('.deviceName').html(data);
+      })
+
+    hplayer3.wifi.getPass()
+      .then(data => {
+        $('.devicePassword').html(data);
+      })
+  }
+
 
   //////////////// FILES ////////////////
 
@@ -183,7 +234,7 @@ $(function() {
   var files = new Array()
 
   function refreshTree() {
-    hplayer3.media.getTree()
+    hplayer3.files.media.getTree()
       .catch(data => {
         console.warn(data)
       })
@@ -280,7 +331,7 @@ $(function() {
     this.delete.click(function() {
       console.log('DELETE ME', that.path)
       // socket.emit('delete', item)
-      hplayer3.media.delete(that.path)
+      hplayer3.files.media.delete(that.path)
         .then(data => {
           console.log('DELETE: OK')
           refreshTree()
@@ -300,7 +351,7 @@ $(function() {
     this.nameChange = function(newname) {
         console.log('NAME CHANGE')
         // socket.emit('rename', item, that.parent+newname)
-        hplayer3.media.rename(that.path, that.parent + newname)
+        hplayer3.files.media.rename(that.path, that.parent + newname)
           .then(data => {
             console.log('RENAME: OK')
             refreshTree()
@@ -321,7 +372,7 @@ $(function() {
 
   /////////////// FOLDER ///////////////
   $('.addFolder').click(function(){
-    hplayer3.media.addFolder(activeFolder+'Nouveau_dossier')
+    hplayer3.files.media.addFolder(activeFolder+'Nouveau_dossier')
       .then(data => {
         console.log('ADDED: OK')
         refreshTree()
