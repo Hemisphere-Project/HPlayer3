@@ -129,9 +129,13 @@ body{
 .btn:active{
   opacity: 0.7;
 }
-/*Small img*/
+/*normal img*/
 img.btn{
   width:18px;
+}
+/*small img*/
+img.small{
+  width:16px;
 }
 .fileFunctions img.btn.cross{
   width:16px;
@@ -292,9 +296,9 @@ input[type="file"]{
   background-color: rgb(70, 70, 70);
 }
 .fileName:active, .folderName:active{
-  background-color: rgb(200, 200, 200);
-  color: rgb(40, 40, 40);
-  /* filter: invert(1); */
+  /* background-color: rgb(200, 200, 200);
+  color: rgb(40, 40, 40); */
+
 }
 /*BROWSER*/
 .browserInfo >*{
