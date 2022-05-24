@@ -15,8 +15,10 @@ if (isPi()) basepath = '/data'      // On RPi: use /data
 // FILES
 hplayer3.files = {
     media: new Files( basepath+'/media' ),
-    conf:  new Files( basepath+'/conf' ) 
+    conf:  new Files( basepath+'/conf' ),
+    apps:  new Files( __dirname+'/apps' )
 }
+
 
 // SYSTEM
 //
