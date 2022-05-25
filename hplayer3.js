@@ -29,9 +29,11 @@ hplayer3.system = new System(hplayer3)
 //
 var webPort = 5000
 if (isPi()) webPort = 80
-hplayer3.webserver  = new Webserver(hplayer3, {port: webPort, apps: './apps'})
+hplayer3.webserver  = new Webserver(hplayer3, webPort)
 
 
 // SOCKETIO SERVER
 //
 hplayer3.socketio   = new Socketio(hplayer3)
+
+

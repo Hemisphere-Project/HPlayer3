@@ -37,7 +37,7 @@ class Audio extends Module{
     }
 
     getVolume() {
-        return 0
+        return 100
     }
     
     setVolume(vol) {
@@ -72,7 +72,6 @@ class AudioPI extends Audio {
     setOutput(out){
         if (out == 'hdmi') out = 'hdmi0'
         if (!this.listOuputs().includes(out)) out = this.listOuputs()[0] // Check if new out is valid
-
         try {
             let currentOut = String(execSync("sed -n -e '/^pcm.!default/p' /etc/asound.conf")).trim().split(' ')[1]     // get current mode
             if (out != currentOut) {
@@ -84,8 +83,13 @@ class AudioPI extends Audio {
 
                 this.config.set('audioout', out)
                 this.log('switching output to ', out)
+
+                // re-apply volume
+                this.setVolume( this.config.get('audiovolume') )
+
                 this.hp3.system.restartkiosk()
             }
+            else this.config.set('audioout', out)
         }
         catch(err) {
             this.log('error when selecting audio out')
@@ -96,7 +100,7 @@ class AudioPI extends Audio {
     }
 
     getVolume() {
-        var vol = 0
+        var vol = 100
         if (this.getOutput() == 'jack') vol = parseInt(execSync(`amixer -c0 get 'Headphone',0  |grep % |awk '{print $4}'|sed 's/[^0-9]//g'`).toString())
         return vol
     } 

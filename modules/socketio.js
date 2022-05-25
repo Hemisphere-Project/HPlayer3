@@ -8,7 +8,7 @@ class Socketio extends Module
     {   
         super('socketio', hplayer3)
 
-        this.mute = true
+        // this.mute = true
 
         this.uuid = crypto.randomUUID()
 
@@ -33,18 +33,26 @@ class Socketio extends Module
             socket.on('call', (data, callback) => {
                 try {
                     if (!Array.isArray(data)) data = [data]
-                    // console.log(data)
+                    // this.log(data)
                     var attributes = data.shift().split('.')
                     var method = attributes.pop()
 
                     var path = this.hp3 
                     for(const a of attributes) path = path[a]
 
-                    let result = path[method].call (path, ...data)
-                    if (callback) callback( true, JSON.stringify(result) )
+                    let result
+                    if (path[method]) {
+                        result = path[method].call(path, ...data)
+                        if (callback) callback( true, JSON.stringify(result) )
+                    }
+                    else {
+                        var err = "Call unknown method: "+attributes.join('.')+'.'+method+'()'
+                        this.log(err)
+                        callback( false, err)
+                    }
                 } 
                 catch(err) {
-                    console.log(err)
+                    this.log(err)
                     callback( false, String(err) )
                 }
             })

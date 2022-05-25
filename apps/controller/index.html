@@ -95,14 +95,11 @@
         <div class="section output">
           <div class="title">AUDIO & VIDEO</div>
           <div class="minigrid">
-            <div class="minisection">
+            <div class="minisection" id="sectionaudio">
               <div class="title_small">Audio</div>
-              <input type="radio" name="audioout" value="jack">
-              <label for="minijack">Jack</label><br>
-              <input type="radio" name="audioout" value="hdmi0">
-              <label for="hdmi0">Hdmi 0</label><br>
-              <input type="radio" name="audioout" value="hdmi1">
-              <label for="hdmi1">Hdmi 1</label><br>
+              <!-- <input type="radio" name="audioout" value="system">
+              <label for="system">system</label><br> -->
+              <div class="subsection" id="subsectionaudioout"></div>
               <div>Volume</div>
               <div class="fader" name="audiovolume" unit="%" max="100">
                 <div class="faderContainer"><div class="faderFiller"></div></div>
@@ -160,7 +157,7 @@
               <label for="moduleSynchro">Synchro</label><br>
 
             </div>
-            <div class="minisection">
+            <div class="minisection" id="sectionwifi">
               <div class="title_small">WIFI</div>
               SSID: <div class="editableText deviceName" id="wifiSsid">device_name</div><br>
               PASS: <div class="editableText devicePassword" id="wifiPass">Museo69*</div><br>
