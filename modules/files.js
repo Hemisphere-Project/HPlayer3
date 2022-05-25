@@ -162,7 +162,7 @@ class Files extends Module {
 
     // ADD FOLDER
     addFolder(path){
-      this.log('adding', path, value )
+      this.log('adding', path  )
 
       fs.mkdir(path, err => {
         if (err) throw err;

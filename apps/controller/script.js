@@ -72,7 +72,7 @@ $(function() {
 
   // REBOOT
   $('.reboot').click(function(){
-    hplayer3.system.reboot()
+    hplayer3.reboot()
     $('.overlayReboot').fadeIn(200)
     setTimeout(function(){
       location.reload()
@@ -80,7 +80,7 @@ $(function() {
   })
   // GIT PULL
   $('.git').click(function(){
-    hplayer3.system.gitpull()
+    hplayer3.gitpull()
     $('.overlayGit').fadeIn(200)
     setTimeout(function(){
       location.reload()
@@ -176,7 +176,7 @@ $(function() {
   //////////////// REFRESHABLE FIELDS ////////////////
   
   // MODULES LIST
-  hplayer3.system.getAvailableModules()
+  hplayer3.getAvailableModules()
     .then(data => {
 
       // BUILD LIST
@@ -190,8 +190,8 @@ $(function() {
       // MODULE
       for(let mod of data)
         new refreshableField(`input[name=module${mod}]`)
-          .getter(hplayer3.system.getModuleState, mod)
-          .setter(hplayer3.system.setModuleState, mod)
+          .getter(hplayer3.getModuleState, mod)
+          .setter(hplayer3.setModuleState, mod)
           .value( (el)=>{ return el.is(':checked') })
           .update( (el, data)=>{
             el.prop('checked', data);
@@ -218,8 +218,8 @@ $(function() {
 
     // THEME SELECTOR
     new refreshableField("#themeSelector")
-      .getter(hplayer3.system.getTheme)
-      .setter(hplayer3.system.setTheme)
+      .getter(hplayer3.getTheme)
+      .setter(hplayer3.setTheme)
       .update( (el, data)=>{
         el.val(data)
         $(".themeLink").attr('href', '/'+data)
@@ -230,8 +230,8 @@ $(function() {
 
   // VIDEOFLIP
   new refreshableField('#videoflip')
-    .getter(hplayer3.system.getVideoflip)
-    .setter(hplayer3.system.setVideoflip)
+    .getter(hplayer3.getVideoflip)
+    .setter(hplayer3.setVideoflip)
     .value( (el)=>{ return el.is(':checked') })
     .update( (el, data)=>{
       el.prop('checked', data);
@@ -241,15 +241,15 @@ $(function() {
     
   // VIDEO ROTATE
   new refreshableField('#videorotate')
-    .getter(hplayer3.system.getVideorotate)
-    .setter(hplayer3.system.setVideorotate)
+    .getter(hplayer3.getVideorotate)
+    .setter(hplayer3.setVideorotate)
     .refresh()
 
 
   // AUDIO VOLUME
   new refreshableField('div[name=audiovolume] > .faderValue')
-    .getter(hplayer3.system.audio.getVolume)
-    .setter(hplayer3.system.audio.setVolume)
+    .getter(hplayer3.audio.getVolume)
+    .setter(hplayer3.audio.setVolume)
     .update( (el, data)=>{
       faderSet('div[name=audiovolume] > .faderContainer', data)
     })
@@ -257,7 +257,7 @@ $(function() {
 
 
   // AUDIO OUT LIST
-  hplayer3.system.audio.listOuputs()
+  hplayer3.audio.listOuputs()
     .then(data => {
 
       // BUILD LIST
@@ -269,8 +269,8 @@ $(function() {
 
       // AUDIO OUT 
       new refreshableField('input:radio[name="audioout"]')
-        .getter(hplayer3.system.audio.getOutput)
-        .setter(hplayer3.system.audio.setOutput)
+        .getter(hplayer3.audio.getOutput)
+        .setter(hplayer3.audio.setOutput)
         .update( (el, data)=>{
           el.prop('checked', false);
           el.filter('[value="'+data+'"]').prop('checked', true);

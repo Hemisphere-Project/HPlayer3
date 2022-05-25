@@ -1,7 +1,12 @@
 // JE
 - system parameters -> controller
 
-// MGR
-- wifi controller -> refreshableField
+// SYSTEM:
+- EventEmitter2 everything !
+- Finnish Config reorg
 - setter / getter for config entry => simplify it !
-- player controller
+
+// CONTROLLER:
+- player
+- wifi -> refreshableField
+- Video -> select resolution (auto, ...)
