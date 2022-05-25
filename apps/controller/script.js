@@ -56,13 +56,6 @@ $(function() {
     })
   })
 
-  // PLAYERMODULES
-  $('.moduleSelect').change(function(){
-    var module = $(this).val()
-    if($(this).is(':checked')){ $('.'+module).fadeIn(100) }
-    else{ $('.'+module).fadeOut(100) }
-  })
-
   // INFOS
   $('.infosOpener').click(function(){
     var infosDiv = $(this).attr('href')
@@ -129,25 +122,27 @@ $(function() {
     // PRIVATE
     this._getter = null                                 // Promise used to remote get value
     this._setter = null                                 // Promise used to remote set value
+    this._getter_args = []
+    this._setter_args = []
     this._value = function(el){ return el.val() }       // Default method to obtain value from element => can be overwriten with value(clbck)
     this._update = function(el, data){ el.val(data) }   // Default method to set value to element     => can be overwriten with update(clbck)
 
     // PUBLIC
-    this.getter = function(src) {this._getter = src; return this}
-    this.setter = function(dest) {this._setter = dest; return this}
+    this.getter = function(src, ...args) {this._getter = src; this._getter_args=args; return this}
+    this.setter = function(dest, ...args) {this._setter = dest; this._setter_args=args; return this}
     this.value = function(clbck) {this._value = clbck; return this}
     this.update = function(clbck) {this._update = clbck; return this}
 
     // INTERNAL
     this.refresh = function() {
-      this._getter().then((data) => {
-        console.log('getter',  data)
+      this._getter(...this._getter_args).then((data) => {
+        // console.log('getter',  data)
         this.element.off('change')
         this._update(this.element, data)
         this.element.on('change', ()=>{
             let value = this._value(this.element)
-            console.log('setter ', value)
-            this._setter(value).then(()=>{this.refresh()})
+            // console.log('setter ', value)
+            this._setter(...this._setter_args, value).then(()=>{this.refresh()})
         })
       })
     }
@@ -178,11 +173,41 @@ $(function() {
   })
   
 
-  //////////////// SYSTEM CONFIG ////////////////
+  //////////////// REFRESHABLE FIELDS ////////////////
+  
+  // MODULES LIST
+  hplayer3.system.getAvailableModules()
+    .then(data => {
+
+      // BUILD LIST
+      $('#sectionmodules').empty();
+      $('#sectionmodules').append(`<div class="title_small">MODULES</div>`)
+      for(let mod of data) {
+        $('#sectionmodules').append(`<input class="moduleSelect" type="checkbox" name="module${mod}" value="${mod}">`)
+        $('#sectionmodules').append(`<label for="module${mod}">${upperWord(mod)}</label><br>`)
+      }
+
+      // MODULE
+      for(let mod of data)
+        new refreshableField(`input[name=module${mod}]`)
+          .getter(hplayer3.system.getModuleState, mod)
+          .setter(hplayer3.system.setModuleState, mod)
+          .value( (el)=>{ return el.is(':checked') })
+          .update( (el, data)=>{
+            el.prop('checked', data);
+            if(data) $('.'+el.val()).fadeIn(100)
+            else $('.'+el.val()).fadeOut(100)
+          })
+          .refresh()
+
+    })
+
 
   // THEME LIST
   hplayer3.files.apps.getTree()
-  .then(data => {
+  .then(data => 
+  {
+    // BUILD LIST
     $('#themeSelector').empty()
     data.fileTree.forEach((item, i) => {
       if(item.type =='folder'){
@@ -195,9 +220,12 @@ $(function() {
     new refreshableField("#themeSelector")
       .getter(hplayer3.system.getTheme)
       .setter(hplayer3.system.setTheme)
+      .update( (el, data)=>{
+        el.val(data)
+        $(".themeLink").attr('href', '/'+data)
+      })
       .refresh()
   })
-
   
 
   // VIDEOFLIP
@@ -207,7 +235,6 @@ $(function() {
     .value( (el)=>{ return el.is(':checked') })
     .update( (el, data)=>{
       el.prop('checked', data);
-      console.log('flip', data)
     })
     .refresh()
 
@@ -237,7 +264,7 @@ $(function() {
       $('#subsectionaudioout').empty();
       for(let out of data) {
         $('#subsectionaudioout').append(`<input type="radio" name="audioout" value="${out}">`)
-        $('#subsectionaudioout').append(`<label for="system">${out}</label><br />`)
+        $('#subsectionaudioout').append(`<label for="system">${upperWord(out)}</label><br />`)
       }
 
       // AUDIO OUT 
@@ -495,7 +522,6 @@ $(function() {
   $('.saveCode').click(function(){
     var content = codeEditor.getValue()
     hplayer3.conf.writeFile('/'+editedFile, content ).then(data => {
-      console.log('ok')
       $('.overlayEditor').fadeOut(100)
     })
 
