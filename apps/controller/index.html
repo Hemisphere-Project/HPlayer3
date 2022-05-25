@@ -118,12 +118,12 @@
               </select>
               <label for="videoflip">Flip</label>
               <input type="checkbox" name="videoflip" id="videoflip"><br>
-              <div>Fade In</div>
+              <!-- <div>Fade In</div>
               <div class="fader" id="fadeInVideo" unit="ms" max="200">
                 <div class="faderContainer"><div class="faderFiller"></div></div>
                 <div class="faderDisplay"></div>
                 <input type="hidden" class="faderValue" value="">
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@
         <div class="section">
           <div class="title">GENERAL</div>
           <div class="minigrid">
-            <div class="minisection">
+            <div class="minisection" id="sectionmodules">
               <!-- <div class="title_small">PLAYER TYPE</div>
               <input type="radio" name="playerType" value="standard">
               <label for="standard">Standard</label><br>
@@ -179,10 +179,11 @@
 
           <div class="option tactile">
             <div class="title_small">Tactile</div>
-            THEME:
+            Thème :
             <select id="themeSelector">
               <option value="" selected>Default</option>
             </select>
+            <a class="themeLink" href="/display" target="_blank"><img class="btn big" src="img/eye.svg"></a>
             <br>
             <div class="btn textBtn editCode" file="complement.css">ADD STYLE</div>
           </div>

@@ -5,7 +5,7 @@ const { execSync } = require('child_process');
 const fs = require('fs')
 const os = require("os");
 
-class System extends Module 
+class System extends Module
 {
 
   constructor(hplayer3)
@@ -147,6 +147,17 @@ class System extends Module
     this.restartkiosk()
   }
 
+  getModuleState(module){
+    return this.config.get('module.'+module)
+  }
+
+  setModuleState(module, value){
+    this.config.set('module.'+module, value)
+  }
+
+  getAvailableModules(){
+    return ['tactile', 'connector', 'serial', 'synchro']
+  }
 
 }
 
