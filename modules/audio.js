@@ -6,9 +6,9 @@ const { execSync } = require('child_process');
 
 class Audio extends Module{
 
-    constructor(hplayer3) {
-        super('audio', hplayer3)
-        if (isPi()) return new AudioPI(hplayer3)
+    constructor(hp3) {
+        super('audio', hp3)
+        if (isPi()) return new AudioPI(hp3)
     }
 
     configure(config) {
@@ -44,9 +44,10 @@ class Audio extends Module{
         if (vol > 100) vol = 100
         if (vol < 0) vol = 0
         if (vol == this.getVolume()) return vol
-        this.log("Can't set audio volume on this machine...")
         vol = this.getVolume()
         this.config.set('audiovolume', vol)
+        this.log("Can't set audio volume on this machine...")
+        this.emit('volume', vol)
         return vol
     }
 
@@ -87,7 +88,7 @@ class AudioPI extends Audio {
                 // re-apply volume
                 this.setVolume( this.config.get('audiovolume') )
 
-                this.hp3.system.restartkiosk()
+                this.hp3.restartkiosk()
             }
             else this.config.set('audioout', out)
         }
@@ -112,8 +113,9 @@ class AudioPI extends Audio {
         if (this.getOutput() == 'jack') execSync(`amixer -c0 set 'Headphone',0 ${vol}%`)
 
         vol = this.getVolume()
-        this.log('set volume', vol)
         this.config.set('audiovolume', vol)
+        this.log('set volume', vol)
+        this.emit('volume', vol)
         return vol
     }
 }

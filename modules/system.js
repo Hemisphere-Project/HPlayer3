@@ -1,29 +1,49 @@
 const Module = require('./module.js')
 const Audio = require('./audio.js')
-var Config = require('./config.js')
+const Config = require('./config.js')
+const Wifi = require('./wifi.js')
+const Webserver = require('./webserver.js')
+const Socketio = require('./socketio.js')
 const { execSync } = require('child_process');
 const fs = require('fs')
 const os = require("os");
+const Files = require('./files.js');
 
 class System extends Module
 {
 
-  constructor(hplayer3)
+  constructor(baseConf)
   {
-    super('system', hplayer3)
+    super('system')
 
     // LOAD CONFIG
-    this.config = new Config(hplayer3)
+    this.config = new Config(this, baseConf)
+
+    // FILES
+    this.files = {}
+    this.files.conf   = new Files( this.config.get('path_conf') )
+    this.files.apps   = new Files( this.config.get('path_apps') )
+    this.files.media  = new Files( this.config.get('path_media') )
+
+    // WEBSERVER
+    this.webserver  = new Webserver(this)
+
+    // SOCKETIO SERVER
+    this.socketio   = new Socketio(this)
 
     // AUDIO
-    this.audio = new Audio(hplayer3)
+    this.audio = new Audio(this)
     this.audio.configure( this.config )
+
+    // WIFI
+    this.wifi = new Wifi()
 
     // APPLY CONFIG
     this.setVideorotate( this.config.get('videorotate') )
     this.setVideoflip( this.config.get('videoflip') )
 
   }
+  
 
 
   reboot(){
@@ -151,7 +171,7 @@ class System extends Module
     // TODO : this is Kiosk / PI Specific !
     try {
       let currentThemeUrl = String(execSync("sed -n -e '/^URL/p' /boot/kiosk.conf")).trim().split('=')[1]
-      let newThemeUrl = `http://localhost:${this.hp3.webserver.port}/${theme}`
+      let newThemeUrl = `http://localhost:${this.webserver.port}/${theme}`
 
       if (newThemeUrl != currentThemeUrl)
       {
@@ -169,7 +189,7 @@ class System extends Module
 
     }
     catch(err) {
-      this.log('error when setting theme URL')
+      this.log('error when setting theme URL', err)
     }
 
   }

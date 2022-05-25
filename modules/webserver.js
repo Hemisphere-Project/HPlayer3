@@ -9,10 +9,10 @@ class Webserver extends Module {
     // DEFAULT CONFIG
     //
 
-    constructor(hplayer3, port)
+    constructor(hp3, port)
     {
-      super('webserver', hplayer3)
-      this.port = port
+      super('webserver', hp3)
+      this.port = this.hp3.config.get('web_port')
       
       //
       // EXPRESS Server
@@ -22,7 +22,7 @@ class Webserver extends Module {
       // DEFAULT index
       this.app.get('/', function(req, res) {
         // res.set('Content-Type', 'text/html');
-        // res.send(Buffer.from('HPlayer3'));
+        // res.send(Buffer.from('hp3'));
         res.redirect(307, '/controller');
       });
 
