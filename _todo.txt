@@ -1,2 +1,7 @@
-
+// JE
 - system parameters -> controller
+
+// MGR
+- wifi controller -> refreshableField
+- setter / getter for config entry => simplify it !
+- player controller
