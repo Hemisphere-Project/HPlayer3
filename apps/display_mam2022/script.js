@@ -20,7 +20,7 @@ $(function() {
     $('#page_browser').css('visibility','hidden')
     $('.item')[0].click()
     $('#videoplayer').click()
-    log('waiting...')
+    log('Kiosk starting...')
   },500)
   setTimeout(function(){
     $('#page_browser').hide().css('visibility','visible').fadeIn(200)
