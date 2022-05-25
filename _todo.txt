@@ -1,5 +1,3 @@
-// JE
-- system parameters -> controller
 
 // SYSTEM:
 - EventEmitter2 everything !
@@ -10,3 +8,5 @@
 - player
 - wifi -> refreshableField
 - Video -> select resolution (auto, ...)
+
+// LIVE PLAYER: 
