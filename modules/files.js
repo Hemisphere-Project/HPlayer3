@@ -10,14 +10,16 @@ const ext_sounds = ['mp3', 'wav', 'aiff']
 const ext_text   = ['txt']
 
 
-class Files extends Module {
+class Directory extends Module {
 
     mytree = []
     path = null
 
-    constructor(path)
+    constructor(name, path)
     {
-      super('files')
+      super('files.'+name)
+
+      this.log('using', path)
 
       this.mute = true
 
@@ -180,6 +182,32 @@ class Files extends Module {
         this.log('Error while saving file: ', error);
       }
     }
+
+}
+
+class Files extends Module {
+  
+  constructor(hp3)
+  {
+    super('files', hp3)
+
+    this.requires('config')
+  }
+
+  init()
+  {
+    // CONF path
+    var confpath = this.getConf('path.conf', __dirname+'/../conf')
+    this.conf = new Directory('conf', confpath)
+
+    // APPS path
+    var appspath = this.getConf('path.apps', __dirname+'/../apps')
+    this.apps = new Directory('apps', appspath)
+
+    // MEDIA path
+    var mediapath = this.getConf('path.media', __dirname+'/../media')
+    this.media = new Directory('media', mediapath)
+  }
 
 }
 

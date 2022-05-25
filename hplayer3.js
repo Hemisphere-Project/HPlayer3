@@ -7,21 +7,21 @@ var isPi = require('detect-rpi');
 var config
 if (isPi()) 
     config = {
-        path_conf:  '/data/conf',
-        path_media: '/data/media',
-        path_temp:  '/data/var/tmp',
-        web_port:   80
+        'path.conf':  '/data/conf',
+        'path.media': '/data/media',
+
+        'webserver.port':   80,
+        'webserver.tmp':    '/data/var/tmp'
     }
 else 
     config = {
-        web_port:   5000
+        'webserver.port':   5000
     }
 
 // SYSTEM
 //
 var hplayer3 = new System(config)
-
-
+hplayer3.start()
 
 
 

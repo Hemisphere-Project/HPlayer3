@@ -7,15 +7,26 @@ const fs = require('fs')
 
 class Webserver extends Module {
 
-    // DEFAULT CONFIG
-    //
-
     constructor(hp3)
     {
       super('webserver', hp3)
-      this.port = this.hp3.config.get('web_port')
-      this.temp = this.hp3.config.get('path_temp')
+
+      this.requires('files')
+    }
+
+
+    // RUN when config is ready
+    //
+    init() 
+    {
       
+      // CONFIG
+      //
+      this.port = this.getConf('webserver.port', 5000)
+      this.temp = this.getConf('webserver.tmp',  "/tmp")
+      
+      this.log('starting on *:'+this.port)
+
       //
       // EXPRESS Server
       //
@@ -42,8 +53,8 @@ class Webserver extends Module {
       // HTTP bind
       this.http = http.createServer(this.app)
       this.http.listen(this.port, () => {
-        this.log('listening on *:', this.port)
-        })
+        // this.log('listening on *:', this.port)
+      })
 
 
       // FILE UPLOAD
@@ -92,7 +103,6 @@ class Webserver extends Module {
           res.status(500).send(err);
         }
       });
-
     }
 
 }

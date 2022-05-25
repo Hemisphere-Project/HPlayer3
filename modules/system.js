@@ -8,22 +8,31 @@ const { execSync } = require('child_process');
 const fs = require('fs')
 const os = require("os");
 const Files = require('./files.js');
+const { EventEmitter2 } = require('eventemitter2')
+const Kiosk = require('./players/kiosk.js')
 
 class System extends Module
 {
 
-  constructor(baseConf)
+  constructor(forcedConf)
   {
     super('system')
+    this.log('HPlayer3 starting...')
+
+    // EVENT MANAGER
+    this.events = new EventEmitter2({
+      wildcard: true,
+      delimiter: '.', 
+      maxListeners: 100,
+      verboseMemoryLeak: true,
+      ignoreErrors: false
+    })
 
     // LOAD CONFIG
-    this.config = new Config(this, baseConf)
+    this.config = new Config(this, forcedConf)
 
     // FILES
-    this.files = {}
-    this.files.conf   = new Files( this.config.get('path_conf') )
-    this.files.apps   = new Files( this.config.get('path_apps') )
-    this.files.media  = new Files( this.config.get('path_media') )
+    this.files = new Files(this)
 
     // WEBSERVER
     this.webserver  = new Webserver(this)
@@ -33,36 +42,26 @@ class System extends Module
 
     // AUDIO
     this.audio = new Audio(this)
-    this.audio.configure( this.config )
 
     // WIFI
-    this.wifi = new Wifi()
+    this.wifi = new Wifi(this)
 
-    // APPLY CONFIG
-    this.setVideorotate( this.config.get('videorotate') )
-    this.setVideoflip( this.config.get('videoflip') )
+    // KIOSK
+    this.kiosk = new Kiosk(this)
 
   }
-  
+
+  start() 
+  {
+    this.hp3 = this
+    this.emit('ready')
+    this.log('READY')
+  }
 
 
   reboot(){
     this.log('rebooting...')
     execSync('reboot')
-  }
-
-
-  restartkiosk(){
-
-    // Restart Kiosk (if already running)
-    try {
-      execSync('systemctl is-active --quiet kiosk')
-      execSync('systemctl restart kiosk')
-    }
-    catch (error) {
-      //this.log(error.status)
-    }
-
   }
 
 
@@ -73,127 +72,6 @@ class System extends Module
   }
 
 
-  getConf(){
-    return this.config._config
-  }
-
-  getVideorotate(){
-    return this.config.get('videorotate')
-  }
-
-  setVideorotate(degree){
-    degree = degree % 360
-    if (degree%90 == 0) {
-
-      // TODO: this is KIOSK / PI specific !
-      try {
-        let currentMode = String(execSync("sed -n -e '/^ROTATE/p' /boot/kiosk.conf")).trim().split('=')[1]
-        let newMode = currentMode
-
-        if (degree == 0 && currentMode.includes('rotate-')) {
-          if (currentMode.startsWith('flipped')) newMode = 'flipped'
-          else newMode = 'normal'
-        }
-        else if (degree != 0 && !currentMode.includes('rotate-'+degree)) {
-          if (currentMode.startsWith('flipped')) newMode = 'flipped-rotate-'+degree
-          else newMode = 'rotate-'+degree
-        }
-
-        if (newMode != currentMode)
-        {
-          execSync("rw")
-          execSync("sed -i 's/ROTATE=.*/ROTATE="+newMode+"/g' /boot/kiosk.conf")
-          execSync("ro")
-
-          this.config.set('videorotate', degree)
-          this.log('rotating video', degree)
-
-          this.restartkiosk()
-        }
-
-      }
-      catch(err) {
-        this.log('error when rotating video', err)
-      }
-
-    }
-    else this.log('video rotation not allowed (0|90|180|270)')
-  }
-
-  getVideoflip(){
-    return this.config.get('videoflip')
-  }
-
-  setVideoflip(doFlip){
-
-    // TODO: thisi Kiosk / PI specific
-    try {
-      let currentMode = String(execSync("sed -n -e '/^ROTATE/p' /boot/kiosk.conf")).trim().split('=')[1]
-      let newMode = currentMode
-
-      if (doFlip && !currentMode.startsWith('flipped')) {
-        if (currentMode == 'normal') newMode = 'flipped'
-        else newMode = 'flipped-'+currentMode
-      }
-      else if (!doFlip && currentMode.startsWith('flipped')) {
-        if (currentMode == 'flipped') newMode = 'normal'
-        else newMode = currentMode.split('flipped-')[1]
-      }
-
-      if (newMode != currentMode)
-      {
-        execSync("rw")
-        execSync("sed -i 's/ROTATE=.*/ROTATE="+newMode+"/g' /boot/kiosk.conf")
-        execSync("ro")
-
-        this.config.set('videoflip', doFlip)
-        if (doFlip) this.log('flipping video')
-        else this.log('unflipping video')
-
-        this.restartkiosk()
-      }
-
-    }
-    catch(err) {
-      this.log('error when flipping video')
-    }
-
-  }
-
-  getTheme(theme){
-    return this.config.get('theme')
-  }
-
-  setTheme(theme){
-
-    // TODO : check if theme is valid !
-
-    // TODO : this is Kiosk / PI Specific !
-    try {
-      let currentThemeUrl = String(execSync("sed -n -e '/^URL/p' /boot/kiosk.conf")).trim().split('=')[1]
-      let newThemeUrl = `http://localhost:${this.webserver.port}/${theme}`
-
-      if (newThemeUrl != currentThemeUrl)
-      {
-        execSync("rw")
-        var cmd = "sed -i 's/URL=.*/URL="+newThemeUrl.replace(/\//g, '\\/')+"/g' /boot/kiosk.conf"
-        // this.log( cmd)
-        execSync(cmd)
-        execSync("ro")
-
-        this.config.set('theme', theme)
-        this.log('new kiosk url', newThemeUrl)
-
-        this.restartkiosk()
-      }
-
-    }
-    catch(err) {
-      this.log('error when setting theme URL', err)
-    }
-
-  }
-
   getModuleState(module){
     return this.config.get('module.'+module)
   }
@@ -203,7 +81,7 @@ class System extends Module
   }
 
   getAvailableModules(){
-    return ['tactile', 'connector', 'serial', 'synchro']
+    return ['kiosk', 'connector', 'serial', 'synchro']
   }
 
 }
