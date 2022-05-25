@@ -6,9 +6,17 @@ const { execSync } = require('child_process');
 
 class Wifi extends Module{
 
-    constructor() {
-        super('wifi')
-        if (isPi()) return new WifiPI()
+    constructor(hp3) 
+    {
+        super('wifi', hp3)
+        this.requires('config')
+    }
+
+    init() 
+    {
+        this.log('starting')
+
+        this.wifiOff = this.getConf('wifi.off',  0)
     }
 
     isConfigurable() {
@@ -67,3 +75,4 @@ class WifiPI extends Wifi {
 }
 
 module.exports = Wifi
+if (isPi()) module.exports = WifiPI
