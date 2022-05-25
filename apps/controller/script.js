@@ -141,7 +141,7 @@ $(function() {
         this._update(this.element, data)
         this.element.on('change', ()=>{
             let value = this._value(this.element)
-            // console.log('setter ', value)
+            // console.log('setter ', this.element, value)
             this._setter(...this._setter_args, value).then(()=>{this.refresh()})
         })
       })
@@ -271,6 +271,10 @@ $(function() {
       new refreshableField('input:radio[name="audioout"]')
         .getter(hplayer3.audio.getOutput)
         .setter(hplayer3.audio.setOutput)
+        .value( (el)=>{ 
+          let value = el.filter(':checked').val()
+          return value
+        })
         .update( (el, data)=>{
           el.prop('checked', false);
           el.filter('[value="'+data+'"]').prop('checked', true);
