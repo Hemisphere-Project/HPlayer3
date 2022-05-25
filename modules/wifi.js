@@ -32,7 +32,6 @@ class Wifi extends Module{
         this.log("Can't set Wifi password on this machine...")
         return false
     }
-    
 }
 
 

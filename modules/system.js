@@ -20,8 +20,8 @@ class System extends Module
     this.audio.configure( this.config )
 
     // APPLY CONFIG
-    this.videorotate( this.config.get('videorotate') )
-    this.videoflip( this.config.get('videoflip') )
+    this.setVideorotate( this.config.get('videorotate') )
+    this.setVideoflip( this.config.get('videoflip') )
 
   }
 
@@ -57,8 +57,11 @@ class System extends Module
     return this.config._config
   }
 
+  getVideorotate(){
+    return this.config.get('videorotate')
+  }
 
-  videorotate(degree){
+  setVideorotate(degree){
     degree = degree % 360
     if (degree%90 == 0) {
 
@@ -96,8 +99,11 @@ class System extends Module
     else this.log('video rotation not allowed (0|90|180|270)')
   }
 
+  getVideoflip(){
+    return this.config.get('videoflip')
+  }
 
-  videoflip(doFlip){
+  setVideoflip(doFlip){
 
     try {
       let currentMode = String(execSync("sed -n -e '/^ROTATE/p' /boot/kiosk.conf")).trim().split('=')[1]
@@ -132,7 +138,11 @@ class System extends Module
 
   }
 
-  selectTheme(theme){
+  getTheme(theme){
+    return this.config.get('theme')
+  }
+
+  setTheme(theme){
     this.config.set('theme', theme)
     this.restartkiosk()
   }

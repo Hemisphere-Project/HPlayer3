@@ -59,7 +59,9 @@ class Config extends Module {
       if (this._config[entry] != value) {
         this._config[entry] = value
         if (this.configFile) this.save()
+        return true
       }
+      return false
     }
   
     get(entry)

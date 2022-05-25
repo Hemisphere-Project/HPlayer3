@@ -8,21 +8,12 @@ class Webserver extends Module {
 
     // DEFAULT CONFIG
     //
-    config = {
-        port:   5000,
-        apps:   './apps'
-    }
 
-    constructor(hplayer3, config)
+    constructor(hplayer3, port)
     {
       super('webserver', hplayer3)
-
+      this.port = port
       
-
-      // APPLY CONFIG
-      //
-      for(var prop in config) this.config[prop]=config[prop];
-
       //
       // EXPRESS Server
       //
@@ -36,7 +27,7 @@ class Webserver extends Module {
       });
 
       // WEBAPPS
-      this.app.use(express.static(this.config.apps))
+      this.app.use(express.static(this.hp3.files.apps.path))
 
       // MEDIAS
       if (this.hp3.files.media)
@@ -48,8 +39,8 @@ class Webserver extends Module {
 
       // HTTP bind
       this.http = http.createServer(this.app)
-      this.http.listen(this.config.port, () => {
-        this.log('listening on *:', this.config.port)
+      this.http.listen(this.port, () => {
+        this.log('listening on *:', this.port)
         })
 
 
@@ -82,7 +73,7 @@ class Webserver extends Module {
             this.log('Upload OK')
 
             // refresh files
-            this.config.media.buildTree()
+            this.hp3.files.media.buildTree()
 
             //return response
             res.send({

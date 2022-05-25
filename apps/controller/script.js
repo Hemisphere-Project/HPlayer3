@@ -40,34 +40,6 @@ $(function() {
     }
   }
 
-  // AUDIOOUT
-  $('input[type=radio][name=audioout]').change(function() {
-    hplayer3.system.audio.setOutput(this.value).then(data => {
-      refreshConfig()
-    })
-  })
-
-  // AUDIOVOLUME
-  $('div[name=audiovolume] > .faderValue').change(function() {
-    hplayer3.system.audio.setVolume(this.value).then(data => {
-      refreshConfig()
-    })
-  })
-
-  // VIDEOFLIP
-  $('#videoflip').change(function() {
-    hplayer3.system.videoflip($('#videoflip').is(':checked')).then(data => {
-      refreshConfig()
-    })
-  })
-
-  // VIDEOROTATE
-  $('#videorotate').change(function() {
-    hplayer3.system.videorotate(this.value).then(data => {
-      refreshConfig()
-    })
-  })
-
   // WIFI SSID
   $('#wifiSsid').change(function() {
     var newName = $('#wifiSsid > input').val()
@@ -81,14 +53,6 @@ $(function() {
     var newPass = $('#wifiPass > input').val()
     hplayer3.wifi.setPass(newPass).then(data => {
       refreshWifi()
-    })
-  })
-
-  // THEMESELECTOR
-  $('#themeSelector').change(function() {
-    console.log(this.value)
-    hplayer3.system.selectTheme(this.value).then(data => {
-      refreshConfig()
     })
   })
 
@@ -158,6 +122,38 @@ $(function() {
   var activeFolder
   var baseFolder = '/data'
 
+  //////////////////////////////////////////
+  function refreshableField(div) {
+    this.element = $(div)
+    
+    // PRIVATE
+    this._getter = null                                 // Promise used to remote get value
+    this._setter = null                                 // Promise used to remote set value
+    this._value = function(el){ return el.val() }       // Default method to obtain value from element => can be overwriten with value(clbck)
+    this._update = function(el, data){ el.val(data) }   // Default method to set value to element     => can be overwriten with update(clbck)
+
+    // PUBLIC
+    this.getter = function(src) {this._getter = src; return this}
+    this.setter = function(dest) {this._setter = dest; return this}
+    this.value = function(clbck) {this._value = clbck; return this}
+    this.update = function(clbck) {this._update = clbck; return this}
+
+    // INTERNAL
+    this.refresh = function() {
+      this._getter().then((data) => {
+        console.log('getter',  data)
+        this.element.off('change')
+        this._update(this.element, data)
+        this.element.on('change', ()=>{
+            let value = this._value(this.element)
+            console.log('setter ', value)
+            this._setter(value).then(()=>{this.refresh()})
+        })
+      })
+    }
+    return this
+  } 
+
   //////////////// HPLAYER3 ////////////////
 
   var hplayer3 = new HPlayer3()
@@ -168,10 +164,7 @@ $(function() {
     $('.connectionInfo').removeClass('disconnected').addClass('connected')
 
     // Tree
-    refreshTree()
-
-    // Config
-    refreshConfig()
+    refreshMedia()
 
     // Wifi
     refreshWifi()
@@ -183,37 +176,81 @@ $(function() {
     // Connect status
     $('.connectionInfo').removeClass('connected').addClass('disconnected')
   })
-
+  
 
   //////////////// SYSTEM CONFIG ////////////////
-  function refreshConfig(){
 
-    // Config
-    hplayer3.system.getConf()
-      .catch(data => { console.warn(data) })
-      .then(data => {
-        console.log('APPLY CONFIG')
+  // THEME LIST
+  hplayer3.files.apps.getTree()
+  .then(data => {
+    $('#themeSelector').empty()
+    data.fileTree.forEach((item, i) => {
+      if(item.type =='folder'){
+        console.log(item.name)
+        $('#themeSelector').append('<option value="'+item.name+'" >'+item.name+'</option>')
+      }
+    });
 
-        // AUDIOOUT
-        $('input:radio[name="audioout"]').prop('checked', false);
-        $('input:radio[name="audioout"]').filter('[value="'+data.audioout+'"]').prop('checked', true);
+    // THEME SELECTOR
+    new refreshableField("#themeSelector")
+      .getter(hplayer3.system.getTheme)
+      .setter(hplayer3.system.setTheme)
+      .refresh()
+  })
 
-        // AUDIOVOLUME
-        faderSet('div[name=audiovolume] > .faderContainer', data.audiovolume)
+  
 
-        // VIDEOFLIP
-        $('#videoflip').prop('checked', data.videoflip);
+  // VIDEOFLIP
+  new refreshableField('#videoflip')
+    .getter(hplayer3.system.getVideoflip)
+    .setter(hplayer3.system.setVideoflip)
+    .value( (el)=>{ return el.is(':checked') })
+    .update( (el, data)=>{
+      el.prop('checked', data);
+      console.log('flip', data)
+    })
+    .refresh()
 
-        // VIDEO ROTATE
-        $('#videorotate').val(data.videorotate);
+    
+  // VIDEO ROTATE
+  new refreshableField('#videorotate')
+    .getter(hplayer3.system.getVideorotate)
+    .setter(hplayer3.system.setVideorotate)
+    .refresh()
 
-        // THEME SELECTOR
-        $("#themeSelector").val(data.theme)
+
+  // AUDIO VOLUME
+  new refreshableField('div[name=audiovolume] > .faderValue')
+    .getter(hplayer3.system.audio.getVolume)
+    .setter(hplayer3.system.audio.setVolume)
+    .update( (el, data)=>{
+      faderSet('div[name=audiovolume] > .faderContainer', data)
+    })
+    .refresh()
 
 
-      })
+  // AUDIO OUT LIST
+  hplayer3.system.audio.listOuputs()
+    .then(data => {
 
-  }
+      // BUILD LIST
+      $('#subsectionaudioout').empty();
+      for(let out of data) {
+        $('#subsectionaudioout').append(`<input type="radio" name="audioout" value="${out}">`)
+        $('#subsectionaudioout').append(`<label for="system">${out}</label><br />`)
+      }
+
+      // AUDIO OUT 
+      new refreshableField('input:radio[name="audioout"]')
+        .getter(hplayer3.system.audio.getOutput)
+        .setter(hplayer3.system.audio.setOutput)
+        .update( (el, data)=>{
+          el.prop('checked', false);
+          el.filter('[value="'+data+'"]').prop('checked', true);
+        })
+        .refresh()
+
+    })
 
   //////////////// WIFI CONFIG ////////////////
   function refreshWifi()
@@ -227,6 +264,11 @@ $(function() {
       .then(data => {
         $('.devicePassword').html(data);
       })
+
+    hplayer3.wifi.isConfigurable()
+      .then(data => {
+        if(!data) $('#sectionwifi').hide()
+      })    
   }
 
 
@@ -236,28 +278,11 @@ $(function() {
   var fileTree = new Array()
   var files = new Array()
 
-  function refreshTree() {
-
-    // APPS
-    hplayer3.files.apps.getTree()
-      .catch(data => {
-        console.warn(data)
-      })
-      .then(data => {
-        $('#themeSelector').empty()
-        data.fileTree.forEach((item, i) => {
-          if(item.type =='folder'){
-            console.log(item.name)
-            $('#themeSelector').append('<option value="'+item.name+'" >'+item.name+'</option>')
-          }
-        });
-      })
+  function refreshMedia() 
+  {
 
     // MEDIA FILES
     hplayer3.files.media.getTree()
-      .catch(data => {
-        console.warn(data)
-      })
       .then(data => {
         console.log('BUILDING FILES')
         fileTree = data.fileTree
@@ -355,7 +380,7 @@ $(function() {
       hplayer3.files.media.delete(that.path)
         .then(data => {
           console.log('DELETE: OK')
-          refreshTree()
+          refreshMedia()
         })
         .catch(data => {
           console.warn('DELETE: FAIL', data)
@@ -375,7 +400,7 @@ $(function() {
         hplayer3.files.media.rename(that.path, that.parent + newname)
           .then(data => {
             console.log('RENAME: OK')
-            refreshTree()
+            refreshMedia()
           })  .catch( data => { console.warn('RENAME: FAIL', data) })
     }
 
@@ -388,7 +413,7 @@ $(function() {
     hplayer3.files.media.addFolder(activeFolder+'Nouveau_dossier')
       .then(data => {
         console.log('ADDED: OK')
-        refreshTree()
+        refreshMedia()
       })
       .catch(data => {
         console.warn('ADDED: FAIL', data)
@@ -433,7 +458,7 @@ $(function() {
       $('#progressBar').removeClass('visible').addClass('invisible')
       document.querySelector('[name=fileInput]').value='';
       console.log('Upload OK')
-      refreshTree()
+      refreshMedia()
     }
     // error
     xhr.onerror = (err) => {
