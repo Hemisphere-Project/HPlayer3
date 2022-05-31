@@ -1,0 +1,57 @@
+
+<!doctype html>
+<HTML>
+  <HEAD>
+    <title>HPLAYER - Display</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- LIBS -->
+    <script src="assets/lib/socket.io.min.js"></script>
+    <script src="assets/lib/jquery-3.6.0.min.js"></script>
+    <!-- INT -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="script.js"></script>
+  </HEAD>
+
+  <BODY>
+
+
+    <div class="page" id="page_home">
+      <div class="title">
+        HELLO
+      </div>
+    </div>
+
+
+    <div class="page" id="page_browser">
+      <div class="grid">
+
+        <!-- <div class="item" media="demo.mp4">
+          <div class="image_wrapper">
+            <img class="thumb" src="media/demo.png">
+          </div>
+          <div class="infos">
+            <div class="title">Video demo 1</div>
+            <div class="subtitle">Si vous voyez ce texte, veuillez charger des médias sur le lecteur via la page http://10.0.0.1 </div>
+          </div>
+        </div> -->
+
+      </div>
+    </div>
+
+    <div class="page" id="page_video">
+      <video id="videoplayer" src=""></video>
+      <img class="btn closer" src="assets/img/cross.svg">
+      <div class="time">
+        <div class="scrollbar_container">
+          <div class="scrollbar_left"></div>
+          <div class="scrollbar_tick"></div>
+          <div class="scrollbar_background"></div>
+        </div>
+        <div class="scrollbar_time">00:00</div>
+      </div>
+    </div>
+
+  </BODY>
+
+</HTML>
