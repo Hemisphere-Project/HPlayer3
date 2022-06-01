@@ -24,13 +24,13 @@ class Socketio
             socket.on('call', (data, callback) => {
                 try {
                     if (!Array.isArray(data)) data = [data]
+                    // console.log(data)
                     var attributes = data.shift().split('.')
                     var method = attributes.pop()
 
                     var path = this.hp3 
                     for(const a of attributes) path = path[a]
 
-                    console.log(data, path[method])
                     let result = path[method].call (path, ...data)
                     if (callback) callback( true, JSON.stringify(result) )
                 } 

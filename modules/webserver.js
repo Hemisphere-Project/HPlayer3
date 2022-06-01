@@ -2,6 +2,7 @@
 const express = require('express')
 const http = require('http')
 const fileUpload = require('express-fileupload');
+const fspath = require('path')
 
 class Webserver {
 
@@ -23,7 +24,6 @@ class Webserver {
       //
       // EXPRESS Server
       //
-
       this.app = express()
 
       // DEFAULT index
@@ -62,11 +62,14 @@ class Webserver {
             // if array - forEach move, if not, move
             if (Array.isArray(req.files.myfiles)) {
               req.files.myfiles.forEach((item, i) => {
-                item.mv('./media/' + item.name);
+                item.mv( fspath.join(this.config.media.path, item.name) );
               });
             } else {
-              req.files.myfiles.mv('./media/' + req.files.myfiles.name);
+              req.files.myfiles.mv( fspath.join(this.config.media.path, req.files.myfiles.name) );
             }
+            // refresh files
+            this.config.media.buildTree()
+
             //return response
             res.send({
               status: true,

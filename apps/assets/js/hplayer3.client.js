@@ -75,7 +75,10 @@ class HPlayer3 extends HModule {
         });
 
         this.sio.on("connect", () => {
-            console.log(`connect`);
+            this.emit('connect')
+        });
+        this.sio.on("disconnect", () => {
+            this.emit('disconnect')
         });
 
 
@@ -92,7 +95,8 @@ class HPlayer3 extends HModule {
     // access sub-property recursively until hit a function call -> relay to server
     //
     get (target, prop) {
-        // console.log('get', prop)
+        // console.log('get', prop, this[prop])
+        if (prop in this || prop.startsWith('_')) return this[prop]
         return new HProxy(this.sio, prop);
     }
 

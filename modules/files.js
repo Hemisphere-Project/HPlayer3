@@ -2,6 +2,7 @@
 const fs = require('fs')
 const { get } = require('http')
 const fspath = require('path')
+const chokidar = require('chokidar')
 
 const ext_images = ['jpg', 'jpeg', 'png', 'gif']
 const ext_videos = ['mp4', 'webm', 'mov', 'ogv']
@@ -13,13 +14,26 @@ class Files {
     
     mytree = []
     path = fspath.join(__dirname, 'media') 
-    count = 2
 
     constructor(path) {
         this.path = path
 
-        // Build Tree
-        this.buildTree() 
+        this.watcher = chokidar.watch(this.path, {ignored: /^\./, persistent: true});
+        this.watcher
+            .on('add',    path => {this.debounceRefresh()})
+            .on('change', path => {this.debounceRefresh()})
+            .on('unlink', path => {this.debounceRefresh()})
+        
+        
+    }
+
+    // Watcher debounce -> rebuild tree
+    //
+    debounceRefresh()
+    {
+        clearTimeout(this.refreshTimer)
+        this.refreshTimer = setTimeout( () => {this.buildTree()}, 100)
+        
     }
 
     // Get file type
@@ -37,7 +51,7 @@ class Files {
     
     // Recursive tree from a specific relative path (private -> use getTree() !)
     //
-    #listDir(relative_path) 
+    listDir(relative_path) 
     {
         if (relative_path === undefined) relative_path = "/"
 
@@ -59,7 +73,7 @@ class Files {
         // Recursive scan for sub-directories
         //
         fileTree.forEach(item => {
-            if(item.type=='folder') item.children = this.#listDir(item.path)
+            if(item.type=='folder') item.children = this.listDir(item.path)
         });
         
         return fileTree
@@ -69,7 +83,8 @@ class Files {
     //
     buildTree()
     {
-        this.mytree = this.#listDir()
+        this.mytree = this.listDir()
+        this.log(this.path, 'updated')
     }
 
     // Get tree from cache, with optional subdirectory
@@ -90,26 +105,48 @@ class Files {
         }
         else relative_path = ''
         
-        return {path: fspath.join(this.path, relative_path) , fileTree: tree}
+        return {path: fspath.join(this.path, relative_path)+'/' , fileTree: tree}
     }
 
     // Delete file
     //
-    delete(item)
+    delete(path)
     {
-        console.log('deleting',item.path)
-        fs.unlink(item.path,function(err) {
+        this.log('deleting',path)
+        
+        if (!path.startsWith(this.path)) {
+            throw "Can't delete a file outside the base path";
+            return
+        }
+
+        fs.unlink(path, err => {
             if (err) throw err;
-            else console.log('deleted '+item.name)
+            else this.log('deleted '+path)
+            this.buildTree()
         })
     }
 
     // Rename file
     //
-    rename(path, name)
+    rename(oldpath, newpath)
     {
-        
+        this.log('renaming', oldpath, newpath)
+
+        if (!oldpath.startsWith(this.path) || !newpath.startsWith(this.path)) {
+            throw "Can't rename a file outside the base path";
+            return
+        }
+
+        fs.rename( oldpath, newpath, err => {
+            if (err) throw err;
+            else this.log('renamed '+newpath)
+            this.buildTree()
+          })
     }
+
+    log(...v) {
+        console.log(`[files]`, ...v)
+      }
 
 }
 
