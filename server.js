@@ -40,17 +40,21 @@ io.on('connection', (socket) => {
   })
   // delete
   socket.on('delete', (item) => {
-    console.log(item.path)
     fs.unlink(item.path,function(err){
       if (err) {
         console.log(err)
         return
       }
-      console.log('deleted '+item.name)
     })
   })
   // rename
-  socket.on('rename', (item) => {
+  socket.on('rename', (item, newPath) => {
+    fs.rename( item.path, newPath, function(err){
+      if (err) {
+        console.log(err)
+        return
+      }
+    })
 
   })
 
