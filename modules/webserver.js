@@ -1,6 +1,7 @@
 
-var express = require('express')
-var http = require('http')
+const express = require('express')
+const http = require('http')
+const fileUpload = require('express-fileupload');
 
 class Webserver {
 
@@ -36,13 +37,46 @@ class Webserver {
 
       // MEDIAS
       if (this.config.media)
-        this.app.use('/media', express.static(this.config.media))
+        this.app.use('/media', express.static(this.config.media.path))
       
       // HTTP bind
       this.http = http.createServer(this.app)
       this.http.listen(this.config.port, () => {
         this.log('listening on *:', this.config.port)
         })
+      
+      
+      // FILE UPLOAD
+      this.app.use(fileUpload({
+        createParentPath: true
+      }));
+
+      this.app.post('/upload-files', async (req, res) => {
+        try {
+          if (!req.files) {
+            res.send({
+              status: false,
+              message: 'No file uploaded'
+            });
+          } else {
+            // if array - forEach move, if not, move
+            if (Array.isArray(req.files.myfiles)) {
+              req.files.myfiles.forEach((item, i) => {
+                item.mv('./media/' + item.name);
+              });
+            } else {
+              req.files.myfiles.mv('./media/' + req.files.myfiles.name);
+            }
+            //return response
+            res.send({
+              status: true,
+              message: 'Files are uploaded'
+            });
+          }
+        } catch (err) {
+          res.status(500).send(err);
+        }
+      });
         
     }
 

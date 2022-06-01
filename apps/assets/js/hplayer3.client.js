@@ -40,7 +40,7 @@ class HProxy {
         // Value() SET/GET
         // if (this.parentProperty.split('.').slice(-1) == 'value') return this.value(...argumentsList)
         
-        console.log('apply', this.parentProperty, thisArg, argumentsList)
+        // console.log('apply', this.parentProperty, thisArg, argumentsList)
         return new Promise((resolve, reject) => {
                     this.sio.emit('call', [this.parentProperty, ...argumentsList], 
                         (success, data) => { 
@@ -65,9 +65,28 @@ class HProxy {
 class HPlayer3 extends HModule {
     constructor() {
         super()
+
+        // SOCKET.IO
+        //
         this.sio = io()
+
+        this.sio.onAny((event, ...args) => {
+            console.log(`got ${event}`);
+        });
+
+        this.sio.on("connect", () => {
+            console.log(`connect`);
+        });
+
+
         return new Proxy(this, this);
     }
+
+    // socket.on('reset', (data) => {
+    //   location.reload()
+    // })
+
+    
 
     //
     // access sub-property recursively until hit a function call -> relay to server
