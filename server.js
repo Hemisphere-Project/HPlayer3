@@ -32,8 +32,11 @@ http.listen(5000, () => {
 io.on('connection', (socket) => {
   // start
   console.log('client connected')
-  // socket.emit('files', makeFileTree(mediaPath))
   socket.emit('files', {path:mediaPath, fileTree: makeFileTree(mediaPath)})
+  // re ask fileTree
+  socket.on('filesRebuild', () => {
+    socket.emit('files', {path:mediaPath, fileTree: makeFileTree(mediaPath)})
+  })
   // on disconnect
   socket.on('disconnect', () => {
     console.log('client disconnected')
