@@ -26,10 +26,13 @@ $(function() {
       input.onblur=function(){
         if(newval==undefined)newval=val
         input.parentNode.innerHTML=newval;
-        // LINK WITH FILE OBJECT
-        var editedPath = $(div).parent().attr('path')
-        var i = files.findIndex(function(item){ return item.path === editedPath; })
-        if(i!=-1) files[i].nameChange(newval)
+        if(newval!=val){
+          // LINK WITH FILE OBJECT
+          var editedPath = $(div).parent().attr('path')
+          var i = files.findIndex(function(item){ return item.path === editedPath; })
+          if(i!=-1) files[i].nameChange(newval)
+        }
+
       }
       this.innerHTML="";
       this.appendChild(input);
@@ -179,25 +182,28 @@ $(function() {
   //////////////// VIDEO ////////////////
   function file(item){
 
+
     var that = this
     this.name = item.name
+    this.raw_name = item.raw_name
     this.path = item.path
     this.parent = this.path.substring(0, this.path.lastIndexOf('/'))+'/'
     this.type = item.type
 
+
     // DOM
     this.preview = $('<div class="file '+this.parent+'" path='+this.path+'></div>').appendTo($(".browser"))
-    this.fileName = $('<div class="fileName editableText">'+item.name+'</div>').appendTo(this.preview)
+    this.fileName = $('<div class="fileName editableText">'+this.name+'</div>').appendTo(this.preview)
     this.controls = $('<div class="fileFunctions"></div>').appendTo(this.preview)
     this.delete =  $('<img class="btn cross" src="assets/img/cross.svg">').appendTo(this.controls)
 
 
     // PLAY
-    if((item.type=='audio')||(item.type=='video')){
+    if((this.type=='audio')||(this.type=='video')){
       this.play =  $('<img class="btn add" src="assets/img/add.svg">').prependTo(this.controls)
       this.play.click(function(){
         console.log('PLAY ME')
-        $('.selectedMedia').html(item.name)
+        $('.selectedMedia').html(that.name)
       })
     }
 
@@ -206,18 +212,18 @@ $(function() {
       console.log('DELETE ME')
       socket.emit('delete', item)
       that.preview.remove()
-      files.splice(files.findIndex(function(item){ return item.name === item.name; }), 1);
+      files.splice(files.findIndex(function(item){ return item.name === that.name; }), 1);
     })
 
     // EDIT
     editableText($(this.fileName)[0])
     this.nameChange=function(newname){
       console.log('NAME CHANGE')
-      // change object too !
+      // change object AND DOM or remake filetree from scratch ?
       socket.emit('rename', item, that.parent+newname)
     }
 
-    if(item.type=='folder'){
+    if(this.type=='folder'){
       this.preview.click(function(){
         console.log('OPEN FOLDER')
         activeFolder = that.path+'/'
