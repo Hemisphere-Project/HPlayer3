@@ -32,25 +32,32 @@ http.listen(5000, () => {
 io.on('connection', (socket) => {
   // start
   console.log('client connected')
-  // socket.emit('files', makeFileTree(mediaPath))
   socket.emit('files', {path:mediaPath, fileTree: makeFileTree(mediaPath)})
+  // re ask fileTree
+  socket.on('filesRebuild', () => {
+    socket.emit('files', {path:mediaPath, fileTree: makeFileTree(mediaPath)})
+  })
   // on disconnect
   socket.on('disconnect', () => {
     console.log('client disconnected')
   })
   // delete
   socket.on('delete', (item) => {
-    console.log(item.path)
     fs.unlink(item.path,function(err){
       if (err) {
         console.log(err)
         return
       }
-      console.log('deleted '+item.name)
     })
   })
   // rename
-  socket.on('rename', (item) => {
+  socket.on('rename', (item, newPath) => {
+    fs.rename( item.path, newPath, function(err){
+      if (err) {
+        console.log(err)
+        return
+      }
+    })
 
   })
 
