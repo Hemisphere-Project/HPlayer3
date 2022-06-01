@@ -81,13 +81,12 @@ class HPlayer3 extends HModule {
             this.emit('disconnect')
         });
 
+        // socket.on('reset', (data) => {
+        //   location.reload()
+        // })
 
         return new Proxy(this, this);
     }
-
-    // socket.on('reset', (data) => {
-    //   location.reload()
-    // })
 
     
 
@@ -101,54 +100,3 @@ class HPlayer3 extends HModule {
     }
 
 }
-
-
-
-
-
-
-//
-    // obtain / set value of recursive sub-property
-    //
-    // value( newvalue ) {
-    //     console.log('value', this.parentProperty, newvalue)
-    //     var property = this.parentProperty.split('.')
-    //     property.pop()
-    //     property = property.join('.')
-        
-    //     // GET
-    //     if ( newvalue === undefined )
-    //     {
-    //         return new Promise((resolve, reject) => {
-    //                     this.sio.emit('get', property, 
-    //                         (success, data) => { 
-    //                             if (success)
-    //                             {
-    //                                 try { resolve(JSON.parse(data)) }
-    //                                 catch(err) { reject('[HP3 callback] ' + err.message) }
-    //                             }
-    //                             else reject('[HP3 server] '+data)
-    //                         })
-    //                 });
-    //     }
-
-    //     // SET 
-    //     else 
-    //     {
-    //         return new Promise((resolve, reject) => {
-    //                     this.sio.emit('set', [property, newvalue], 
-    //                         (success, data) => { 
-    //                             if (success)
-    //                             {
-    //                                 try {
-    //                                     resolve()
-    //                                 }
-    //                                 catch(err) {
-    //                                     reject('[HP3 callback] ' + err.message)
-    //                                 }
-    //                             }
-    //                             else reject('[HP3 server] '+data)
-    //                         })
-    //                 });
-    //     }
-    // }
