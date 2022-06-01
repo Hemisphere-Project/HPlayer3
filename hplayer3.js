@@ -12,7 +12,7 @@ hplayer3.webserver  = new Webserver({
                             hp3:    hplayer3,
                             port:   5000, 
                             apps:   './apps', 
-                            media:  hplayer3.media.path 
+                            media:  hplayer3.media 
                         })
 
 hplayer3.socketio   = new Socketio(hplayer3)

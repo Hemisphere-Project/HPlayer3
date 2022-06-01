@@ -83,23 +83,25 @@ $(function() {
   var activeFolder = '/data'
   var baseFolder = '/data'
 
-  //////////////// SOCKETIO ////////////////
+  //////////////// FILES ////////////////
+
   var fileTree = new Array()
   var files = new Array()
-  var socket = io()
+  
+  //////////////// HPLAYER3 ////////////////
 
-  socket.on('reset', (data) => {
-    location.reload()
-  })
+  var hplayer3 = new HPlayer3()
 
-  socket.on('files', function(data) {
-    fileTree = data.fileTree
-    $('.browser').empty()
-    parseFileTree(fileTree)
-    activeFolder = data.path
-    baseFolder = data.path
-    showActiveFolder()
-  })
+  hplayer3.media.getTree()
+      .then( data => {
+          fileTree = data.fileTree
+          $('.browser').empty()
+          console.log(fileTree)
+          parseFileTree(fileTree)
+          activeFolder = data.path
+          baseFolder = data.path
+          showActiveFolder()
+        })
 
   function parseFileTree(folder){
     folder.forEach((item, i) => {
@@ -188,12 +190,12 @@ $(function() {
     this.preview = $('<div class="file '+this.parent+'"></div>').appendTo($(".browser"))
     this.fileName = $('<div class="fileName editableText">'+thisItem.name+'</div>').appendTo(this.preview)
     this.controls = $('<div class="fileFunctions"></div>').appendTo(this.preview)
-    this.delete =  $('<img class="btn cross" src="assets/img/cross.svg">').appendTo(this.controls)
+    this.delete =  $('<img class="btn cross" src="img/cross.svg">').appendTo(this.controls)
 
 
     // PLAY
     if((thisItem.type=='audio')||(thisItem.type=='video')){
-      this.play =  $('<img class="btn add" src="assets/img/add.svg">').prependTo(this.controls)
+      this.play =  $('<img class="btn add" src="img/add.svg">').prependTo(this.controls)
       this.play.click(function(){
         console.log('PLAY ME')
         $('.selectedMedia').html(thisItem.name)
@@ -202,8 +204,13 @@ $(function() {
 
     // DELETE
     this.delete.click(function(){
-      console.log('DELETE ME')
-      socket.emit('delete', thisItem)
+      console.log('DELETE', thisItem)
+
+      // socket.emit('delete', thisItem)
+      hplayer3.media.delete(thisItem)
+          .then( data => { console.log('DELETE: OK') })
+          .catch( data => { console.warn('DELETE: FAIL', data) })
+
       that.preview.remove()
       files.splice(files.findIndex(function(item){ return item.name === thisItem.name; }), 1);
     })
@@ -212,7 +219,12 @@ $(function() {
     editableText($(this.fileName)[0])
     this.nameChange=function(newname){
       console.log('NAME CHANGE')
-      socket.emit('rename', thisItem)
+
+      // socket.emit('rename', thisItem)
+      hplayer3.media.rename(thisItem)
+          .then( data => { console.log('RENAME: OK') })
+          .catch( data => { console.warn('RENAME: FAIL', data) })
+
     }
 
     if(thisItem.type=='folder'){

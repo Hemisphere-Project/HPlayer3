@@ -11,7 +11,7 @@ const ext_text   = ['txt']
 
 class Files {
     
-    _tree = []
+    mytree = []
     path = fspath.join(__dirname, 'media') 
     count = 2
 
@@ -35,7 +35,7 @@ class Files {
         return type
     }
     
-    // Recursive tree from a specific relative path
+    // Recursive tree from a specific relative path (private -> use getTree() !)
     //
     #listDir(relative_path) 
     {
@@ -69,27 +69,46 @@ class Files {
     //
     buildTree()
     {
-        this._tree = this.#listDir()
+        this.mytree = this.#listDir()
     }
 
     // Get tree from cache, with optional subdirectory
     //
     getTree(relative_path)
     {   
-        let filetree = this._tree
-
+        let tree = this.mytree
+        
         // Dig into sub directories
         if (relative_path !== undefined) 
         {
             relative_path.split('/').forEach( (dir)=>{
-                filetree = filetree
-                            .find(item => (item.name == dir && item.type=='folder'))
-                if (filetree) filetree = filetree.children
-                else filetree = []
+                tree = tree
+                .find(item => (item.name == dir && item.type=='folder'))
+                if (tree) tree = tree.children
+                else tree = []
             })
         }
+        else relative_path = ''
+        
+        return {path: fspath.join(this.path, relative_path) , fileTree: tree}
+    }
 
-        return filetree
+    // Delete file
+    //
+    delete(item)
+    {
+        console.log('deleting',item.path)
+        fs.unlink(item.path,function(err) {
+            if (err) throw err;
+            else console.log('deleted '+item.name)
+        })
+    }
+
+    // Rename file
+    //
+    rename(path, name)
+    {
+        
     }
 
 }
