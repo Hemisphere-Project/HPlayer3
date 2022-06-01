@@ -1,0 +1,342 @@
+
+<!doctype html>
+<HTML>
+  <HEAD>
+    <title>HPLAYER - Configuration</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- LIBS -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/js/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/eventemitter2.js"></script>
+    <script src="/assets/js/hplayer3.client.js"></script>
+    <!-- INT -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="script.js"></script>
+  </HEAD>
+
+  <BODY>
+
+    <div class="header">
+      <div class="title">HPLAYER</div>
+      <div class="deviceName">device_name</div>
+      <div class="connectionInfo disconnected"><div class="led"> &#11044;</div></div>
+    </div>
+
+    <div class="grid">
+
+      <div class="column left">
+
+        <!-- ///////////////////// LIVE PLAYER ///////////////////// -->
+        <div class="section livePlayer">
+          <div class="title">LIVE PLAYER</div>
+          <div class="selectedMedia">selected_media.mp4</div>
+          <div class="controls">
+            <img class="btn play" src="assets/img/play.svg">
+            <img class="btn pause" src="assets/img/pause.svg">
+            <img class="btn stop" src="assets/img/stop.svg">
+            <img class="btn prev" src="assets/img/prev.svg">
+            <img class="btn next" src="assets/img/next.svg">
+            <img class="btn loop" src="assets/img/loop.svg">
+          </div>
+          <div class="fader" id="scrollbar">
+            <div class="faderContainer"><div class="faderFiller"></div></div>
+            <div class="faderValue">0 : 00</div>
+          </div>
+        </div>
+
+        <!-- ///////////////////// BROWSER ///////////////////// -->
+        <div class="section fileBrowser">
+          <div class="title">BROWSER</div>
+          <div class="controls">
+            <img class="btn big addFolder" src="assets/img/folder-add.svg">
+            <img class="btn big upload" src="assets/img/upload.svg">
+          </div>
+          <div class="browserInfo">
+            <div class="folderPath">/data</div>
+            <img class="btn nav back" src="assets/img/arrow_left.svg">
+          </div>
+          <div class="browser">
+            <div class="file">
+              <div class="fileName editableText">EXAMPLE_FILE.mp4</div>
+              <div class="fileFunctions">
+                <img class="btn add" src="assets/img/add.svg">
+                <img class="btn cross" src="assets/img/cross.svg">
+              </div>
+            </div>
+            <div class="folder">
+              <div class="folderName editableText">EXAMPLE FOLDER</div>
+              <div class="folderFunctions">
+                <img class="btn cross" src="assets/img/cross.svg">
+              </div>
+            </div>
+          </div>
+
+          <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="fileInput" id="fileInput" multiple style="display:none;">
+          </form>
+          <div class="fader invisible" id="progressBar">
+            <div class="faderContainer"><div class="faderFiller"></div></div>
+          </div>
+
+
+        </div>
+
+        <!-- ///////////////////// OUTPUT ///////////////////// -->
+        <div class="section output">
+          <div class="title">AUDIO & VIDEO</div>
+          <div class="minigrid">
+            <div class="minisection">
+              <div class="title_small">Audio</div>
+              <input type="radio" name="audioOutput" id="minijack" checked>
+              <label for="minijack">Minijack</label><br>
+              <input type="radio" name="audioOutput" id="hdmi">
+              <label for="hdmi">HDMI</label><br>
+              <div>Volume</div>
+              <div class="fader" id="volumeAudio" unit="%" max="100">
+                <div class="faderContainer"><div class="faderFiller"></div></div>
+                <div class="faderValue">0 %</div>
+              </div>
+            </div>
+            <div class="minisection">
+              <div class="title_small">Video</div>
+              <input type="checkbox" name="rotate" id="rotate">
+              <label for="rotate">Rotate 180°</label><br>
+              <input type="checkbox" name="flip" id="flip">
+              <label for="flip">Flip</label><br>
+              <div>Fade In</div>
+              <div class="fader" id="fadeInVideo" unit="ms" max="200">
+                <div class="faderContainer"><div class="faderFiller"></div></div>
+                <div class="faderValue">200 ms</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>  <!-- end column -->
+
+
+      <div class="column right">
+
+
+        <!-- ///////////////////// GENERAL ///////////////////// -->
+        <div class="section">
+          <div class="title">GENERAL</div>
+          <div class="minigrid">
+            <div class="minisection">
+              <div class="title_small">PLAYER TYPE</div>
+              <input type="radio" name="playerType" id="standard" checked>
+              <label for="standard">Standard</label><br>
+              <input type="radio" name="playerType" id="tactile">
+              <label for="tactile">Tactile</label><br>
+              <input type="radio" name="playerType" id="synchro">
+              <label for="synchro">Synchro</label><br>
+            </div>
+            <div class="minisection">
+              <div class="title_small">WIFI</div>
+              SSID: <div class="editableText deviceName">device_name</div><br>
+              PASS: <div class="editableText devicePassword">Museo69*</div><br>
+              <input type="checkbox" name="wifiOff" id="wifiOff">
+              <label for="wifiOff">Turn off wifi after 15 min </label><br>
+            </div>
+            <div class="minisection">
+              <div class="btn textBtn reboot">REBOOT</div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- ///////////////////// STANDARD ///////////////////// -->
+        <div class="section">
+          <div class="title">STANDARD</div>
+          <div class="title_small">HConnector<div class="btn infosOpener" href="infos-HConnector">&#9432;</div></div>
+          T1
+          <select name="T1" id="T1-select">
+            <option value="" selected>play 1</option>
+            <option value="">play 2</option>
+            <option value="">play 3</option>
+            <option value="">play 4</option>
+            <option value="">play 5</option>
+            <option value="">Stop</option>
+          </select>
+          T2
+          <select name="T2" id="T1-select">
+            <option value="">play 1</option>
+            <option value="" selected>play 2</option>
+            <option value="">play 3</option>
+            <option value="">play 4</option>
+            <option value="">play 5</option>
+            <option value="">Stop</option>
+          </select>
+          T3
+          <select name="T3" id="T1-select">
+            <option value="">play 1</option>
+            <option value="">play 2</option>
+            <option value="" selected>play 3</option>
+            <option value="">play 4</option>
+            <option value="">play 5</option>
+            <option value="">Stop</option>
+          </select>
+          T4
+          <select name="T4" id="T1-select">
+            <option value="">play 1</option>
+            <option value="">play 2</option>
+            <option value="">play 3</option>
+            <option value="" selected>play 4</option>
+            <option value="">play 5</option>
+            <option value="">Stop</option>
+          </select>
+          T5
+          <select name="T5" id="T1-select">
+            <option value="">play 1</option>
+            <option value="">play 2</option>
+            <option value="">play 3</option>
+            <option value="">play 4</option>
+            <option value="" selected>play 5</option>
+            <option value="">Stop</option>
+          </select>
+          <br>
+          B1
+          <select name="B1" id="T1-select">
+            <option value="" selected>play</option>
+            <option value="">stop</option>
+            <option value="">pause</option>
+            <option value="">play 1</option>
+            <option value="">play 2</option>
+            <option value="">play 3</option>
+            <option value="">play 4</option>
+            <option value="">play 5</option>
+            <option value="">next</option>
+            <option value="">previous</option>
+            <option value="">vol+</option>
+            <option value="">vol-</option>
+          </select>
+          B2
+          <select name="B2" id="T1-select">
+            <option value="">play</option>
+            <option value="" selected>stop</option>
+            <option value="">pause</option>
+            <option value="">play 1</option>
+            <option value="">play 2</option>
+            <option value="">play 3</option>
+            <option value="">play 4</option>
+            <option value="">play 5</option>
+            <option value="">Stop</option>
+            <option value="">next</option>
+            <option value="">previous</option>
+            <option value="">vol+</option>
+            <option value="">vol-</option>
+          </select>
+          B3
+          <select name="B3" id="T1-select">
+            <option value="">play</option>
+            <option value="">stop</option>
+            <option value="" selected>pause</option>
+            <option value="">play 1</option>
+            <option value="">play 2</option>
+            <option value="">play 3</option>
+            <option value="">play 4</option>
+            <option value="">play 5</option>
+            <option value="">next</option>
+            <option value="">previous</option>
+            <option value="">vol+</option>
+            <option value="">vol-</option>
+          </select>
+          <br>
+          <input type="checkbox" name="loop0" id="loop0">
+          <label for="loop0">Fichier d'attente en boucle (0_video.mp4)</label><br>
+          <div class="title_small">Serial<div class="btn infosOpener" href="infos-Serial">&#9432;</div></div>
+          Logs
+          <div class="serialLogs">
+          </div>
+        </div>
+
+
+        <!-- ///////////////////// TACTILE ///////////////////// -->
+        <div class="section">
+          <div class="title">TACTILE</div>
+          <input type="checkbox" name="waitPage" id="waitPage">
+          <label for="waitPage">Page d'attente</label><br>
+          <input type="checkbox" name="scrollbar_tactile" id="scrollbar_tactile">
+          <label for="scrollbar_tactile">Scrollbar</label><br>
+          <input type="checkbox" name="closeBtn" id="closeBtn">
+          <label for="closeBtn">Bouton 'close' </label><br>
+          <input type="checkbox" name="langage" id="langage">
+          <label for="langage">Choix des langues</label><br>
+        </div>
+
+
+        <!-- ///////////////////// SYNCHRO ///////////////////// -->
+        <div class="section">
+          <div class="title">SYNCHRO</div>
+          <div class="minigrid">
+            <div class="minisection">
+              <input type="radio" name="host_client" id="host">
+              <label for="host">Host</label><br>
+              <input type="radio" name="host_client" id="client">
+              <label for="client">Client</label><br>
+              Host: <div class="editableText hostName">host_name</div><br>
+            </div>
+            <div class="minisection">
+              <div class="title_small">Clients disponibles</div>
+              <div class="clientsList">
+                Aucun client trouvé
+                <!-- <a href="http:10.0.0.100" target="_blank">http:10.0.0.100</a>
+                <a href="http:10.0.0.101" target="_blank">http:10.0.0.101</a>
+                <a href="http:10.0.0.102" target="_blank">http:10.0.0.102</a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>  <!-- end column -->
+
+    </div>
+
+
+    <!-- /////////////// NOTICE /////////////// -->
+    <div class="overlay infos-HConnector">
+      <div class="overlayContent">
+          <img class="btn overlayCloser" src="assets/img/cross.svg">
+          <div class="title_small">HConnector</div>
+          <br>
+          Les 5 borniers du HConnector (T1...T5) permettent de connecter des commandes par contact (ex: boutons) au HPlayer.<br>
+          Chaque terminal est pré-configuré, mais il est possible de modifier le rôle attribué à chacun.<br>
+          Les boutons présents sur la carte sont également configurables.<br><br>
+          La configuration par défaut est la suivante:<br><br>
+          T1  ......... play 1_title.mp4<br>
+          T2  ......... play 2_title.mp4<br>
+          etc...<br>
+          B1 ......... play / pause<br>
+          B2 ......... previous<br>
+          B3 ......... next<br>
+
+      </div>
+    </div>
+
+    <div class="overlay infos-Serial">
+      <div class="overlayContent">
+          <img class="btn overlayCloser" src="assets/img/cross.svg">
+          <div class="title_small">Serial</div><br>
+          Le lecteur est commandable par le port série<br>
+          Résumé des commandes disponibles:<br>
+          /play<br>
+          /play 0<br>
+          /pause<br>
+          /stop<br>
+      </div>
+    </div>
+
+    <div class="overlayReboot">
+      <div class="overlayContent">
+        <img class="rotate big" src="assets/img/loop.svg" alt="">
+        <div class="title">Rebooting...</div>
+      </div>
+    </div>
+
+
+
+
+  </BODY>
+
+</HTML>
