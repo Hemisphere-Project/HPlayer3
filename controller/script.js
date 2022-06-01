@@ -9,24 +9,23 @@ $(function() {
   function editableText(div){
     div.ondblclick=function(){
       var val=this.innerHTML;
-      var newval
-      console.log(val)
       var input=document.createElement("input");
       input.type = "text";
       input.value=val;
+      var newval
       input.addEventListener("keydown", function(e) {
         if(e.keyCode == 13){
           newval=this.value;
           input.blur()
         }
-      });
-      input.addEventListener("keydown", function(e) {
         if(e.keyCode == 27){
+          newval = val
           input.blur()
         }
       });
       input.onblur=function(){
-        this.parentNode.innerHTML=newval;
+        if(newval==undefined)newval=val
+        input.parentNode.innerHTML=newval;
         // LINK WITH FILE OBJECT
         var i = files.findIndex(function(item){ return item.name === val; })
         if(i!=-1) files[i].nameChange(newval)
@@ -36,6 +35,8 @@ $(function() {
       input.focus();
     }
   }
+
+
 
   // INFOS
   $('.infosOpener').click(function(){
@@ -180,7 +181,7 @@ $(function() {
     var thisItem = item
     var that = this
     this.name = thisItem.name
-    this.path = thisItem.path.slice(0, -1)
+    this.path = thisItem.path
     this.parent = this.path.substring(0, this.path.lastIndexOf('/'))+'/'
 
     // DOM
@@ -195,6 +196,7 @@ $(function() {
       this.play =  $('<img class="btn add" src="assets/img/add.svg">').prependTo(this.controls)
       this.play.click(function(){
         console.log('PLAY ME')
+        $('.selectedMedia').html(thisItem.name)
       })
     }
 

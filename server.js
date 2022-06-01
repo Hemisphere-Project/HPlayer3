@@ -38,9 +38,18 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('client disconnected')
   })
+  // delete
   socket.on('delete', (item) => {
-
+    console.log(item.path)
+    fs.unlink(item.path,function(err){
+      if (err) {
+        console.log(err)
+        return
+      }
+      console.log('deleted '+item.name)
+    })
   })
+  // rename
   socket.on('rename', (item) => {
 
   })
@@ -81,12 +90,13 @@ function makeFileTree(dir) {
     .map(item => ({
       name:item.name,
       raw_name: item.name.substring(0, item.name.lastIndexOf('.')),
-      path: dir+item.name+'/',
+      // path: dir+item.name+'/',
+      path: dir+item.name,
       type: getType(item)
      }));
   fileTree.forEach(item => {
     if(item.type=='folder'){
-      item.children = makeFileTree(item.path)
+      item.children = makeFileTree(item.path+'/')
     }
   });
   return fileTree

@@ -28,44 +28,18 @@
         <!-- ///////////////////// LIVE PLAYER ///////////////////// -->
         <div class="section livePlayer">
           <div class="title">LIVE PLAYER</div>
-          <div class="">selected_media.mp4</div>
+          <div class="selectedMedia">selected_media.mp4</div>
           <div class="controls">
-            <img class="btn play" src="assets/img/play.svg" alt="">
-            <img class="btn pause" src="assets/img/pause.svg" alt="">
-            <img class="btn stop" src="assets/img/stop.svg" alt="">
-            <img class="btn prev" src="assets/img/prev.svg" alt="">
-            <img class="btn next" src="assets/img/next.svg" alt="">
+            <img class="btn play" src="assets/img/play.svg">
+            <img class="btn pause" src="assets/img/pause.svg">
+            <img class="btn stop" src="assets/img/stop.svg">
+            <img class="btn prev" src="assets/img/prev.svg">
+            <img class="btn next" src="assets/img/next.svg">
+            <img class="btn loop" src="assets/img/loop.svg">
           </div>
-          <img class="btn loop" src="assets/img/loop.svg" alt="">
           <div class="fader" id="scrollbar">
             <div class="faderContainer"><div class="faderFiller"></div></div>
             <div class="faderValue">0 : 00</div>
-          </div>
-          <div class="playlist">
-            <div class="file">
-              <div class="fileName">untitled.mp4</div>
-              <div class="fileFunctions">
-                <img class="btn cross" src="assets/img/cross.svg" alt="">
-              </div>
-            </div>
-            <div class="file">
-              <div class="fileName">0_attente.mp4</div>
-              <div class="fileFunctions">
-                <img class="btn cross" src="assets/img/cross.svg" alt="">
-              </div>
-            </div>
-            <div class="file">
-              <div class="fileName">1_french.mp4</div>
-              <div class="fileFunctions">
-                <img class="btn cross" src="assets/img/cross.svg" alt="">
-              </div>
-            </div>
-            <div class="file">
-              <div class="fileName">2_english.mp4</div>
-              <div class="fileFunctions">
-                <img class="btn cross" src="assets/img/cross.svg" alt="">
-              </div>
-            </div>
           </div>
         </div>
 
@@ -73,28 +47,28 @@
         <div class="section fileBrowser">
           <div class="title">BROWSER</div>
           <div class="controls">
-            <img class="btn upload" src="assets/img/upload.svg" alt="">
+            <img class="btn big addFolder" src="assets/img/folder-add.svg">
+            <img class="btn big upload" src="assets/img/upload.svg">
           </div>
           <div class="browserInfo">
             <div class="folderPath">/data</div>
-            <img class="btn nav back" src="assets/img/arrow_left.svg" alt="">
+            <img class="btn nav back" src="assets/img/arrow_left.svg">
           </div>
           <div class="browser">
             <div class="file">
               <div class="fileName editableText">EXAMPLE_FILE.mp4</div>
               <div class="fileFunctions">
-                <img class="btn add" src="assets/img/add.svg" alt="">
-                <img class="btn cross" src="assets/img/cross.svg" alt="">
+                <img class="btn add" src="assets/img/add.svg">
+                <img class="btn cross" src="assets/img/cross.svg">
               </div>
             </div>
             <div class="folder">
               <div class="folderName editableText">EXAMPLE FOLDER</div>
               <div class="folderFunctions">
-                <img class="btn cross" src="assets/img/cross.svg" alt="">
+                <img class="btn cross" src="assets/img/cross.svg">
               </div>
             </div>
           </div>
-
 
           <form method="POST" enctype="multipart/form-data">
             <input type="file" name="fileInput" id="fileInput" multiple style="display:none;">
@@ -321,7 +295,7 @@
     <!-- /////////////// NOTICE /////////////// -->
     <div class="overlay infos-HConnector">
       <div class="overlayContent">
-          <img class="btn overlayCloser" src="assets/img/cross.svg" alt="">
+          <img class="btn overlayCloser" src="assets/img/cross.svg">
           <div class="title_small">HConnector</div>
           <br>
           Les 5 borniers du HConnector (T1...T5) permettent de connecter des commandes par contact (ex: boutons) au HPlayer.<br>
@@ -340,7 +314,7 @@
 
     <div class="overlay infos-Serial">
       <div class="overlayContent">
-          <img class="btn overlayCloser" src="assets/img/cross.svg" alt="">
+          <img class="btn overlayCloser" src="assets/img/cross.svg">
           <div class="title_small">Serial</div><br>
           Le lecteur est commandable par le port série<br>
           Résumé des commandes disponibles:<br>
@@ -353,7 +327,7 @@
 
     <div class="overlayReboot">
       <div class="overlayContent">
-        <img class="rotate" src="assets/img/loop.svg" alt="">
+        <img class="rotate big" src="assets/img/loop.svg" alt="">
         <div class="title">Rebooting...</div>
       </div>
     </div>
