@@ -40,64 +40,6 @@ class Socketio
                 }
             })
 
-            // //
-            // // Getter: data = 'path.to.getter'
-            // //
-            // socket.on('get', (data, callback) => {
-            //     console.log('GET', data)
-            //     try{
-            //         var attributes = data.split('.')
-
-            //         var path = this.hp3  
-            //         for(const a of attributes) path = path[a]
-            //         console.log(path)
-
-            //         if (callback) callback( true, JSON.stringify(path) )
-            //     } 
-            //     catch(err) {
-            //         console.log(err)
-            //         callback( false, String(err) )
-            //     }
-            // })
-
-            // //
-            // // Setter: data = ['path.to.setter', value]
-            // //
-            // socket.on('set', (data, callback) => {
-            //     console.log('SET', data)
-            //     try{
-            //         var attributes = data[0].split('.')
-            //         var value = data[1]
-
-            //         var path = this.hp3 
-            //         for(const a of attributes) path = path[a]
-
-            //         path = value
-            //         callback( true )
-            //     } 
-            //     catch(err) {
-            //         console.log(err)
-            //         callback( false, String(err) )
-            //     }
-            // })
-
-            // //
-            // // Subscribe: data = 'event'
-            // //
-            // socket.on('subscribe', (data, callback) => {
-            //     try{
-            //         let event = data
-            //         this.hp3.on(event, (...args) => {
-            //             socket.emit(event, ...args)
-            //         })
-            //         callback( true )
-            //     } 
-            //     catch(err) {
-            //         console.log(err)
-            //         callback( false, String(err) )
-            //     }
-            // })
-        
         }) 
 
 
