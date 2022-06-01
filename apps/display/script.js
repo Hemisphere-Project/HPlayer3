@@ -1,4 +1,7 @@
 
+// /media subdirectory
+var mediaFolder = "gallery1"
+
 $(function() {
 
   var fadeTime = 200
@@ -83,24 +86,25 @@ $(function() {
   }
 
 
-  //////////////// SOCKETIO ////////////////
+  
   var allFiles = new Array()
   var allVideos = new Array()
-  var socket = io()
+  
+  //////////////// HPLAYER3 ////////////////
 
-  socket.on('reset', (data) => {
-    location.reload()
-  })
+  var hplayer3 = new HPlayer3()
 
-  socket.on('files', function(data) {
-    allFiles = data.fileTree
-    $('#page_browser .grid').empty()
-    allFiles.forEach((item, i) => {
-      if(item.type=='video')
-      allVideos.push(new video(item))
-    });
-  })
+  hplayer3.media.getTree('gallery1')
+      .catch( error => console.warn(error) )
+      .then( data => {
+          allFiles = data
+          $('#page_browser .grid').empty()
+          allFiles.forEach((item, i) => {
+            if(item.type=='video') allVideos.push(new video(item))
+          });
+        })
 
+  
   //////////////// VIDEO ////////////////
   function video(item){
 
@@ -110,10 +114,10 @@ $(function() {
     // setImageRatio()
 
     // THUMBNAIL
-    this.thumb = $('<div class="image_wrapper"><img class="thumb" src="assets/img/not_found.png"></div>').appendTo(this.preview)
+    this.thumb = $('<div class="image_wrapper"><img class="thumb" src="img/not_found.png"></div>').appendTo(this.preview)
     allFiles.forEach((item, i) => {
       if((item.raw_name==thisItem.raw_name)&&(item.type=='image')) {
-        that.thumb.find('img').attr('src', '/files/'+item.name)
+        that.thumb.find('img').attr('src', '/media/'+mediaFolder+'/'+item.name)
       }
     });
 
@@ -121,7 +125,7 @@ $(function() {
     this.desc = $('<div class="infos">'+thisItem.name+'</div>').appendTo(this.preview)
     const textExist = allFiles.some(item => ((item.raw_name === thisItem.raw_name)&&(item.type === 'text')) );
     if (textExist) {
-      $.get('../files/'+thisItem.raw_name +'.txt', function(txt) {
+      $.get('/media/'+mediaFolder+'/'+thisItem.raw_name +'.txt', function(txt) {
         that.desc.empty()
         that.desc.append(txt)
       }, 'text')
@@ -129,7 +133,7 @@ $(function() {
 
     // GO
     this.preview.click(function(){
-      launchVideo('/files/'+thisItem.name)
+      launchVideo('/media/'+mediaFolder+'/'+thisItem.name)
     })
 
 

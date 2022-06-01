@@ -29,7 +29,6 @@ $('#ctrls').html(" \
     <br />\
     .:: VIEW ::. <br />\
     S: simple view <br />\
-    D: 3D webgl view <br />\
     X: mapping view <br />\
     <br /> \
     .:: MAPPING ::. <br />\
@@ -51,31 +50,31 @@ function controls(video) {
     video.mute = false
 
     video.addEventListener('loadedmetadata', function () {
-        console.log('VIDEO: loaded');
+        console.log('[VIDEO] loaded');
         $("#time").html('Video: '+video.videoWidth+'x'+video.videoHeight)
         video.play()
     }, false);
 
     //  paused and playing events to control buttons
     video.addEventListener("pause", function () {
-        console.log('VIDEO: paused');
+        console.log('[VIDEO] paused');
     }, false);
 
     video.addEventListener("playing", function () {
-        console.log('VIDEO: playing');
+        console.log('[VIDEO] playing');
     }, false);
 
     video.addEventListener("ended", function () {
         // BROKEN ! use hard fix instead
-        console.log('VIDEO: ended');
+        console.log('[VIDEO] ended');
     }, false);
 
     video.addEventListener("stalled", function () {
-        console.log('VIDEO: stalled');
+        console.log('[VIDEO] stalled');
     }, false);
 
     video.addEventListener("timeupdate", function () {
-        // console.log('VIDEO: time', video.currentTime, video.duration, video.paused);
+        // console.log('[VIDEO] time', video.currentTime, video.duration, video.paused);
     }, false);
 
 
@@ -85,7 +84,7 @@ function controls(video) {
     endedWatcher = setInterval(()=>{
         if ((video.duration-video.currentTime < 0.05 && !video.paused)) 
         {
-            console.log('VIDEO: ended (hard fix)')
+            console.log('[VIDEO] ended (hard fix)')
             video.currentTime = 0;
         }
     }, 10)
@@ -131,22 +130,25 @@ function controls(video) {
         // S : simple view
         if(key == 's') 
         {
-            window.location = 'simple.html';
+            window.location = 'index.html';
         }
 
-        // D : 3D Cube
-        if(key == 'd') 
-        {
-            window.location = 'webgl.html';
-        }
-        
         // X : mapping view
         if(key == 'x') 
         {
-            window.location = 'index.html';
+            window.location = 'mapping.html';
         }
         
     })
 
     
 }
+
+
+// SOCKETIO
+//
+var socket = io();
+
+socket.emit('get', 'media.tree', (data)=>{
+    console.log(data)
+})
