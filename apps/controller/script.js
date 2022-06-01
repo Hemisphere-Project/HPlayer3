@@ -87,25 +87,39 @@ $(function() {
   var activeFolder
   var baseFolder = '/data'
 
-  //////////////// FILES ////////////////
-
-  var fileTree = new Array()
-  var files = new Array()
-  
   //////////////// HPLAYER3 ////////////////
 
   var hplayer3 = new HPlayer3()
 
-  hplayer3.media.getTree()
-      .then( data => {
-          console.log('BUILDING FILES')
-          fileTree = data.fileTree
-          $('.browser').empty()
-          parseFileTree(fileTree)
-          if(activeFolder==undefined) activeFolder = data.path
-          baseFolder = data.path
-          showActiveFolder()
-        })
+  hplayer3.on('connect', ()=>{
+    $('.connectionInfo').removeClass('disconnected').addClass('connected')
+  })
+
+  hplayer3.on('disconnect', ()=>{
+    $('.connectionInfo').removeClass('connected').addClass('disconnected')
+  })
+
+  //////////////// FILES ////////////////
+
+  var fileTree = new Array()
+  var files = new Array()
+
+  function refreshTree() 
+  {
+    hplayer3.media.getTree()
+        .catch( data => { console.warn(data) })
+        .then( data => {
+            console.log('BUILDING FILES')
+            fileTree = data.fileTree
+            console.log(data)
+            $('.browser').empty()
+            parseFileTree(fileTree)
+            if(activeFolder==undefined) activeFolder = data.path
+            baseFolder = data.path
+            showActiveFolder()
+          })
+  }
+  refreshTree() 
 
   function parseFileTree(folder){
     folder.forEach((item, i) => {
@@ -139,7 +153,7 @@ $(function() {
     var that = this
     this.name = item.name
     this.raw_name = item.raw_name
-    this.path = item.path
+    this.path = item.fullpath
     this.parent = this.path.substring(0, this.path.lastIndexOf('/'))+'/'
     this.type = item.type
 
@@ -148,12 +162,12 @@ $(function() {
     this.preview = $('<div class="file '+this.parent+'" path='+this.path+'></div>').appendTo($(".browser"))
     this.fileName = $('<div class="fileName editableText">'+this.name+'</div>').appendTo(this.preview)
     this.controls = $('<div class="fileFunctions"></div>').appendTo(this.preview)
-    this.delete =  $('<img class="btn cross" src="assets/img/cross.svg">').appendTo(this.controls)
+    this.delete =  $('<img class="btn cross" src="img/cross.svg">').appendTo(this.controls)
 
 
     // PLAY
     if((this.type=='audio')||(this.type=='video')){
-      this.play =  $('<img class="btn add" src="assets/img/add.svg">').prependTo(this.controls)
+      this.play =  $('<img class="btn add" src="img/add.svg">').prependTo(this.controls)
       this.play.click(function(){
         console.log('PLAY ME')
         $('.selectedMedia').html(that.name)
@@ -162,30 +176,33 @@ $(function() {
 
     // DELETE
     this.delete.click(function(){
-      console.log('DELETE ME')
-      
+      console.log('DELETE ME', that.path)
+
       // socket.emit('delete', item)
-      hplayer3.media.delete(item)
-          .then( data => { console.log('DELETE: OK') })
+      hplayer3.media.delete(that.path)
+          .then( data => { 
+            console.log('DELETE: OK') 
+            refreshTree() 
+          })
           .catch( data => { console.warn('DELETE: FAIL', data) })
 
       that.preview.remove()
       files.splice(files.findIndex(function(item){ return item.name === that.name; }), 1);
-      socket.emit('filesRebuild')
     })
 
     // EDIT
     editableText($(this.fileName)[0])
-    this.nameChange=function(newname){
+    this.nameChange = function(newname)
+    {
       console.log('NAME CHANGE')
 
       // socket.emit('rename', item, that.parent+newname)
-      hplayer3.media.rename(item, that.parent+newname)
-          .then( data => { console.log('RENAME: OK') })
+      hplayer3.media.rename(that.path, that.parent+newname)
+          .then( data => { 
+            console.log('RENAME: OK')
+            refreshTree()  
+          })
           .catch( data => { console.warn('RENAME: FAIL', data) })
-          
-      // not changing that.name & DOM (that.preview), rebuilding files instead --->
-      socket.emit('filesRebuild')
     }
 
     if(this.type=='folder'){
@@ -234,7 +251,7 @@ $(function() {
     xhr.onload = () => {
       console.log(xhr.responseText)
       $('#progressBar').removeClass('visible').addClass('invisible')
-      socket.emit('filesRebuild')
+      refreshTree() 
     }
     // error
     xhr.onerror = () => {

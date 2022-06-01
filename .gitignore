@@ -3,5 +3,3 @@
 node_modules
 media/*
 !media/.gitkeep
-uploads/*
-!uploads/.gitkeep
