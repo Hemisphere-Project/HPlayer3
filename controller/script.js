@@ -125,54 +125,53 @@ $(function() {
   })
 
   /////////////// UPLOAD ///////////////
-  $('.upload').click(function(){
-    console.log('upload')
-  })
-  $("#fileLabel").click(function(e){
-    e.preventDefault()
-    $("#fileInput").click()
-  })
-  var filelist = new Array();
 
-  updateFileInputList = function(){
-    // var input = document.getElementById('fileInput');
-    //  var output = document.getElementById('fileInputList');
-    //  output.innerHTML=''
-    //  var html = "<table>";
-    //  for (var i = 0; i < input.files.length; ++i) {
-    //      filelist[i]=input.files.item(i).name;
-    //      html += "<tr><td>" + filelist[i] + "</td></tr>";
-    //  }
-    //  html += "</table>";
-    //  output.innerHTML += html;
-  }
 
   // define URL and for element
-  const url = "http://localhost:5000/upload-files";
-  const form = document.querySelector('form');
+  const url = "http://localhost:5000/upload-files"
+  const form = document.querySelector('form')
 
   // add event listener
-  form.addEventListener('submit', e => {
-    e.preventDefault();
+  // form.addEventListener('submit', e => {
+  //   e.preventDefault()
+  //   submitUpload()
+  // });
+
+  // BTN replacing standard input type file
+  $('.upload').click(function(){
+    $("#fileInput").click()
+  })
+  // Listen -> Upload
+  $('#fileInput').on('change',function(){
+    submitUpload()
+  })
+
+  function submitUpload(){
     const files = document.querySelector('[name=fileInput]').files;
-    const formData = new FormData();
+    const formData = new FormData()
     Array.from(files).forEach(file => {
-      formData.append("myfiles", file);
-    });
+      formData.append("myfiles", file)
+    })
+    $('#progressBar').removeClass('invisible').addClass('visible')
     // post form data
-    const xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest()
     // response
     xhr.onload = () => {
-      console.log(xhr.responseText);
-    };
+      console.log(xhr.responseText)
+      $('#progressBar').removeClass('visible').addClass('invisible')
+    }
+    // error
+    xhr.onerror = () => {
+      $('#progressBar').removeClass('visible').addClass('invisible')
+    }
     xhr.upload.onprogress = (event) => {
       var percent = (event.loaded / event.total)*100
       $('#progressBar').find('.faderFiller').css('width', percent+'%')
     }
     // create and send the reqeust
-    xhr.open('POST', url);
-    xhr.send(formData);
-  });
+    xhr.open('POST', url)
+    xhr.send(formData)
+  }
 
 
   //////////////// VIDEO ////////////////

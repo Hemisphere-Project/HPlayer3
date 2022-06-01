@@ -97,12 +97,9 @@
 
 
           <form method="POST" enctype="multipart/form-data">
-            <label for="fileInput" id="fileLabel"><div class="btn textBtn">PARCOURIR</div></label>
-            <input type="file" name="fileInput" id="fileInput" multiple style="display:inline;" onchange="updateFileInputList()">
-            <button type="submit" role="button">OK</button>
-            <div id="fileInputList">Aucun fichier choisi</div>
+            <input type="file" name="fileInput" id="fileInput" multiple style="display:none;">
           </form>
-          <div class="fader" id="progressBar">
+          <div class="fader invisible" id="progressBar">
             <div class="faderContainer"><div class="faderFiller"></div></div>
           </div>
 
