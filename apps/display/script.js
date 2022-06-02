@@ -119,7 +119,7 @@ $(function() {
     // setImageRatio()
 
     // THUMBNAIL
-    this.thumb = $('<div class="image_wrapper"><img class="thumb" src="img/not_found.png"></div>').appendTo(this.preview)
+    this.thumb = $('<div class="image_wrapper"><img class="thumb" src="assets/img/not_found.png"></div>').appendTo(this.preview)
     allFiles.forEach((item, i) => {
       if((item.raw_name==thisItem.raw_name)&&(item.type=='image')) {
         that.thumb.find('img').attr('src', '/media/'+mediaSubfolder+'/'+item.name)
