@@ -63,7 +63,7 @@ img{
 }
 
 /*-----------------------OVERLAY-----------------------*/
-.overlay, .overlayReboot{
+.overlay{
   position:fixed;
   top:0;
   left:0;
@@ -91,7 +91,7 @@ img{
   right:15px;
 }
 
-.overlayReboot{
+.overlayReboot, .overlayGit{
   text-align: center;
 }
 .rotate{

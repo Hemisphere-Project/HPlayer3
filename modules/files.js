@@ -11,9 +11,9 @@ const ext_text   = ['txt']
 
 
 class Files {
-    
+
     mytree = []
-    path = fspath.join(__dirname, 'media') 
+    path = fspath.join(__dirname, 'media')
 
     constructor(path) {
         this.path = path
@@ -23,8 +23,8 @@ class Files {
             .on('add',    path => {this.debounceRefresh()})
             .on('change', path => {this.debounceRefresh()})
             .on('unlink', path => {this.debounceRefresh()})
-        
-        
+
+
     }
 
     // Watcher debounce -> rebuild tree
@@ -33,12 +33,12 @@ class Files {
     {
         clearTimeout(this.refreshTimer)
         this.refreshTimer = setTimeout( () => {this.buildTree()}, 100)
-        
+
     }
 
     // Get file type
     //
-    getType(file) 
+    getType(file)
     {
         var type = 'unknown'
         if (ext_images.indexOf(file.name.replace(/.*\./, '').toLowerCase()) >= 0) type = 'image'
@@ -48,15 +48,15 @@ class Files {
         if (file.isDirectory()) type = 'folder'
         return type
     }
-    
+
     // Recursive tree from a specific relative path (private -> use getTree() !)
     //
-    listDir(relative_path) 
+    listDir(relative_path)
     {
         if (relative_path === undefined) relative_path = "/"
 
         var fileTree = []
-        var full_path = fspath.join(this.path, relative_path) 
+        var full_path = fspath.join(this.path, relative_path)
 
         // Read directory content
         //
@@ -69,17 +69,17 @@ class Files {
                 fullpath:     fspath.join(full_path, item.name),
                 type:         this.getType(item)
             }));
-        
+
         // Recursive scan for sub-directories
         //
         fileTree.forEach(item => {
             if(item.type=='folder') item.children = this.listDir(item.path)
         });
-        
+
         return fileTree
     }
 
-    // Rebuild cached tree 
+    // Rebuild cached tree
     //
     buildTree()
     {
@@ -90,11 +90,12 @@ class Files {
     // Get tree from cache, with optional subdirectory
     //
     getTree(relative_path)
-    {   
+    {
+        this.buildTree()
         let tree = this.mytree
-        
+
         // Dig into sub directories
-        if (relative_path !== undefined) 
+        if (relative_path !== undefined)
         {
             relative_path.split('/').forEach( (dir)=>{
                 tree = tree
@@ -104,7 +105,7 @@ class Files {
             })
         }
         else relative_path = ''
-        
+
         return {path: fspath.join(this.path, relative_path)+'/' , fileTree: tree}
     }
 
@@ -113,7 +114,7 @@ class Files {
     delete(path)
     {
         this.log('deleting',path)
-        
+
         if (!path.startsWith(this.path)) {
             throw "Can't delete a file outside the base path";
             return
@@ -152,5 +153,3 @@ class Files {
 
 
 module.exports = Files
-
-
