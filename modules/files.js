@@ -111,38 +111,58 @@ class Files {
 
     // Delete file
     //
-    delete(path)
-    {
-        this.log('deleting',path)
+    delete(path) {
+      this.log('deleting', path)
 
-        if (!path.startsWith(this.path)) {
-            throw "Can't delete a file outside the base path";
-            return
-        }
+      if (!path.startsWith(this.path)) {
+        throw "Can't delete a file outside the base path";
+        return
+      }
 
-        fs.unlink(path, err => {
-            if (err) throw err;
-            else this.log('deleted '+path)
-            this.buildTree()
+      if (fs.lstatSync(path).isDirectory()) {
+        console.log('deleting folder')
+        fs.rmSync(path, { recursive: true, force: true }, err => {
+          if (err) throw err;
+          else this.log('deleted ' + path)
+          this.buildTree()
         })
+      } else {
+        console.log('deleting file')
+        fs.unlink(path, err => {
+          if (err) throw err;
+          else this.log('deleted ' + path)
+          this.buildTree()
+        })
+      }
+
     }
 
     // Rename file
     //
-    rename(oldpath, newpath)
-    {
-        this.log('renaming', oldpath, newpath)
+    rename(oldpath, newpath) {
+      this.log('renaming', oldpath, newpath)
 
-        if (!oldpath.startsWith(this.path) || !newpath.startsWith(this.path)) {
-            throw "Can't rename a file outside the base path";
-            return
-        }
+      if (!oldpath.startsWith(this.path) || !newpath.startsWith(this.path)) {
+        throw "Can't rename a file outside the base path";
+        return
+      }
 
-        fs.rename( oldpath, newpath, err => {
-            if (err) throw err;
-            else this.log('renamed '+newpath)
-            this.buildTree()
-          })
+      fs.rename(oldpath, newpath, err => {
+        if (err) throw err;
+        else this.log('renamed ' + newpath)
+        this.buildTree()
+      })
+    }
+
+    // ADD FOLDER
+    addFolder(path){
+      this.log('adding', path )
+
+      fs.mkdir(path, err => {
+        if (err) throw err;
+        else this.log('added '+path)
+        this.buildTree()
+      })
     }
 
     log(...v) {
