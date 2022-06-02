@@ -159,7 +159,7 @@ $(function() {
   })
 
 
-  //////////////// VIDEO ////////////////
+  //////////////// FILE ////////////////
   function file(item){
 
 
@@ -173,6 +173,8 @@ $(function() {
 
     // DOM
     this.preview = $('<div class="file ' + this.parent + '" path=' + this.path + '></div>').appendTo($(".browser"))
+    if(this.type=='folder'){ this.opener = $('<img class="btn open" src="img/arrow_right.svg">').appendTo(this.preview) }
+    if(this.type!='folder'){ this.icon = $('<img class="btn small open" src="img/file.svg">').appendTo(this.preview) }
     this.fileName = $('<div class="fileName editableText">' + this.name + '</div>').appendTo(this.preview)
     this.controls = $('<div class="fileFunctions"></div>').appendTo(this.preview)
     this.delete = $('<img class="btn cross" src="img/cross.svg">').appendTo(this.controls)
@@ -218,15 +220,28 @@ $(function() {
     }
 
     if(this.type=='folder'){
-      this.preview.click(function(){
+      this.opener.click(function(){
         console.log('OPEN FOLDER')
         activeFolder = that.path+'/'
         showActiveFolder()
       })
     }
 
+
+
   }
 
+  /////////////// FOLDER ///////////////
+  $('.addFolder').click(function(){
+    hplayer3.media.addFolder(activeFolder+'Nouveau_dossier')
+      .then(data => {
+        console.log('ADDED: OK')
+        refreshTree()
+      })
+      .catch(data => {
+        console.warn('ADDED: FAIL', data)
+      })
+  })
 
   /////////////// UPLOAD ///////////////
 
