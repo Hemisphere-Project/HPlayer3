@@ -6,20 +6,20 @@ const fspath = require('path')
 
 class Webserver {
 
-    // DEFAULT CONFIG 
+    // DEFAULT CONFIG
     //
-    config = { 
+    config = {
         hp3:  null,
-        port:   5000, 
-        apps:   './apps', 
+        port:   5000,
+        apps:   './apps',
         media:  null
     }
 
-    constructor(config) 
+    constructor(config)
     {
-      // APPLY CONFIG 
+      // APPLY CONFIG
       //
-      for(var prop in config) this.config[prop]=config[prop];   
+      for(var prop in config) this.config[prop]=config[prop];
 
       //
       // EXPRESS Server
@@ -38,14 +38,14 @@ class Webserver {
       // MEDIAS
       if (this.config.media)
         this.app.use('/media', express.static(this.config.media.path))
-      
+
       // HTTP bind
       this.http = http.createServer(this.app)
       this.http.listen(this.config.port, () => {
         this.log('listening on *:', this.config.port)
         })
-      
-      
+
+
       // FILE UPLOAD
       this.app.use(fileUpload({
         createParentPath: true
@@ -62,14 +62,14 @@ class Webserver {
           } else {
 
             this.log('Uploading...')
-
+            
             // if array - forEach move, if not, move
             if (Array.isArray(req.files.myfiles)) {
               req.files.myfiles.forEach((item, i) => {
-                item.mv( fspath.join(this.config.media.path, item.name) );
+                  item.mv( fspath.join(req.body.destination, item.name) );
               });
             } else {
-              req.files.myfiles.mv( fspath.join(this.config.media.path, req.files.myfiles.name) );
+              req.files.myfiles.mv( fspath.join(req.body.destination, req.files.myfiles.name) );
             }
 
             this.log('Upload OK')
@@ -87,7 +87,7 @@ class Webserver {
           res.status(500).send(err);
         }
       });
-        
+
     }
 
     log(...v) {
@@ -95,5 +95,5 @@ class Webserver {
     }
 
 }
-  
+
 module.exports = Webserver
