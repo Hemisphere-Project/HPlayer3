@@ -35,6 +35,8 @@ $(function() {
       $('.scrollbar_left').css('width', percent+'%')
       $('.scrollbar_tick').css('margin-left', percent+'%')
       $('.scrollbar_time').text(secondsToTime(currentTime))
+      // if no 'ended' event
+      if ((videoDuration-currentTime < 0.05 && !$("#videoplayer")[0].paused)){ stopVideo() }
     }, 20)
   }
 
