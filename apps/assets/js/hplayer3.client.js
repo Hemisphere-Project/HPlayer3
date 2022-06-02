@@ -6,9 +6,9 @@ class HModule extends EventEmitter2 {
     constructor() {
         super({
             wildcard: true,
-            delimiter: '.', 
-            newListener: true, 
-            removeListener: false, 
+            delimiter: '.',
+            newListener: true,
+            removeListener: false,
             maxListeners: 37,
             verboseMemoryLeak: false,
             ignoreErrors: false
@@ -36,14 +36,14 @@ class HProxy {
     // generic function call -> relay to server
     //
     apply(target, thisArg, argumentsList) {
-        
+
         // Value() SET/GET
         // if (this.parentProperty.split('.').slice(-1) == 'value') return this.value(...argumentsList)
-        
+
         // console.log('apply', this.parentProperty, thisArg, argumentsList)
         return new Promise((resolve, reject) => {
-                    this.sio.emit('call', [this.parentProperty, ...argumentsList], 
-                        (success, data) => { 
+                    this.sio.emit('call', [this.parentProperty, ...argumentsList],
+                        (success, data) => {
                             if (success)
                             {
                                 try {
@@ -57,27 +57,27 @@ class HProxy {
                             else reject('[HP3 server] '+data)
                         })
                 });
-                
-    }   
+
+    }
 }
 
 
 class HPlayer3 extends HModule {
 
-    config = {
-        controls: false     // enable keyboard controls
-    }
+    // config = {
+    //     controls: false     // enable keyboard controls
+    // }
 
-    constructor(config) {
+    constructor() {
         super()
 
         // CONFIG
         //
-        for(var prop in config) this.config[prop]=config[prop];  
+        // for(var prop in config) this.config[prop]=config[prop];
 
         // CONTROLS
         //
-        if (this.config.controls) this.controls()
+        // if (this.config.controls) this.controls()
 
         // SOCKET.IO
         //
@@ -101,7 +101,7 @@ class HPlayer3 extends HModule {
         return new Proxy(this, this);
     }
 
-    
+
 
     //
     // access sub-property recursively until hit a function call -> relay to server
@@ -116,10 +116,10 @@ class HPlayer3 extends HModule {
     //
     // Enable keyboard/mouse control
     //
-    controls() 
+    controls()
     {
         $(window).keypress(function(e) {
-                    
+
             var key = String.fromCharCode(e.which).toLowerCase();
             console.log('>', key, e.which)
 
@@ -132,7 +132,7 @@ class HPlayer3 extends HModule {
             if(key == 'c' || key == '0') {
                 $('#log').toggle()
             }
-            
+
         })
     }
 
