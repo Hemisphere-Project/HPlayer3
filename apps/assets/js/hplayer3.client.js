@@ -64,7 +64,7 @@ class HProxy {
 
 class HPlayer3 extends HModule {
 
-    constructor() {
+    constructor(config) {
         super()
 
         // CONFIG
@@ -80,7 +80,7 @@ class HPlayer3 extends HModule {
 
         // CONTROLS
         //
-        // if (this.config.controls) this.controls()
+        if (this.config.controls) this.controls()
 
         // SOCKET.IO
         //
@@ -121,10 +121,10 @@ class HPlayer3 extends HModule {
     //
     controls()
     {
-        $(window).keypress(function(e) {
+        $(window).keypress((e) => {
 
             var key = String.fromCharCode(e.which).toLowerCase();
-            console.log('>', key, e.which)
+            // console.log('>', key, e.which)
 
             // R / 7 : Refresh
             if(key == 'r' || key == '7') {
@@ -150,7 +150,7 @@ class Divlogger {
 
         // OVERLAY LOG DIV
         //
-        this.logdiv = $('<div style="border: 1px solid green; width: 250px; right: 20px; top: 20px; max-height: 523px;" id="log"></div>').hide().appendTo('body')
+        this.logdiv = $('<div style="border: 1px solid green; width: 400px; right: 20px; top: 20px; max-height: 523px; position: absolute; background-color: black; color: white;" id="log">LOGS<br /></div>').hide().appendTo('body')
 
         // SUPERCHARGE CONSOLE.LOG
         //

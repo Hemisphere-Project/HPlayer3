@@ -99,7 +99,7 @@ $(function() {
   hplayer3.media.getTree(mediaSubfolder)
       .catch( error => console.warn(error) )
       .then( data => {
-          console.log(data)
+          // console.log(data)
           allFiles = data.fileTree
           $('#page_browser .grid').empty()
           allFiles.forEach((item, i) => {
