@@ -69,7 +69,7 @@ img{
   width:100%;
   padding: 2% 5% 2% 5%;
   display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(30%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(20%), 1fr));
    /* xx% defines max columns qty */
   grid-gap: 3vw 3vw;
 }
