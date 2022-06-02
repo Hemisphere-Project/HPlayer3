@@ -61,7 +61,19 @@ $(function() {
 
   // REBOOT
   $('.reboot').click(function(){
+    hplayer3.system.reboot()
     $('.overlayReboot').fadeIn(200)
+    setTimeout(function(){
+      location.reload()
+    }, 20000)
+  })
+  // GIT PULL
+  $('.git').click(function(){
+    hplayer3.system.gitpull()
+    $('.overlayGit').fadeIn(200)
+    setTimeout(function(){
+      location.reload()
+    }, 20000)
   })
 
   // FADERS CTRL
@@ -104,22 +116,23 @@ $(function() {
   var fileTree = new Array()
   var files = new Array()
 
-  function refreshTree() 
-  {
+  function refreshTree() {
     hplayer3.media.getTree()
-        .catch( data => { console.warn(data) })
-        .then( data => {
-            console.log('BUILDING FILES')
-            fileTree = data.fileTree
-            console.log(data)
-            $('.browser').empty()
-            parseFileTree(fileTree)
-            if(activeFolder==undefined) activeFolder = data.path
-            baseFolder = data.path
-            showActiveFolder()
-          })
+      .catch(data => {
+        console.warn(data)
+      })
+      .then(data => {
+        console.log('BUILDING FILES')
+        fileTree = data.fileTree
+        console.log(data)
+        $('.browser').empty()
+        parseFileTree(fileTree)
+        if (activeFolder == undefined) activeFolder = data.path
+        baseFolder = data.path
+        showActiveFolder()
+      })
   }
-  refreshTree() 
+  refreshTree()
 
   function parseFileTree(folder){
     folder.forEach((item, i) => {
@@ -159,11 +172,10 @@ $(function() {
 
 
     // DOM
-    this.preview = $('<div class="file '+this.parent+'" path='+this.path+'></div>').appendTo($(".browser"))
-    this.fileName = $('<div class="fileName editableText">'+this.name+'</div>').appendTo(this.preview)
+    this.preview = $('<div class="file ' + this.parent + '" path=' + this.path + '></div>').appendTo($(".browser"))
+    this.fileName = $('<div class="fileName editableText">' + this.name + '</div>').appendTo(this.preview)
     this.controls = $('<div class="fileFunctions"></div>').appendTo(this.preview)
-    this.delete =  $('<img class="btn cross" src="img/cross.svg">').appendTo(this.controls)
-
+    this.delete = $('<img class="btn cross" src="img/cross.svg">').appendTo(this.controls)
 
     // PLAY
     if((this.type=='audio')||(this.type=='video')){
@@ -175,34 +187,34 @@ $(function() {
     }
 
     // DELETE
-    this.delete.click(function(){
+    this.delete.click(function() {
       console.log('DELETE ME', that.path)
-
       // socket.emit('delete', item)
       hplayer3.media.delete(that.path)
-          .then( data => { 
-            console.log('DELETE: OK') 
-            refreshTree() 
-          })
-          .catch( data => { console.warn('DELETE: FAIL', data) })
+        .then(data => {
+          console.log('DELETE: OK')
+          refreshTree()
+        })
+        .catch(data => {
+          console.warn('DELETE: FAIL', data)
+        })
 
       that.preview.remove()
-      files.splice(files.findIndex(function(item){ return item.name === that.name; }), 1);
+      files.splice(files.findIndex(function(item) {
+        return item.name === that.name;
+      }), 1);
     })
 
     // EDIT
     editableText($(this.fileName)[0])
-    this.nameChange = function(newname)
-    {
-      console.log('NAME CHANGE')
-
-      // socket.emit('rename', item, that.parent+newname)
-      hplayer3.media.rename(that.path, that.parent+newname)
-          .then( data => { 
+    this.nameChange = function(newname) {
+        console.log('NAME CHANGE')
+        // socket.emit('rename', item, that.parent+newname)
+        hplayer3.media.rename(that.path, that.parent + newname)
+          .then(data => {
             console.log('RENAME: OK')
-            refreshTree()  
-          })
-          .catch( data => { console.warn('RENAME: FAIL', data) })
+            refreshTree()
+          })  .catch( data => { console.warn('RENAME: FAIL', data) })
     }
 
     if(this.type=='folder'){
@@ -251,7 +263,8 @@ $(function() {
     xhr.onload = () => {
       console.log(xhr.responseText)
       $('#progressBar').removeClass('visible').addClass('invisible')
-      refreshTree() 
+      document.querySelector('[name=fileInput]').value='';
+      refreshTree()
     }
     // error
     xhr.onerror = () => {
