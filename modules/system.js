@@ -1,3 +1,4 @@
+const { execSync } = require('child_process');
 
 class System {
 
@@ -15,10 +16,13 @@ class System {
 
     reboot(){
       this.log('rebooting...')
+      exec('reboot')
     }
 
     gitpull(){
       this.log('git pull...')
+      execSync('git pull')
+      setTimeout(function(){process.exit()}, 1000)
     }
 
 
