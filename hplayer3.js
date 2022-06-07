@@ -7,6 +7,10 @@ var isPi = require('detect-rpi');
 
 var hplayer3 = {}
 
+// SYSTEM CONTROLS
+//
+hplayer3.system   = new System(hplayer3, '/data/hplayer3.conf')
+
 
 // MEDIA
 //
@@ -32,8 +36,6 @@ hplayer3.webserver  = new Webserver({
 hplayer3.socketio   = new Socketio(hplayer3)
 
 
-// SYSTEM CONTROLS
-//
-hplayer3.system   = new System(hplayer3)
+
 
 

@@ -40,7 +40,26 @@ $(function() {
     }
   }
 
+  // AUDIOSELECT
+  $('input[type=radio][name=audioselect]').change(function() {
+    hplayer3.system.audioselect(this.value).then(data => {
+      refreshConfig()
+    })
+  });
 
+  // VIDEOFLIP
+  $('#videoflip').change(function() {
+    hplayer3.system.videoflip($('#videoflip').is(':checked')).then(data => {
+      refreshConfig()
+    })
+  });
+
+  // VIDEOROTATE
+  $('#videorotate').change(function() {
+    hplayer3.system.videorotate(this.value).then(data => {
+      refreshConfig()
+    })
+  });
 
   // INFOS
   $('.infosOpener').click(function(){
@@ -105,11 +124,44 @@ $(function() {
 
   hplayer3.on('connect', ()=>{
     $('.connectionInfo').removeClass('disconnected').addClass('connected')
+    
+    // Tree
+    refreshTree()
+
+    // Config
+    refreshConfig()
+
   })
 
   hplayer3.on('disconnect', ()=>{
     $('.connectionInfo').removeClass('connected').addClass('disconnected')
   })
+
+
+  //////////////// SYSTEM CONFIG ////////////////
+  function refreshConfig() 
+  {
+    hplayer3.system.getConf()
+      .catch(data => {
+        console.warn(data)
+      })
+      .then(data => {
+        console.log('APPLY CONFIG')
+        console.log(data)
+        
+        // AUDIOSELECT
+        $('input:radio[name="audioselect"]').prop('checked', false);
+        $('input:radio[name="audioselect"]').filter('[value="'+data.audioselect+'"]').prop('checked', true);
+
+        // VIDEOFLIP
+        $('#videoflip').prop('checked', data.videoflip);
+
+        // VIDEO ROTATE
+        $('#videorotate').val(data.videorotate);
+
+      })
+  }
+
 
   //////////////// FILES ////////////////
 
@@ -132,7 +184,6 @@ $(function() {
         showActiveFolder()
       })
   }
-  refreshTree()
 
   function parseFileTree(folder){
     folder.forEach((item, i) => {

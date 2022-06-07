@@ -94,7 +94,7 @@ $(function() {
 
   //////////////// HPLAYER3 ////////////////
 
-  var hplayer3 = new HPlayer3({controls:true})
+  var hplayer3 = new HPlayer3({divlogger:true, controls:true})
 
   hplayer3.media.getTree(mediaSubfolder)
       .catch( error => console.warn(error) )
