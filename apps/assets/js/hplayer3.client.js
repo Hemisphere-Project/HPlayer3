@@ -70,13 +70,15 @@ class HPlayer3 extends HModule {
         // CONFIG
         //
         this.config = {
+            divlogger: false,
             controls: false     // enable keyboard controls
         }
         for(var prop in config) this.config[prop]=config[prop];  
 
         // LOGS
         //
-        this.logger = new Divlogger()
+        if (this.config.divlogger)
+            this.logger = new Divlogger()
 
         // CONTROLS
         //

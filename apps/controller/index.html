@@ -88,10 +88,12 @@
           <div class="minigrid">
             <div class="minisection">
               <div class="title_small">Audio</div>
-              <input type="radio" name="audioOutput" id="minijack" checked>
-              <label for="minijack">Minijack</label><br>
-              <input type="radio" name="audioOutput" id="hdmi">
-              <label for="hdmi">HDMI</label><br>
+              <input type="radio" name="audioselect" value="jack">
+              <label for="minijack">Jack</label><br>
+              <input type="radio" name="audioselect" value="hdmi0">
+              <label for="hdmi0">Hdmi 0</label><br>
+              <input type="radio" name="audioselect" value="hdmi1">
+              <label for="hdmi1">Hdmi 1</label><br>
               <div>Volume</div>
               <div class="fader" id="volumeAudio" unit="%" max="100">
                 <div class="faderContainer"><div class="faderFiller"></div></div>
@@ -100,10 +102,15 @@
             </div>
             <div class="minisection">
               <div class="title_small">Video</div>
-              <input type="checkbox" name="rotate" id="rotate">
-              <label for="rotate">Rotate 180°</label><br>
-              <input type="checkbox" name="flip" id="flip">
-              <label for="flip">Flip</label><br>
+              <label for="videorotate">Rotate</label>
+              <select name="videorotate" id="videorotate">
+                <option value="0">0°</option>
+                <option value="90">90°</option>
+                <option value="180">180°</option>
+                <option value="270">270°</option>
+              </select>
+              <label for="videoflip">Flip</label>
+              <input type="checkbox" name="videoflip" id="videoflip"><br>
               <div>Fade In</div>
               <div class="fader" id="fadeInVideo" unit="ms" max="200">
                 <div class="faderContainer"><div class="faderFiller"></div></div>
