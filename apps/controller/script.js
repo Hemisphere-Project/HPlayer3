@@ -223,13 +223,12 @@ $(function() {
     this.type = item.type
 
 
+
     // DOM
     this.preview = $('<div class="file ' + this.parent + '" path=' + this.path + '></div>').appendTo($(".browser"))
-    if(this.type=='folder'){ this.opener = $('<img class="btn open" src="img/arrow_right.svg">').appendTo(this.preview) }
-    if(this.type!='folder'){ this.icon = $('<img class="btn small open" src="img/file.svg">').appendTo(this.preview) }
     this.fileName = $('<div class="fileName editableText">' + this.name + '</div>').appendTo(this.preview)
     this.controls = $('<div class="fileFunctions"></div>').appendTo(this.preview)
-    this.delete = $('<img class="btn cross" src="img/cross.svg">').appendTo(this.controls)
+    this.delete = $('<img class="btn cross small" src="img/cross.svg">').appendTo(this.controls)
 
     // DL
     if(this.type!='folder'){
@@ -237,15 +236,31 @@ $(function() {
       this.download.attr({target: '_blank', href: '/media/'+this.mediaSubfolder+this.name, download: this.name})
     }
 
-    // PLAY
+    // SPECIFIC ICONS
+    // MEDIA
     if((this.type=='audio')||(this.type=='video')){
-      this.play =  $('<img class="btn add" src="img/add.svg">').prependTo(this.controls)
+      this.play =  $('<img class="btn add small" src="img/play2.svg">').prependTo(this.preview)
       this.play.click(function(){
         console.log('PLAY ME')
         $('.selectedMedia').html(that.name)
       })
-
     }
+    // FOLDER
+    else if(this.type=='folder'){
+      this.opener = $('<img class="btn open" src="img/arrow_right.svg">').prependTo(this.preview)
+      this.opener.click(function(){
+        console.log('OPEN FOLDER')
+        activeFolder = that.path+'/'
+        showActiveFolder()
+      })
+    }
+    // FILE
+    else{
+      this.icon = $('<img class="small open" src="img/file.svg">').prependTo(this.preview)
+    }
+
+
+
 
     // DELETE
     this.delete.click(function() {
@@ -278,13 +293,13 @@ $(function() {
           })  .catch( data => { console.warn('RENAME: FAIL', data) })
     }
 
-    if(this.type=='folder'){
-      this.opener.click(function(){
-        console.log('OPEN FOLDER')
-        activeFolder = that.path+'/'
-        showActiveFolder()
-      })
-    }
+    // if(this.type=='folder'){
+    //   this.opener.click(function(){
+    //     console.log('OPEN FOLDER')
+    //     activeFolder = that.path+'/'
+    //     showActiveFolder()
+    //   })
+    // }
 
 
 
