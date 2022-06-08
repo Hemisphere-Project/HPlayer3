@@ -6,10 +6,15 @@ var System = require('./modules/system.js')
 var isPi = require('detect-rpi');
 
 var hplayer3 = {}
-
+var configFile
 // SYSTEM CONTROLS
 //
-hplayer3.system   = new System(hplayer3, '/data/hplayer3.conf')
+if (isPi()) {
+  configFile = '/data/hplayer3.conf'
+} else {
+  configFile = 'hplayer3.conf'
+}
+hplayer3.system   = new System(hplayer3, configFile)
 
 
 // MEDIA
