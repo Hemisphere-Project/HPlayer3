@@ -258,9 +258,9 @@ input[type="file"]{
 .browser{
   border: 1px solid white;
   padding:1% 1% 0 1%;
-  max-height: 30vh;
+  /* max-height: 30vh; */
   overflow-y: scroll;
-  min-height:50px;
+  min-height:200px;
 }
 .controls > *{
   margin-right:6px;
@@ -302,7 +302,7 @@ input[type="file"]{
 }
 /*BROWSER*/
 .browserInfo >*{
-  margin-right: 20px;
+  margin-left: 6px;
   display: inline-block;
 }
 .btn.upload{
