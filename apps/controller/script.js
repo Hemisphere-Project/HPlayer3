@@ -124,7 +124,7 @@ $(function() {
 
   hplayer3.on('connect', ()=>{
     $('.connectionInfo').removeClass('disconnected').addClass('connected')
-    
+
     // Tree
     refreshTree()
 
@@ -139,7 +139,7 @@ $(function() {
 
 
   //////////////// SYSTEM CONFIG ////////////////
-  function refreshConfig() 
+  function refreshConfig()
   {
     hplayer3.system.getConf()
       .catch(data => {
@@ -148,7 +148,7 @@ $(function() {
       .then(data => {
         console.log('APPLY CONFIG')
         console.log(data)
-        
+
         // AUDIOSELECT
         $('input:radio[name="audioselect"]').prop('checked', false);
         $('input:radio[name="audioselect"]').filter('[value="'+data.audioselect+'"]').prop('checked', true);
@@ -219,6 +219,7 @@ $(function() {
     this.raw_name = item.raw_name
     this.path = item.fullpath
     this.parent = this.path.substring(0, this.path.lastIndexOf('/'))+'/'
+    this.mediaSubfolder = this.parent.split('/media/')[1]
     this.type = item.type
 
 
@@ -230,6 +231,12 @@ $(function() {
     this.controls = $('<div class="fileFunctions"></div>').appendTo(this.preview)
     this.delete = $('<img class="btn cross" src="img/cross.svg">').appendTo(this.controls)
 
+    // DL
+    if(this.type!='folder'){
+      this.download =  $('<a><img class="btn dl" src="img/download.svg"></a>').prependTo(this.controls)
+      this.download.attr({target: '_blank', href: '/media/'+this.mediaSubfolder+this.name, download: this.name})
+    }
+
     // PLAY
     if((this.type=='audio')||(this.type=='video')){
       this.play =  $('<img class="btn add" src="img/add.svg">').prependTo(this.controls)
@@ -237,6 +244,7 @@ $(function() {
         console.log('PLAY ME')
         $('.selectedMedia').html(that.name)
       })
+
     }
 
     // DELETE
