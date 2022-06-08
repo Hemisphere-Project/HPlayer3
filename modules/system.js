@@ -3,14 +3,14 @@ const fs = require('fs')
 
 class System {
 
-  
+
   constructor(hplayer3, configPath)
-  { 
+  {
     this.hp3 = hplayer3
 
     // LOAD CONFIG
     this.config = new Config(configPath)
-    
+
     // APPLY CONFIG
     this.audioselect( this.config.get('audioselect') )
     this.videorotate( this.config.get('videorotate') )
@@ -31,7 +31,7 @@ class System {
     try {
       execSync('systemctl is-active --quiet kiosk')
       execSync('systemctl restart kiosk')
-    } 
+    }
     catch (error) {
       //this.log(error.status)
     }
@@ -45,7 +45,7 @@ class System {
     setTimeout(function(){process.exit()}, 1000)
   }
 
-  
+
   getConf(){
     return this.config._config
   }
@@ -80,11 +80,11 @@ class System {
   videorotate(degree){
     degree = degree % 360
     if (degree%90 == 0) {
-      
+
       try {
         let currentMode = String(execSync("sed -n -e '/^ROTATE/p' /boot/kiosk.conf")).trim().split('=')[1]
         let newMode = currentMode
-  
+
         if (degree == 0 && currentMode.includes('rotate-')) {
           if (currentMode.startsWith('flipped')) newMode = 'flipped'
           else newMode = 'normal'
@@ -93,19 +93,19 @@ class System {
           if (currentMode.startsWith('flipped')) newMode = 'flipped-rotate-'+degree
           else newMode = 'rotate-'+degree
         }
-  
-        if (newMode != currentMode) 
+
+        if (newMode != currentMode)
         {
           execSync("rw")
           execSync("sed -i 's/ROTATE=.*/ROTATE="+newMode+"/g' /boot/kiosk.conf")
           execSync("ro")
-  
+
           this.config.set('videorotate', degree)
           this.log('rotating video', degree)
-  
+
           this.restartkiosk()
         }
-  
+
       }
       catch(err) {
         this.log('error when rotating video', err)
@@ -131,7 +131,7 @@ class System {
         else newMode = currentMode.split('flipped-')[1]
       }
 
-      if (newMode != currentMode) 
+      if (newMode != currentMode)
       {
         execSync("rw")
         execSync("sed -i 's/ROTATE=.*/ROTATE="+newMode+"/g' /boot/kiosk.conf")
@@ -163,9 +163,16 @@ class Config {
 
   // DEFAULT CONFIG
   _config = {
+    ssid: 'device_name',
+    pass: 'Museo69*',
+    wifiOff: true,
     audioselect: 'jack',
+    audiovolume: 80,
     videorotate: 0,
-    videoflip: false
+    videoflip: false,
+    videofade: 0,
+    modules: ['tactile', 'connector'],
+    theme: 'default'
   }
 
   configFile = null
@@ -173,20 +180,20 @@ class Config {
   constructor(path)
   {
     this.configFile = path
-    
+
     // load from file
-    if (this.configFile) 
+    if (this.configFile)
       try {
         const data = fs.readFileSync(this.configFile);
         var conf = JSON.parse(data)
         for(var prop in conf) this._config[prop]=conf[prop]
         this.log('loaded from', this.configFile);
-      } 
+      }
       catch(err) {
         this.log('No config loaded... using default. ')
         this.save() // save clean file if previous one was broken..
       }
-      
+
   }
 
   save()
@@ -197,9 +204,9 @@ class Config {
     }
 
     try {
-      fs.writeFileSync(this.configFile, JSON.stringify(this._config), 'utf8');
+      fs.writeFileSync(this.configFile, JSON.stringify(this._config, null, 2), 'utf8');
       this.log('saved !');
-    } 
+    }
     catch (error) {
       this.log('Error while saving config: ', error);
     }
@@ -218,7 +225,7 @@ class Config {
   {
     return this._config[entry]
   }
-  
+
   log(...v) {
     console.log(`[config]`, ...v)
   }
