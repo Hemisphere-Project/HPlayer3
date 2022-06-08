@@ -22,7 +22,10 @@ img{
 *::-webkit-scrollbar {
   display: none;
 }
-
+/*-----------------------SECTIONS-----------------------*/
+.option{
+  display:none;
+}
 
 /*-----------------------GRID-----------------------*/
 
@@ -46,7 +49,7 @@ img{
   margin-bottom: 30px;
   position: relative;
 }
-.section > *, .minisection > *, .overlayContent > *{
+.section > *, .minisection > *, .overlayContent > *,  .option > *{
   margin-bottom: 8px;
 }
 .section .title{
@@ -60,6 +63,9 @@ img{
 .title > *, .title_small > *{
   margin-left: 10px;
   display:inline-block;
+}
+.option{
+  margin-bottom: 20px;
 }
 
 /*-----------------------OVERLAY-----------------------*/
@@ -115,6 +121,7 @@ body{
   font-size: 12pt;
   text-decoration: underline;
   text-underline-offset: 3px;
+  margin-bottom: 10px;
 }
 
 /*--------------------GRAPHIC ELEMENTS------------------*/
@@ -321,9 +328,6 @@ input[type="file"]{
 }
 
 /*OUTPUT*/
-.section.output .title_small{
-  margin-bottom: 10px;
-}
 .section.output #volumeAudio, .section.output #fadeInVideo{
   width: 80%;
 }

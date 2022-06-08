@@ -45,21 +45,35 @@ $(function() {
     hplayer3.system.audioselect(this.value).then(data => {
       refreshConfig()
     })
-  });
+  })
 
   // VIDEOFLIP
   $('#videoflip').change(function() {
     hplayer3.system.videoflip($('#videoflip').is(':checked')).then(data => {
       refreshConfig()
     })
-  });
+  })
 
   // VIDEOROTATE
   $('#videorotate').change(function() {
     hplayer3.system.videorotate(this.value).then(data => {
       refreshConfig()
     })
-  });
+  })
+
+  // PLAYERTYPE
+  // $('input[type=radio][name=playerType]').change(function(){
+  //   var playerType = this.value
+  //   $('.option').filter(":visible").fadeOut(200,function(){
+  //     $('.'+playerType).fadeIn(200)
+  //   })
+  // })
+  // PLAYERMODULES
+  $('.moduleSelect').change(function(){
+    var module = $(this).val()
+    if($(this).is(':checked')){ $('.'+module).fadeIn(100) }
+    else{ $('.'+module).fadeOut(100) }
+  })
 
   // INFOS
   $('.infosOpener').click(function(){

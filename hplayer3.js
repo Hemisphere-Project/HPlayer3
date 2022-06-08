@@ -32,10 +32,5 @@ hplayer3.webserver  = new Webserver({
 
 
 // SOCKETIO SERVER
-//                        
+//
 hplayer3.socketio   = new Socketio(hplayer3)
-
-
-
-
-

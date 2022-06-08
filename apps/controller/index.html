@@ -131,13 +131,23 @@
           <div class="title">GENERAL</div>
           <div class="minigrid">
             <div class="minisection">
-              <div class="title_small">PLAYER TYPE</div>
-              <input type="radio" name="playerType" id="standard" checked>
+              <!-- <div class="title_small">PLAYER TYPE</div>
+              <input type="radio" name="playerType" value="standard">
               <label for="standard">Standard</label><br>
-              <input type="radio" name="playerType" id="tactile">
+              <input type="radio" name="playerType" value="tactile">
               <label for="tactile">Tactile</label><br>
-              <input type="radio" name="playerType" id="synchro">
-              <label for="synchro">Synchro</label><br>
+              <input type="radio" name="playerType" value="synchro">
+              <label for="synchro">Synchro</label><br> -->
+              <div class="title_small">MODULES</div>
+              <input class="moduleSelect" type="checkbox" name="moduleTactile" value="tactile">
+              <label for="moduleTactile">Tactile</label><br>
+              <input class="moduleSelect" type="checkbox" name="moduleConnector" value="connector">
+              <label for="moduleConnector">Connector</label><br>
+              <input class="moduleSelect" type="checkbox" name="moduleSerial" value="serial">
+              <label for="moduleSerial">Serial</label><br>
+              <input class="moduleSelect" type="checkbox" name="moduleSynchro" value="synchro">
+              <label for="moduleSynchro">Synchro</label><br>
+
             </div>
             <div class="minisection">
               <div class="title_small">WIFI</div>
@@ -154,148 +164,57 @@
         </div>
 
 
-        <!-- ///////////////////// STANDARD ///////////////////// -->
+        <!-- ///////////////////// SPECIFIC OPTIONS ///////////////////// -->
         <div class="section">
-          <div class="title">STANDARD</div>
-          <div class="title_small">HConnector<div class="btn infosOpener" href="infos-HConnector">&#9432;</div></div>
-          T1
-          <select name="T1" id="T1-select">
-            <option value="" selected>play 1</option>
-            <option value="">play 2</option>
-            <option value="">play 3</option>
-            <option value="">play 4</option>
-            <option value="">play 5</option>
-            <option value="">Stop</option>
-          </select>
-          T2
-          <select name="T2" id="T1-select">
-            <option value="">play 1</option>
-            <option value="" selected>play 2</option>
-            <option value="">play 3</option>
-            <option value="">play 4</option>
-            <option value="">play 5</option>
-            <option value="">Stop</option>
-          </select>
-          T3
-          <select name="T3" id="T1-select">
-            <option value="">play 1</option>
-            <option value="">play 2</option>
-            <option value="" selected>play 3</option>
-            <option value="">play 4</option>
-            <option value="">play 5</option>
-            <option value="">Stop</option>
-          </select>
-          T4
-          <select name="T4" id="T1-select">
-            <option value="">play 1</option>
-            <option value="">play 2</option>
-            <option value="">play 3</option>
-            <option value="" selected>play 4</option>
-            <option value="">play 5</option>
-            <option value="">Stop</option>
-          </select>
-          T5
-          <select name="T5" id="T1-select">
-            <option value="">play 1</option>
-            <option value="">play 2</option>
-            <option value="">play 3</option>
-            <option value="">play 4</option>
-            <option value="" selected>play 5</option>
-            <option value="">Stop</option>
-          </select>
-          <br>
-          B1
-          <select name="B1" id="T1-select">
-            <option value="" selected>play</option>
-            <option value="">stop</option>
-            <option value="">pause</option>
-            <option value="">play 1</option>
-            <option value="">play 2</option>
-            <option value="">play 3</option>
-            <option value="">play 4</option>
-            <option value="">play 5</option>
-            <option value="">next</option>
-            <option value="">previous</option>
-            <option value="">vol+</option>
-            <option value="">vol-</option>
-          </select>
-          B2
-          <select name="B2" id="T1-select">
-            <option value="">play</option>
-            <option value="" selected>stop</option>
-            <option value="">pause</option>
-            <option value="">play 1</option>
-            <option value="">play 2</option>
-            <option value="">play 3</option>
-            <option value="">play 4</option>
-            <option value="">play 5</option>
-            <option value="">Stop</option>
-            <option value="">next</option>
-            <option value="">previous</option>
-            <option value="">vol+</option>
-            <option value="">vol-</option>
-          </select>
-          B3
-          <select name="B3" id="T1-select">
-            <option value="">play</option>
-            <option value="">stop</option>
-            <option value="" selected>pause</option>
-            <option value="">play 1</option>
-            <option value="">play 2</option>
-            <option value="">play 3</option>
-            <option value="">play 4</option>
-            <option value="">play 5</option>
-            <option value="">next</option>
-            <option value="">previous</option>
-            <option value="">vol+</option>
-            <option value="">vol-</option>
-          </select>
-          <br>
-          <input type="checkbox" name="loop0" id="loop0">
-          <label for="loop0">Fichier d'attente en boucle (0_video.mp4)</label><br>
-          <div class="title_small">Serial<div class="btn infosOpener" href="infos-Serial">&#9432;</div></div>
-          Logs
-          <div class="serialLogs">
+
+          <div class="title">OPTIONS</div>
+
+          <div class="option tactile">
+            <div class="title_small">Tactile</div>
+            THEME:
+            <select id="select">
+              <option value="" selected>Default</option>
+            </select>
+            <br>
+            <div class="textBtn editCSS">EDIT STYLE</div>
           </div>
-        </div>
 
+          <div class="option connector">
+            <div class="title_small">Connector<div class="btn infosOpener" href="infos-HConnector">&#9432;</div></div>
+            <div class="textBtn editScenario">EDIT SCENARIO</div>
+          </div>
 
-        <!-- ///////////////////// TACTILE ///////////////////// -->
-        <div class="section">
-          <div class="title">TACTILE</div>
-          <input type="checkbox" name="waitPage" id="waitPage">
-          <label for="waitPage">Page d'attente</label><br>
-          <input type="checkbox" name="scrollbar_tactile" id="scrollbar_tactile">
-          <label for="scrollbar_tactile">Scrollbar</label><br>
-          <input type="checkbox" name="closeBtn" id="closeBtn">
-          <label for="closeBtn">Bouton 'close' </label><br>
-          <input type="checkbox" name="langage" id="langage">
-          <label for="langage">Choix des langues</label><br>
-        </div>
+          <div class="option serial">
+            <div class="title_small">Serial<div class="btn infosOpener" href="infos-Serial">&#9432;</div></div>
+            Logs
+            <div class="serialLogs"></div>
+          </div>
 
-
-        <!-- ///////////////////// SYNCHRO ///////////////////// -->
-        <div class="section">
-          <div class="title">SYNCHRO</div>
-          <div class="minigrid">
-            <div class="minisection">
-              <input type="radio" name="host_client" id="host">
-              <label for="host">Host</label><br>
-              <input type="radio" name="host_client" id="client">
-              <label for="client">Client</label><br>
-              Host: <div class="editableText hostName">host_name</div><br>
-            </div>
-            <div class="minisection">
-              <div class="title_small">Clients disponibles</div>
-              <div class="clientsList">
-                Aucun client trouvé
-                <!-- <a href="http:10.0.0.100" target="_blank">http:10.0.0.100</a>
-                <a href="http:10.0.0.101" target="_blank">http:10.0.0.101</a>
-                <a href="http:10.0.0.102" target="_blank">http:10.0.0.102</a> -->
+          <div class="option synchro">
+            <div class="title_small">Synchro</div>
+            <div class="minigrid">
+              <div class="minisection">
+                <input type="radio" name="host_client" id="host">
+                <label for="host">Host</label><br>
+                <input type="radio" name="host_client" id="client">
+                <label for="client">Client</label><br>
+                Host: <div class="editableText hostName">host_name</div><br>
+              </div>
+              <div class="minisection">
+                <div class="title_small">Clients disponibles</div>
+                <div class="clientsList">
+                  Aucun client trouvé
+                  <!-- <a href="http:10.0.0.100" target="_blank">http:10.0.0.100</a>
+                  <a href="http:10.0.0.101" target="_blank">http:10.0.0.101</a>
+                  <a href="http:10.0.0.102" target="_blank">http:10.0.0.102</a> -->
+                </div>
               </div>
             </div>
           </div>
+
+
         </div>
+
 
       </div>  <!-- end column -->
 
