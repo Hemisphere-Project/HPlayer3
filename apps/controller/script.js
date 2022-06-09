@@ -387,26 +387,27 @@ $(function() {
 
   /////////////// CODE EDITOR ///////////////
 
-
   var codeEditor = CodeMirror($('.codeEditor')[0], {
-    value: "function(){ return;}",
+    value: "",
     mode:  "javascript",
     theme: "monokai"
   });
 
   $('.editCSS').click(function(){
-    $('.overlayEditor').hide().css('visibility','visible').fadeIn(100)
+    $('.overlayEditor').fadeIn(100)
     $.get('/conf/complement.css', function(txt) {
       codeEditor.setValue(txt)
+      codeEditor.setSize("100%", "100%");
       codeEditor.refresh()
     }, 'text')
   })
 
-  $('.saveCSS').click(function(){
+  $('.saveCode').click(function(){
     var content = codeEditor.getValue()
 
     hplayer3.conf.writeFile('/complement.css', content ).then(data => {
       console.log('ok')
+      $('.overlayEditor').fadeOut(100)
     })
 
   })

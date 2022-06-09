@@ -89,15 +89,15 @@ img{
   min-height: 30vh;
   border: 1px solid white;
   position:relative;
-  pointer-events: none;
-  box-shadow: 0px 0px 50px rgb(0,0,0,0.4)
+  box-shadow: 0px 0px 50px rgb(0,0,0,0.4);
 }
 .overlayCloser{
   position: absolute;
   top: 15px;
   right:15px;
 }
-
+.overlay .codeEditor{
+}
 .overlayReboot, .overlayGit{
   text-align: center;
 }
