@@ -61,13 +61,14 @@ $(function() {
     })
   })
 
-  // PLAYERTYPE
-  // $('input[type=radio][name=playerType]').change(function(){
-  //   var playerType = this.value
-  //   $('.option').filter(":visible").fadeOut(200,function(){
-  //     $('.'+playerType).fadeIn(200)
-  //   })
-  // })
+  // THEMESELECTOR
+  $('#themeSelector').change(function() {
+    console.log(this.value)
+    hplayer3.system.selectTheme(this.value).then(data => {
+      refreshConfig()
+    })
+  })
+
   // PLAYERMODULES
   $('.moduleSelect').change(function(){
     var module = $(this).val()
@@ -83,9 +84,6 @@ $(function() {
   $('.overlayCloser').click(function(){
     $('.overlay').fadeOut(100)
   })
-  // $('.overlay').click(function(e){
-  //   $('.overlay').fadeOut(100)
-  // })
   $('body').on("keydown", function(e) {
     if(e.keyCode == 27){
       $('.overlay').fadeOut(100)
@@ -153,15 +151,15 @@ $(function() {
 
 
   //////////////// SYSTEM CONFIG ////////////////
-  function refreshConfig()
-  {
+  function refreshConfig(){
+
+    // Config
     hplayer3.system.getConf()
       .catch(data => {
         console.warn(data)
       })
       .then(data => {
         console.log('APPLY CONFIG')
-        console.log(data)
 
         // AUDIOSELECT
         $('input:radio[name="audioselect"]').prop('checked', false);
@@ -173,8 +171,14 @@ $(function() {
         // VIDEO ROTATE
         $('#videorotate').val(data.videorotate);
 
+        // THEME SELECTOR
+        $("#themeSelector").val(data.theme)
+
+
       })
+
   }
+
 
 
   //////////////// FILES ////////////////
@@ -183,6 +187,23 @@ $(function() {
   var files = new Array()
 
   function refreshTree() {
+
+    // APPS
+    hplayer3.apps.getTree()
+      .catch(data => {
+        console.warn(data)
+      })
+      .then(data => {
+        $('#themeSelector').empty()
+        data.fileTree.forEach((item, i) => {
+          if(item.type =='folder'){
+            console.log(item.name)
+            $('#themeSelector').append('<option value="'+item.name+'" >'+item.name+'</option>')
+          }
+        });
+      })
+
+    // MEDIA FILES
     hplayer3.media.getTree()
       .catch(data => {
         console.warn(data)
@@ -197,6 +218,7 @@ $(function() {
         baseFolder = data.path
         showActiveFolder()
       })
+
   }
 
   function parseFileTree(folder){
@@ -307,14 +329,6 @@ $(function() {
           })  .catch( data => { console.warn('RENAME: FAIL', data) })
     }
 
-    // if(this.type=='folder'){
-    //   this.opener.click(function(){
-    //     console.log('OPEN FOLDER')
-    //     activeFolder = that.path+'/'
-    //     showActiveFolder()
-    //   })
-    // }
-
 
 
   }
@@ -386,18 +400,17 @@ $(function() {
   }
 
   /////////////// CODE EDITOR ///////////////
-
+  var editedFile = ''
   var codeEditor = CodeMirror($('.codeEditor')[0], {
-    value: "$('.editCSS').click(function(){$('.overlayEditor').fadeIn(100)$.get('/conf/complement.css', function(txt) \n{codeEditor.setValue(txt)codeEditor.setSize();codeEditor.refresh()}, 'text')})",
+    value: "",
     theme: "moxer",
     mode:  "css"
-
-    // theme: 'default',
   });
 
-  $('.editCSS').click(function(){
+  $('.editCode').click(function(){
+    editedFile = $(this).attr('file')
     $('.overlayEditor').fadeIn(100)
-    $.get('/conf/complement.css', function(txt) {
+    $.get('/conf/'+editedFile, function(txt) {
       codeEditor.setValue(txt)
       codeEditor.setSize("100%", "50vh")
       codeEditor.refresh()
@@ -406,8 +419,7 @@ $(function() {
 
   $('.saveCode').click(function(){
     var content = codeEditor.getValue()
-
-    hplayer3.conf.writeFile('/complement.css', content ).then(data => {
+    hplayer3.conf.writeFile('/'+editedFile, content ).then(data => {
       console.log('ok')
       $('.overlayEditor').fadeOut(100)
     })

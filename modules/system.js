@@ -151,6 +151,11 @@ class System {
 
   }
 
+  selectTheme(theme){
+    this.config.set('theme', theme)
+    this.restartkiosk()
+  }
+
 
   log(...v) {
     console.log(`[system]`, ...v)
