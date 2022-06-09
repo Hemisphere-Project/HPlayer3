@@ -83,9 +83,9 @@ $(function() {
   $('.overlayCloser').click(function(){
     $('.overlay').fadeOut(100)
   })
-  $('.overlay').click(function(e){
-    $('.overlay').fadeOut(100)
-  })
+  // $('.overlay').click(function(e){
+  //   $('.overlay').fadeOut(100)
+  // })
   $('body').on("keydown", function(e) {
     if(e.keyCode == 27){
       $('.overlay').fadeOut(100)
@@ -389,17 +389,26 @@ $(function() {
 
 
   var codeEditor = CodeMirror($('.codeEditor')[0], {
-    value: "",
-    mode:  "css",
-    theme: "monokai.css"
+    value: "function(){ return;}",
+    mode:  "javascript",
+    theme: "monokai"
   });
 
   $('.editCSS').click(function(){
-      // codeEditor.setValue("lkJHDlkdjh")
+    $('.overlayEditor').hide().css('visibility','visible').fadeIn(100)
+    $.get('/conf/complement.css', function(txt) {
+      codeEditor.setValue(txt)
+      codeEditor.refresh()
+    }, 'text')
+  })
 
-      $.get('/assets/complement.css', function(txt) {
-        codeEditor.setValue(txt)
-      }, 'text')
+  $('.saveCSS').click(function(){
+    var content = codeEditor.getValue()
+
+    hplayer3.conf.writeFile('/complement.css', content ).then(data => {
+      console.log('ok')
+    })
+
   })
 
 

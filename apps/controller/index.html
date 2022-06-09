@@ -11,7 +11,8 @@
     <script src="/assets/lib/eventemitter2.js"></script>
     <script src="/assets/lib/codemirror.js"></script>
     <link rel="stylesheet" href="/assets/lib/codemirror.css">
-    <link rel="stylesheet" href="/assets/lib/codemirror_themes/codemirror.css">
+    <link rel="stylesheet" href="/assets/lib/codemirror_themes/monokai.css">
+    <link rel="stylesheet" href="/assets/lib/codemirror_themes/night.css">
     <!-- COMMON JS -->
     <script src="/assets/js/hplayer3.client.js"></script>
     <!-- INT -->
@@ -180,7 +181,7 @@
               <option value="" selected>Default</option>
             </select>
             <br>
-            <div class="textBtn editCSS">EDIT STYLE</div>
+            <div class="btn textBtn editCSS">EDIT STYLE</div>
           </div>
 
           <div class="option connector">
@@ -214,9 +215,6 @@
                 </div>
               </div>
             </div>
-          </div>
-
-          <div class="codeEditor">
           </div>
 
         </div> <!-- end section -->
@@ -260,9 +258,12 @@
       </div>
     </div>
 
-    <div class="overlay codeEditor">
+    <div class="overlay overlayEditor">
       <div class="overlayContent">
-
+        <img class="btn overlayCloser" src="img/cross.svg">
+        <div class="codeEditor">
+        </div>
+        <div class="btn textBtn saveCode">SAVE</div>
       </div>
     </div>
 

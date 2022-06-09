@@ -4,12 +4,12 @@ const fs = require('fs')
 class System {
 
 
-  constructor(hplayer3, configPath)
+  constructor(hplayer3)
   {
     this.hp3 = hplayer3
 
     // LOAD CONFIG
-    this.config = new Config(configPath)
+    this.config = new Config(this.hp3.conf.path+'/hplayer3.conf')
 
     // APPLY CONFIG
     this.audioselect( this.config.get('audioselect') )
@@ -199,7 +199,7 @@ class Config {
   save()
   {
     if (!this.configFile) {
-      this.log('cannot save: no config file loaded..')
+      this.log('cannot save: no config file provided..')
       return
     }
 

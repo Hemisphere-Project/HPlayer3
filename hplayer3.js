@@ -9,22 +9,18 @@ var hplayer3 = {}
 var configFile
 // SYSTEM CONTROLS
 //
-if (isPi()) {
-  configFile = '/data/hplayer3.conf'
-} else {
-  configFile = 'hplayer3.conf'
-}
-hplayer3.system   = new System(hplayer3, configFile)
-
-
 // MEDIA
 //
 if (isPi()) {
     hplayer3.media = new Files( '/data/media' )
 } else {
     hplayer3.media = new Files( __dirname+'/media' )
+    hplayer3.conf = new Files( __dirname+'/conf' )
 }
 
+// SYSTEM
+//
+hplayer3.system   = new System(hplayer3)
 
 // FILE SERVER
 //
@@ -32,7 +28,8 @@ hplayer3.webserver  = new Webserver({
                             hp3:    hplayer3,
                             port:   5000,
                             apps:   './apps',
-                            media:  hplayer3.media
+                            media:  hplayer3.media,
+                            conf:  hplayer3.conf,
                         })
 
 
