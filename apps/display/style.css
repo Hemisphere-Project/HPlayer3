@@ -196,4 +196,5 @@ img{
   right: 4%;
   top: 4%;
   z-index: 10;
+  display:none;
 }
