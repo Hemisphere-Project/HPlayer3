@@ -18,6 +18,9 @@ if (isPi()) {
     hplayer3.conf = new Files( __dirname+'/conf' )
 }
 
+
+hplayer3.apps = new Files( __dirname+'/apps' )
+
 // SYSTEM
 //
 hplayer3.system   = new System(hplayer3)
