@@ -39,6 +39,10 @@ class Webserver {
       if (this.config.media)
         this.app.use('/media', express.static(this.config.media.path))
 
+      // CONF
+      if (this.config.conf)
+        this.app.use('/conf', express.static(this.config.conf.path))
+
       // HTTP bind
       this.http = http.createServer(this.app)
       this.http.listen(this.config.port, () => {
@@ -62,7 +66,7 @@ class Webserver {
           } else {
 
             this.log('Uploading...')
-            
+
             // if array - forEach move, if not, move
             if (Array.isArray(req.files.myfiles)) {
               req.files.myfiles.forEach((item, i) => {

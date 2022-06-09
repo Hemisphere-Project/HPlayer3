@@ -156,13 +156,24 @@ class Files {
 
     // ADD FOLDER
     addFolder(path){
-      this.log('adding', path )
+      this.log('adding', path, value )
 
       fs.mkdir(path, err => {
         if (err) throw err;
         else this.log('added '+path)
         this.buildTree()
       })
+    }
+
+
+    writeFile(path, value){
+      try {
+        fs.writeFileSync(this.path+path, value, 'utf8');
+        this.log('saved !');
+      }
+      catch (error) {
+        this.log('Error while saving file: ', error);
+      }
     }
 
     log(...v) {
