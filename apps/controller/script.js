@@ -388,9 +388,9 @@ $(function() {
   /////////////// CODE EDITOR ///////////////
 
   var codeEditor = CodeMirror($('.codeEditor')[0], {
-    value: "",
-    theme: "bespin",
-    mode:  "CSS"
+    value: "$('.editCSS').click(function(){$('.overlayEditor').fadeIn(100)$.get('/conf/complement.css', function(txt) \n{codeEditor.setValue(txt)codeEditor.setSize();codeEditor.refresh()}, 'text')})",
+    theme: "moxer",
+    mode:  "css"
 
     // theme: 'default',
   });
