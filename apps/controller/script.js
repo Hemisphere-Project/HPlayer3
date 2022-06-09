@@ -389,15 +389,17 @@ $(function() {
 
   var codeEditor = CodeMirror($('.codeEditor')[0], {
     value: "",
-    mode:  "javascript",
-    theme: "monokai"
+    theme: "bespin",
+    mode:  "CSS"
+
+    // theme: 'default',
   });
 
   $('.editCSS').click(function(){
     $('.overlayEditor').fadeIn(100)
     $.get('/conf/complement.css', function(txt) {
       codeEditor.setValue(txt)
-      codeEditor.setSize("100%", "100%");
+      codeEditor.setSize("100%", "50vh")
       codeEditor.refresh()
     }, 'text')
   })
