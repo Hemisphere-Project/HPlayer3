@@ -385,6 +385,23 @@ $(function() {
     xhr.send(formData)
   }
 
+  /////////////// CODE EDITOR ///////////////
+
+
+  var codeEditor = CodeMirror($('.codeEditor')[0], {
+    value: "",
+    mode:  "css",
+    theme: "monokai.css"
+  });
+
+  $('.editCSS').click(function(){
+      // codeEditor.setValue("lkJHDlkdjh")
+
+      $.get('/assets/complement.css', function(txt) {
+        codeEditor.setValue(txt)
+      }, 'text')
+  })
+
 
 
 

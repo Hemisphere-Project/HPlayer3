@@ -7,8 +7,12 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <!-- LIBS -->
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/assets/js/jquery-3.6.0.min.js"></script>
-    <script src="/assets/js/eventemitter2.js"></script>
+    <script src="/assets/lib/jquery-3.6.0.min.js"></script>
+    <script src="/assets/lib/eventemitter2.js"></script>
+    <script src="/assets/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="/assets/lib/codemirror.css">
+    <link rel="stylesheet" href="/assets/lib/codemirror_themes/codemirror.css">
+    <!-- COMMON JS -->
     <script src="/assets/js/hplayer3.client.js"></script>
     <!-- INT -->
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -212,8 +216,10 @@
             </div>
           </div>
 
+          <div class="codeEditor">
+          </div>
 
-        </div>
+        </div> <!-- end section -->
 
 
       </div>  <!-- end column -->
@@ -251,6 +257,12 @@
           /play 0<br>
           /pause<br>
           /stop<br>
+      </div>
+    </div>
+
+    <div class="overlay codeEditor">
+      <div class="overlayContent">
+
       </div>
     </div>
 
