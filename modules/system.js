@@ -5,7 +5,7 @@ const { execSync } = require('child_process');
 const fs = require('fs')
 const os = require("os");
 
-class System extends Module 
+class System extends Module
 {
 
   constructor(hplayer3)
@@ -135,6 +135,10 @@ class System extends Module
   selectTheme(theme){
     this.config.set('theme', theme)
     this.restartkiosk()
+  }
+
+  toggleModule(module, value){
+    console.log(module)
   }
 
 
