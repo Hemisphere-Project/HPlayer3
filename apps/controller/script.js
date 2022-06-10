@@ -86,7 +86,6 @@ $(function() {
 
   // THEMESELECTOR
   $('#themeSelector').change(function() {
-    console.log(this.value)
     hplayer3.system.selectTheme(this.value).then(data => {
       refreshConfig()
     })
@@ -95,8 +94,18 @@ $(function() {
   // PLAYERMODULES
   $('.moduleSelect').change(function(){
     var module = $(this).val()
-    if($(this).is(':checked')){ $('.'+module).fadeIn(100) }
-    else{ $('.'+module).fadeOut(100) }
+    var value
+    if($(this).is(':checked')){
+      value = true
+      $('.'+module).fadeIn(100)
+    }
+    else{
+      value = false
+      $('.'+module).fadeOut(100)
+    }
+    hplayer3.system.toggleModule(module, value ).then(data => {
+      refreshConfig()
+    })
   })
 
   // INFOS
@@ -192,7 +201,6 @@ $(function() {
     hplayer3.system.getConf()
       .catch(data => { console.warn(data) })
       .then(data => {
-        console.log('APPLY CONFIG')
 
         // AUDIOOUT
         $('input:radio[name="audioout"]').prop('checked', false);
@@ -207,9 +215,17 @@ $(function() {
         // VIDEO ROTATE
         $('#videorotate').val(data.videorotate);
 
+        // MODULE SELECTOR
+        // Reset
+        $('.moduleSelect').each(function(i,div){ $(div).prop('checked', false) })
+        data.modules.forEach(module =>{
+          $('input:radio[name="audioout"]').filter('[value="'+module+'"]').prop('checked', true);
+          // $('.moduleSelect').filter('[value="'+module+'"]').click()
+        })
+
         // THEME SELECTOR
         $("#themeSelector").val(data.theme)
-
+        $(".themeLink").attr('href', '/'+data.theme)
 
       })
 
@@ -247,7 +263,6 @@ $(function() {
         $('#themeSelector').empty()
         data.fileTree.forEach((item, i) => {
           if(item.type =='folder'){
-            console.log(item.name)
             $('#themeSelector').append('<option value="'+item.name+'" >'+item.name+'</option>')
           }
         });
@@ -470,7 +485,6 @@ $(function() {
   $('.saveCode').click(function(){
     var content = codeEditor.getValue()
     hplayer3.conf.writeFile('/'+editedFile, content ).then(data => {
-      console.log('ok')
       $('.overlayEditor').fadeOut(100)
     })
 

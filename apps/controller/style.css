@@ -223,7 +223,7 @@ select{
   background-color: rgb(50, 50, 50);
   color:white;
   border:none;
-  margin-right: 20px;
+  margin-right: 5px;
 }
 input[type="file"]{
 
