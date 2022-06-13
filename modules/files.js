@@ -15,7 +15,7 @@ class Files extends Module {
     mytree = []
     path = null
 
-    constructor(path) 
+    constructor(path)
     {
       super('files')
 
@@ -162,7 +162,6 @@ class Files extends Module {
 
     // ADD FOLDER
     addFolder(path){
-      this.log('adding', path, value )
 
       fs.mkdir(path, err => {
         if (err) throw err;
@@ -172,6 +171,7 @@ class Files extends Module {
     }
 
 
+    // WRITE FILE
     writeFile(path, value){
       try {
         fs.writeFileSync(this.path+path, value, 'utf8');

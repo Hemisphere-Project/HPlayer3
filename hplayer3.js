@@ -35,5 +35,3 @@ hplayer3.webserver  = new Webserver(hplayer3, webPort)
 // SOCKETIO SERVER
 //
 hplayer3.socketio   = new Socketio(hplayer3)
-
-

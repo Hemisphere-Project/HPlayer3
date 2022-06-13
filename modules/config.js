@@ -13,15 +13,15 @@ class Config extends Module {
       modules: ['tactile', 'connector'],
       theme: 'default'
     }
-  
+
     configFile = null
-  
+
     constructor(hplayer3)
     {
       super('config', hplayer3)
 
       this.configFile = this.hp3.files.conf.path+'/hplayer3.conf'
-  
+
       // load from file
       if (this.configFile)
         try {
@@ -34,16 +34,16 @@ class Config extends Module {
           this.log('No config loaded... using default. ')
           this.save() // save clean file if previous one was broken..
         }
-  
+
     }
-  
+
     save()
     {
       if (!this.configFile) {
         this.log('cannot save: no config file provided..')
         return
       }
-  
+
       try {
         fs.writeFileSync(this.configFile, JSON.stringify(this._config, null, 2), 'utf8');
         this.log('saved !');
@@ -51,9 +51,9 @@ class Config extends Module {
       catch (error) {
         this.log('Error while saving config: ', error);
       }
-  
+
     }
-  
+
     set(entry, value)
     {
       if (this._config[entry] != value) {
@@ -63,12 +63,12 @@ class Config extends Module {
       }
       return false
     }
-  
+
     get(entry)
     {
       return this._config[entry]
     }
-  
+
   }
 
 module.exports = Config
