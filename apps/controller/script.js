@@ -118,7 +118,7 @@ $(function() {
   //////////////////////////////////////////
   function refreshableField(div) {
     this.element = $(div)
-    
+
     // PRIVATE
     this._getter = null                                 // Promise used to remote get value
     this._setter = null                                 // Promise used to remote set value
@@ -147,7 +147,7 @@ $(function() {
       })
     }
     return this
-  } 
+  }
 
   //////////////// HPLAYER3 ////////////////
 
@@ -171,10 +171,10 @@ $(function() {
     // Connect status
     $('.connectionInfo').removeClass('connected').addClass('disconnected')
   })
-  
+
 
   //////////////// REFRESHABLE FIELDS ////////////////
-  
+
   // MODULES LIST
   hplayer3.system.getAvailableModules()
     .then(data => {
@@ -205,7 +205,7 @@ $(function() {
 
   // THEME LIST
   hplayer3.files.apps.getTree()
-  .then(data => 
+  .then(data =>
   {
     // BUILD LIST
     $('#themeSelector').empty()
@@ -226,7 +226,7 @@ $(function() {
       })
       .refresh()
   })
-  
+
 
   // VIDEOFLIP
   new refreshableField('#videoflip')
@@ -238,7 +238,7 @@ $(function() {
     })
     .refresh()
 
-    
+
   // VIDEO ROTATE
   new refreshableField('#videorotate')
     .getter(hplayer3.system.getVideorotate)
@@ -267,7 +267,7 @@ $(function() {
         $('#subsectionaudioout').append(`<label for="system">${upperWord(out)}</label><br />`)
       }
 
-      // AUDIO OUT 
+      // AUDIO OUT
       new refreshableField('input:radio[name="audioout"]')
         .getter(hplayer3.system.audio.getOutput)
         .setter(hplayer3.system.audio.setOutput)
@@ -295,7 +295,7 @@ $(function() {
     hplayer3.wifi.isConfigurable()
       .then(data => {
         if(!data) $('#sectionwifi').hide()
-      })    
+      })
   }
 
 
@@ -305,7 +305,7 @@ $(function() {
   var fileTree = new Array()
   var files = new Array()
 
-  function refreshMedia() 
+  function refreshMedia()
   {
 
     // MEDIA FILES
@@ -521,7 +521,7 @@ $(function() {
 
   $('.saveCode').click(function(){
     var content = codeEditor.getValue()
-    hplayer3.conf.writeFile('/'+editedFile, content ).then(data => {
+    hplayer3.files.conf.writeFile('/'+editedFile, content ).then(data => {
       $('.overlayEditor').fadeOut(100)
     })
 
