@@ -9,8 +9,23 @@ $(function() {
   setTimeout(function(){
     $('#page_browser').show().css('visibility','hidden')
     setImageRatio()
-    $('#page_browser').hide().css('visibility','visible').fadeIn(200)
+    // $('#page_browser').hide().css('visibility','visible').fadeIn(200)
+    $('#page_browser').hide().css('visibility','visible') // don't show, make the waveshare workaround
   },200)
+
+  // WAVESHARE SCREEN WORKAROUND
+  // During the 8 secs following the first user action, touch events are ignored & then triggered after 8 secs
+  // --> Simulate a first one, wait 8sec & show
+  setTimeout(function(){
+    $('#page_browser').css('visibility','hidden')
+    $('.item')[0].click()
+    $('#videoplayer').click()
+    log('waiting...')
+  },500)
+  setTimeout(function(){
+    $('#page_browser').hide().css('visibility','visible').fadeIn(200)
+    clearLogs()
+  },8000)
 
   // OPEN
   $('.item').click(function(){
@@ -107,7 +122,7 @@ $(function() {
           });
         })
 
-  
+
   //////////////// PLAYER ////////////////
   hplayer3.registerPlayer( "#videoplayer", "player")
 
@@ -118,7 +133,6 @@ $(function() {
     var thisItem = item
     var that = this
     this.preview = $('<div class="item" media="'+thisItem.name+'"></div>').appendTo($("#page_browser .grid"))
-    // setImageRatio()
 
     // THUMBNAIL
     this.thumb = $('<div class="image_wrapper"><img class="thumb" src="assets/img/not_found.png"></div>').appendTo(this.preview)
@@ -143,7 +157,16 @@ $(function() {
       launchVideo('/media/'+mediaSubfolder+'/'+thisItem.name)
     })
 
+  }
 
+
+  //////////////// LOGGER ////////////////
+  function log(content){
+    $('.logger').append('<div class="log">'+content+'</div>')
+    if($('.log').length>5)$('.log')[0].remove()
+  }
+  function clearLogs(){
+    $('.logger').empty()
   }
 
 
