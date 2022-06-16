@@ -1,4 +1,10 @@
 
+
+// DEBUG - retours denys :
+- premiers touch ineffectifs -> simuler events click via JS on start ?
+- freeze sur player, image freezée, son  (observé 1 fois)
+
+
 // SYSTEM:
 - EventEmitter2 everything !
 - Finnish Config reorg
@@ -8,5 +14,4 @@
 - player
 - wifi -> refreshableField
 - Video -> select resolution (auto, ...)
-
-// LIVE PLAYER: 
+- if not pi: can't change theme
