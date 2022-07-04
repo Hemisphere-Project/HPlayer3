@@ -9,6 +9,7 @@ if (isPi())
     config = {
         path_conf:  '/data/conf',
         path_media: '/data/media',
+        path_temp:  '/data/var/tmp',
         web_port:   80
     }
 else 
