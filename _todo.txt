@@ -1,12 +1,16 @@
 
+
+// DEBUG - retours denys :
+- freeze sur player, image freezée, son  (observé 1 fois)
+- changing theme on the controller breaks the kiosk.conf file
+
 // SYSTEM:
 - EventEmitter2 everything !
-- Finnish Config reorg
+- Finish Config reorg
 - setter / getter for config entry => simplify it !
 
 // CONTROLLER:
 - player
 - wifi -> refreshableField
 - Video -> select resolution (auto, ...)
-
-// LIVE PLAYER: 
+- if not pi: can't change theme
