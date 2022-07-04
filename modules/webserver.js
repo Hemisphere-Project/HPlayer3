@@ -3,16 +3,18 @@ const express = require('express')
 const http = require('http')
 const fileUpload = require('express-fileupload');
 const fspath = require('path')
+const fs = require('fs')
 
 class Webserver extends Module {
 
     // DEFAULT CONFIG
     //
 
-    constructor(hp3, port)
+    constructor(hp3)
     {
       super('webserver', hp3)
       this.port = this.hp3.config.get('web_port')
+      this.temp = this.hp3.config.get('path_temp')
       
       //
       // EXPRESS Server
@@ -45,8 +47,13 @@ class Webserver extends Module {
 
 
       // FILE UPLOAD
+      fs.mkdirSync(this.temp, { recursive: true })
       this.app.use(fileUpload({
-        createParentPath: true
+        createParentPath: true,
+        limits: { fileSize: 10 * 1024 * 1024 * 1024 }, // 10gb
+        abortOnLimit: true,
+        useTempFiles : true,
+        tempFileDir : this.temp
       }));
 
       this.app.post('/upload-files', async (req, res) => {

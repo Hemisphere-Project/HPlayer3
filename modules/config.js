@@ -9,6 +9,7 @@ class Config extends Module {
       path_conf:  __dirname+'/../conf',
       path_media: __dirname+'/../media',
       path_apps:  __dirname+'/../apps',
+      path_temp: '/tmp',
       web_port:   5000,
       wifiOff: true,
       videorotate: 0,
