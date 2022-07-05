@@ -85,14 +85,6 @@ class KioskPI extends Kiosk {
         catch (error) {
             //this.log(error.status)
         }
-
-        // End spawned process
-        // if (this.kioskprocess) {
-        //     this.kioskprocess.stdin.pause()
-        //     this.kioskprocess.kill()
-        //     this.kioskprocess = null
-        //     this.log('kiosk stopped 2')
-        // }
     }
 
     start() 
@@ -112,6 +104,14 @@ class KioskPI extends Kiosk {
                 this.kioskprocess = null
                 if (this.autorespawn) this.start()
             });
+
+            // LOGS
+            this.kioskprocess.stdout.setEncoding('utf8');
+            this.kioskprocess.stdout.on('data', (data) => { this.log('stdout: ' + data); });
+            this.kioskprocess.stderr.setEncoding('utf8');
+            this.kioskprocess.stderr.on('data', (data) => { this.log('stderr: ' + data); });
+
+            this.log('started.')
         }
     }
 
