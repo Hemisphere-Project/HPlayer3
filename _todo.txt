@@ -2,14 +2,22 @@
 
 // DEBUG - retours denys :
 - freeze sur player, image freezée, son  (observé 1 fois)
-- HDMI1 does not apply video config (weston)
 
-// SYSTEM:
-- EventEmitter2 everything !
-- setter / getter for config entry => simplify it !
+// SYSTEM
+- log color !
 
 // CONTROLLER:
-- player
+- player ctrls
 - wifi -> refreshableField
 - Video -> select resolution (auto, ...)
 - if not pi: can't change theme
+
+// KIOSK
+- watch hdmi state to reload kiosk on hdmi-out change
+- test 2 kiosk on 2 hdmi..
+
+// UPGRADE:
+/boot/wifi 
+/boot/config.txt
+/opt/Pi-tools/kiosk
+/opt/HPlayer3 (+ npm install !)
