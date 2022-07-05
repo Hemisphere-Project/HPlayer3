@@ -56,6 +56,11 @@ $(function() {
     })
   })
 
+  // REBOOT
+  $('.applywifi').click(function(){
+    hplayer3.wifi.apply()
+  })
+
   // INFOS
   $('.infosOpener').click(function(){
     var infosDiv = $(this).attr('href')
@@ -116,7 +121,8 @@ $(function() {
   var baseFolder = '/data'
 
   //////////////////////////////////////////
-  function refreshableField(div) {
+  function refreshableField(div) 
+  {
     this.element = $(div)
 
     // PRIVATE
@@ -203,6 +209,8 @@ $(function() {
     })
 
 
+  //////////////// KIOSK CONFIG ////////////////
+
   // THEME LIST
   hplayer3.files.apps.getTree()
   .then(data =>
@@ -218,8 +226,8 @@ $(function() {
 
     // THEME SELECTOR
     new refreshableField("#themeSelector")
-      .getter(hplayer3.getTheme)
-      .setter(hplayer3.setTheme)
+      .getter(hplayer3.kiosk.getTheme)
+      .setter(hplayer3.kiosk.setTheme)
       .update( (el, data)=>{
         el.val(data)
         $(".themeLink").attr('href', '/'+data)
@@ -230,21 +238,23 @@ $(function() {
 
   // VIDEOFLIP
   new refreshableField('#videoflip')
-    .getter(hplayer3.getVideoflip)
-    .setter(hplayer3.setVideoflip)
+    .getter(hplayer3.kiosk.getVideoflip)
+    .setter(hplayer3.kiosk.setVideoflip)
     .value( (el)=>{ return el.is(':checked') })
     .update( (el, data)=>{
       el.prop('checked', data);
     })
-    .refresh()
+     .refresh()
 
 
   // VIDEO ROTATE
   new refreshableField('#videorotate')
-    .getter(hplayer3.getVideorotate)
-    .setter(hplayer3.setVideorotate)
+    .getter(hplayer3.kiosk.getVideorotate)
+    .setter(hplayer3.kiosk.setVideorotate)
     .refresh()
+  
 
+  //////////////// AUDIO CONFIG ////////////////
 
   // AUDIO VOLUME
   new refreshableField('div[name=audiovolume] > .faderValue')
