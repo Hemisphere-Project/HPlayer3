@@ -6,7 +6,6 @@
 
 // SYSTEM:
 - EventEmitter2 everything !
-- Finish Config reorg
 - setter / getter for config entry => simplify it !
 
 // CONTROLLER:

@@ -41,7 +41,7 @@ class Module {
     }
 
     setConf(key, value) {
-        this.hp3.config.set(key, value)
+        return this.hp3.config.set(key, value)
     } 
 
 }
