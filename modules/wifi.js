@@ -6,9 +6,17 @@ const { execSync } = require('child_process');
 
 class Wifi extends Module{
 
-    constructor() {
-        super('wifi')
-        if (isPi()) return new WifiPI()
+    constructor(hp3) 
+    {
+        super('wifi', hp3)
+        this.requires('config')
+    }
+
+    init() 
+    {
+        this.log('starting')
+
+        this.wifiOff = this.getConf('wifi.off',  0)
     }
 
     isConfigurable() {
@@ -32,6 +40,11 @@ class Wifi extends Module{
         this.log("Can't set Wifi password on this machine...")
         return false
     }
+
+    apply() {
+        this.log("Can't control Wifi on this machine...")
+        return false
+    }
 }
 
 
@@ -45,7 +58,6 @@ class WifiPI extends Wifi {
         if (!name) return false
         execSync('hostrename '+name)
         this.log("hostname changed to ", this.getName())
-        execSync('setnet')
         this.log("hotspot ssid updated to", this.getName())
         return true
     }
@@ -59,11 +71,16 @@ class WifiPI extends Wifi {
     setPass(pass) {
         execSync('rw')
         execSync(`sed -i -E 's/^psk=.*/psk='${pass}'/' /boot/wifi/wlan0-hotspot.nmconnection`)
-        execSync('setnet')
         execSync('ro')
         this.log("hotspot password updated to", this.getPass())
         return true
     }
+
+    apply() {
+        execSync('setnet')
+        this.log("Wifi config apply")
+    }
 }
 
 module.exports = Wifi
+if (isPi()) module.exports = WifiPI

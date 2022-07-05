@@ -8,9 +8,15 @@ class Socketio extends Module
     {   
         super('socketio', hplayer3)
 
-        // this.mute = true
+        this.mute = true
 
+        this.requires('webserver')
+    }
+
+    init() {
         this.uuid = crypto.randomUUID()
+
+        this.log('starting with UUID', this.uuid)
 
         this.sio = socketio(this.hp3.webserver.http)  
 
@@ -57,10 +63,7 @@ class Socketio extends Module
                 }
             })
 
-        }) 
-
-
-        
+        })
     }
 
 }

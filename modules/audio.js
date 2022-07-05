@@ -8,13 +8,12 @@ class Audio extends Module{
 
     constructor(hp3) {
         super('audio', hp3)
-        if (isPi()) return new AudioPI(hp3)
+        this.requires('config')
     }
 
-    configure(config) {
-        this.config = config
-        this.setOutput( this.config.get('audioout') )
-        this.setVolume( this.config.get('audiovolume') )
+    init() {
+        this.setOutput( this.getConf('audio.output') )
+        this.setVolume( this.getConf('audio.volume') )
     }
 
     listOuputs() {
@@ -22,17 +21,17 @@ class Audio extends Module{
     }
 
     getOutput() {
-        if (!this.listOuputs().includes(this.config.get('audioout'))) 
+        if (!this.listOuputs().includes(this.getConf('audio.output'))) 
             this.setOutput( this.listOuputs()[0] )  // Check if current config is valid
 
-        return this.config.get('audioout')
+        return this.getConf('audio.output')
     }
 
     setOutput(out){
         if (!this.listOuputs().includes(out)) out = this.listOuputs()[0] // Check if new out is valid
-        if (this.config.get('audioout') == out) return out             
+        if (this.getConf('audio.output') == out) return out             
         this.log("Can't set audio out on this machine...")
-        this.config.set( 'audioout', out )
+        this.setConf( 'audio.output', out )
         return this.getOutput()
     }
 
@@ -45,7 +44,7 @@ class Audio extends Module{
         if (vol < 0) vol = 0
         if (vol == this.getVolume()) return vol
         vol = this.getVolume()
-        this.config.set('audiovolume', vol)
+        this.setConf('audio.volume', vol)
         this.log("Can't set audio volume on this machine...")
         this.emit('volume', vol)
         return vol
@@ -58,7 +57,7 @@ class Audio extends Module{
     setMute(doMute) {
         this.log("Can't set audio mute on this machine...")
         doMute = this.getMute()
-        this.config.set('audiomute', doMute)
+        this.setConf('audiomute', doMute)
         return doMute
     }
 }
@@ -82,15 +81,16 @@ class AudioPI extends Audio {
                 execSync("ro")
                 // TODO: check if asound.conf is properly initialized
 
-                this.config.set('audioout', out)
+                this.setConf('audio.output', out)
                 this.log('switching output to ', out)
 
                 // re-apply volume
-                this.setVolume( this.config.get('audiovolume') )
+                this.setVolume( this.getConf('audio.volume') )
 
-                this.hp3.restartkiosk()
+                // emit audiout change
+                this.emit('output', out)
             }
-            else this.config.set('audioout', out)
+            else this.setConf('audio.output', out)
         }
         catch(err) {
             this.log('error when selecting audio out')
@@ -113,12 +113,13 @@ class AudioPI extends Audio {
         if (this.getOutput() == 'jack') execSync(`amixer -c0 set 'Headphone',0 ${vol}%`)
 
         vol = this.getVolume()
-        this.config.set('audiovolume', vol)
+        this.setConf('audio.volume', vol)
         this.log('set volume', vol)
         this.emit('volume', vol)
         return vol
     }
 }
 
-module.exports = Audio
 
+module.exports = Audio
+if (isPi()) module.exports = AudioPI

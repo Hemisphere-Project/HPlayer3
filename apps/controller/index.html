@@ -93,7 +93,7 @@
 
         <!-- ///////////////////// OUTPUT ///////////////////// -->
         <div class="section output">
-          <div class="title">AUDIO & VIDEO</div>
+          <div class="title">SYSTEM</div>
           <div class="minigrid">
             <div class="minisection" id="sectionaudio">
               <div class="title_small">Audio</div>
@@ -107,24 +107,7 @@
                 <input type="hidden" class="faderValue" value="">
               </div>
             </div>
-            <div class="minisection">
-              <div class="title_small">Video</div>
-              <label for="videorotate">Rotate</label>
-              <select name="videorotate" id="videorotate">
-                <option value="0">0°</option>
-                <option value="90">90°</option>
-                <option value="180">180°</option>
-                <option value="270">270°</option>
-              </select><br>
-              <label for="videoflip">Flip</label>
-              <input type="checkbox" name="videoflip" id="videoflip"><br>
-              <!-- <div>Fade In</div>
-              <div class="fader" id="fadeInVideo" unit="ms" max="200">
-                <div class="faderContainer"><div class="faderFiller"></div></div>
-                <div class="faderDisplay"></div>
-                <input type="hidden" class="faderValue" value="">
-              </div> -->
-            </div>
+            
           </div>
         </div>
 
@@ -142,13 +125,13 @@
               <!-- <div class="title_small">PLAYER TYPE</div>
               <input type="radio" name="playerType" value="standard">
               <label for="standard">Standard</label><br>
-              <input type="radio" name="playerType" value="tactile">
-              <label for="tactile">Tactile</label><br>
+              <input type="radio" name="playerType" value="kiosk">
+              <label for="kiosk">Kiosk</label><br>
               <input type="radio" name="playerType" value="synchro">
               <label for="synchro">Synchro</label><br> -->
               <div class="title_small">MODULES</div>
-              <input class="moduleSelect" type="checkbox" name="moduleTactile" value="tactile">
-              <label for="moduleTactile">Tactile</label><br>
+              <input class="moduleSelect" type="checkbox" name="moduleKiosk" value="kiosk">
+              <label for="moduleKiosk">Kiosk</label><br>
               <input class="moduleSelect" type="checkbox" name="moduleConnector" value="connector">
               <label for="moduleConnector">Connector</label><br>
               <input class="moduleSelect" type="checkbox" name="moduleSerial" value="serial">
@@ -163,6 +146,7 @@
               PASS: <div class="editableText devicePassword" id="wifiPass">Museo69*</div><br>
               <!-- <input type="checkbox" name="wifiOff" id="wifiOff">
               <label for="wifiOff">Turn off wifi after 15 min </label><br> -->
+              <div class="btn textBtn applywifi">Apply now</div>
             </div>
             <div class="minisection">
               <div class="btn textBtn reboot">Reboot</div>
@@ -177,8 +161,25 @@
 
           <div class="title">OPTIONS</div>
 
-          <div class="option tactile">
-            <div class="title_small">Tactile</div>
+          <!-- ///////////////////// KIOSK ///////////////////// -->
+          <div class="option kiosk">
+            <div class="title_small">Kiosk</div>
+            <label for="videorotate">Video Rotate</label>
+            <select name="videorotate" id="videorotate">
+              <option value="0">0°</option>
+              <option value="90">90°</option>
+              <option value="180">180°</option>
+              <option value="270">270°</option>
+            </select><br>
+            <label for="videoflip">Video Flip</label>
+            <input type="checkbox" name="videoflip" id="videoflip"><br>
+            <!-- <div>Fade In</div>
+            <div class="fader" id="fadeInVideo" unit="ms" max="200">
+              <div class="faderContainer"><div class="faderFiller"></div></div>
+              <div class="faderDisplay"></div>
+              <input type="hidden" class="faderValue" value="">
+            </div> -->
+
             Thème :
             <select id="themeSelector">
               <option value="" selected>Default</option>
@@ -188,17 +189,20 @@
             <div class="btn textBtn editCode" file="complement.css">ADD STYLE</div>
           </div>
 
+          <!-- ///////////////////// CONNECTOR ///////////////////// -->
           <div class="option connector">
             <div class="title_small">Connector<div class="btn infosOpener" href="infos-HConnector">&#9432;</div></div>
             <div class="textBtn editScenario">EDIT SCENARIO</div>
           </div>
 
+          <!-- ///////////////////// SERIAL ///////////////////// -->
           <div class="option serial">
             <div class="title_small">Serial<div class="btn infosOpener" href="infos-Serial">&#9432;</div></div>
             Logs
             <div class="serialLogs"></div>
           </div>
 
+          <!-- ///////////////////// SYNCHRO ///////////////////// -->
           <div class="option synchro">
             <div class="title_small">Synchro</div>
             <div class="minigrid">

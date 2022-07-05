@@ -62,6 +62,18 @@ img{
   opacity: 0.7;
 }
 
+/*LOGGER*/
+.logger{
+  position:absolute;
+  z-index:100;
+  color: white;
+  width: 40%;
+  max-height: 30vh;
+  top:20px;
+  left:20px;
+  pointer-events: none;
+}
+
 /*PAGES*/
 .page{
   position: absolute;
