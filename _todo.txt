@@ -1,13 +1,11 @@
 
 
 // DEBUG - retours denys :
-- premiers touch ineffectifs -> simuler events click via JS on start ?
 - freeze sur player, image freezée, son  (observé 1 fois)
-
+- HDMI1 does not apply video config (weston)
 
 // SYSTEM:
 - EventEmitter2 everything !
-- Finnish Config reorg
 - setter / getter for config entry => simplify it !
 
 // CONTROLLER:

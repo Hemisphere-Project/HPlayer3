@@ -4,45 +4,38 @@ const fs = require('fs')
 
 class Config extends Module {
 
-    // DEFAULT CONFIG
-    _config = {
-      path_conf:  __dirname+'/../conf',
-      path_media: __dirname+'/../media',
-      path_apps:  __dirname+'/../apps',
-      web_port:   5000,
-      wifiOff: true,
-      videorotate: 0,
-      videoflip: false,
-      videofade: 0,
-      modules: ['tactile', 'connector'],
-      theme: 'default'
-    }
-
+    _config = {}
     configFile = null
   
-    constructor(hp3, baseConf)
+    constructor(hp3, forcedConf)
     {
       super('config', hp3)
 
-      // Apply base conf
-      this._config = {...this._config, ...baseConf}
+      this.forcedConf = forcedConf
+      this._config = {...this._config, ...this.forcedConf}
+      
+      this.requires('system')
+    }
 
+    init() 
+    {
+      var confpath = this.getConf('path.conf', __dirname+'/../conf')
       
       // load from file
-      if (this._config.path_conf) {
-        this.configFile = this._config.path_conf+'/hplayer3.conf'
-        try {
-          const data = fs.readFileSync(this.configFile);
-          var conf = JSON.parse(data)
-          for(var prop in conf) this._config[prop]=conf[prop]
-          this.log('loaded from', this.configFile);
-        }
-        catch(err) {
-          this.log('No config loaded... using default. ')
-          this.save() // save clean file if previous one was broken..
-        }
+      this.configFile = confpath+'/hplayer3.conf'
+      try {
+        const data = fs.readFileSync(this.configFile);
+        var conf = JSON.parse(data)
+        for(var prop in conf) this._config[prop]=conf[prop]
+        this.log('loaded from', this.configFile);
+      }
+      catch(err) {
+        this.log('No config loaded... using default. ')
+        this.save() // save clean file if previous one was broken..
       }
 
+      // Apply hardcoded conf (overwrite stored config)
+      this._config = {...this._config, ...this.forcedConf}
     }
 
     save()
@@ -73,8 +66,9 @@ class Config extends Module {
       return false
     }
 
-    get(entry)
+    get(entry, defaultValue)
     {
+      if (defaultValue !== null && !(entry in this._config)) this.set(entry, defaultValue)
       return this._config[entry]
     }
 
