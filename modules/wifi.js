@@ -17,7 +17,11 @@ class Wifi extends Module{
         this.log('starting')
 
         this.wifiOff = this.getConf('wifi.off',  0)
+
+        this.start()
     }
+
+    start() {}
 
     isConfigurable() {
         return false
@@ -48,7 +52,29 @@ class Wifi extends Module{
 }
 
 
-class WifiPI extends Wifi {
+class WifiPI extends Wifi 
+{
+
+    start() 
+    {
+        const network = require("node-network-manager")
+
+        // First try to connect to wlan0-hmsphr 
+        network
+            .connectionUp("wlan0-hmsphr")
+            .then((data) => this.log('connected to wlan0-hmsphr'))
+            .catch((error) => {
+
+                this.log("can't connect to wlan0-hmsphr.. switching to Access Point.")
+
+                // Then switch to Access Point (hotspot)
+                network
+                    .connectionUp("wlan0-hotspot")
+                    .then((data) => this.log('Access Point created:', this.getName()))
+                    .catch((error) => this.log('Access Point error:', error));
+
+            })
+    }
 
     isConfigurable() {
         return true
@@ -78,7 +104,8 @@ class WifiPI extends Wifi {
 
     apply() {
         execSync('setnet')
-        this.log("Wifi config apply")
+        setTimeout(()=> this.start(), 1000)
+        this.log("config applied, reloading NetworkManager..")
     }
 }
 
