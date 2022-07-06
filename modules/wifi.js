@@ -18,7 +18,7 @@ class Wifi extends Module{
 
         this.wifiOff = this.getConf('wifi.off',  0)
 
-        this.start()
+        return this.start()
     }
 
     start() {}
@@ -57,23 +57,99 @@ class WifiPI extends Wifi
 
     start() 
     {
+        return new Promise((resolve, reject) => {
+            
+            // Try service connection
+            this.serviceMode()
+                .then(resolve)
+                .catch(()=>{
+
+                    // Then try connect as client
+                    this.clientMode()
+                        .then(resolve)
+                        .catch(()=>{
+
+                            // Fallback to Hotspot Access point
+                            this.hotspotMode()
+                                .then(resolve)
+                                .catch(reject)
+                        })
+                })
+        })
+    }
+
+    serviceMode()
+    {
         const network = require("node-network-manager")
 
-        // First try to connect to wlan0-hmsphr 
-        network
-            .connectionUp("wlan0-hmsphr")
-            .then((data) => this.log('connected to wlan0-hmsphr'))
-            .catch((error) => {
+        // try to connect to wlan0-service
+        return new Promise((resolve, reject) => 
+        {
+            this.log('connecting to wlan0-service..')
+            network
+                .connectionUp("wlan0-service")
+                .then((data) => {
+                    this.log('connected to wlan0-service')
+                    this.mode = "service"
+                    this.emit('connected', this.mode)
+                    resolve()
+                })
+                .catch((error) => {
 
-                this.log("can't connect to wlan0-hmsphr.. switching to Access Point.")
+                    this.log("Error: wlan0-service not found")
+                    this.mode = "error"
+                    reject()
+                })
+        })
+    }
 
-                // Then switch to Access Point (hotspot)
-                network
-                    .connectionUp("wlan0-hotspot")
-                    .then((data) => this.log('Access Point created:', this.getName()))
-                    .catch((error) => this.log('Access Point error:', error));
+    hotspotMode()
+    {
+        const network = require("node-network-manager")
 
-            })
+        // create AP based on wlan0-hotspot
+        return new Promise((resolve, reject) => 
+        {
+            this.log('creating wlan0-hotspot Access point..')
+            network
+                .connectionUp("wlan0-hotspot")
+                .then((data) => {
+                    this.log('Access Point created:', this.getName())
+                    this.mode = "hotspot"
+                    this.emit('connected', this.mode)
+                    resolve()
+                })
+                .catch((error) => {
+                    this.log('Access Point error:', error)
+                    this.mode = "error"
+                    reject()
+                });
+        })
+    }
+
+    clientMode()
+    {
+        const network = require("node-network-manager")
+
+        // try to connect to wlan0-client
+        return new Promise((resolve, reject) => 
+        {
+            this.log('connecting to wlan0-client..')
+            network
+                .connectionUp("wlan0-client")
+                .then((data) => {
+                    this.log('connected to wlan0-client')
+                    this.mode = "client"
+                    this.emit('connected', this.mode)
+                    resolve()
+                })
+                .catch((error) => {
+
+                    this.log(error)
+                    this.mode = "error"
+                    reject()
+                })
+        })
     }
 
     isConfigurable() {
