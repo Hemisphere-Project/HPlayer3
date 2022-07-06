@@ -106,10 +106,10 @@ class KioskPI extends Kiosk {
             });
 
             // LOGS
-            this.kioskprocess.stdout.setEncoding('utf8');
-            this.kioskprocess.stdout.on('data', (data) => { this.log('stdout: ' + data); });
-            this.kioskprocess.stderr.setEncoding('utf8');
-            this.kioskprocess.stderr.on('data', (data) => { this.log('stderr: ' + data); });
+            // this.kioskprocess.stdout.setEncoding('utf8');
+            // this.kioskprocess.stdout.on('data', (data) => { this.log('stdout: ' + data); });
+            // this.kioskprocess.stderr.setEncoding('utf8');
+            // this.kioskprocess.stderr.on('data', (data) => { this.log('stderr: ' + data); });
 
             this.log('started.')
         }
