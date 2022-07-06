@@ -9,7 +9,7 @@ class Config extends Module {
   
     constructor(hp3, forcedConf)
     {
-      super('config', hp3)
+      super('config', hp3, 'yellowBright')
 
       this.forcedConf = forcedConf
       this._config = {...this._config, ...this.forcedConf}

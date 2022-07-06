@@ -17,7 +17,7 @@ class Directory extends Module {
 
     constructor(name, path)
     {
-      super('files.'+name)
+      super('files.'+name, null, 'yellow')
 
       this.log('using', path)
 

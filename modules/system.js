@@ -16,7 +16,17 @@ class System extends Module
 
   constructor(forcedConf)
   {
-    super('system')
+    super('system', null, 'greenBright')
+
+    console.log("\x1b[32m", '\n\
+    ╭╮╱╭┳━━━┳╮╱╱╭━━━┳╮╱╱╭┳━━━┳━━━╮╭━━━╮\n\
+    ┃┃╱┃┃╭━╮┃┃╱╱┃╭━╮┃╰╮╭╯┃╭━━┫╭━╮┃┃╭━╮┃\n\
+    ┃╰━╯┃╰━╯┃┃╱╱┃┃╱┃┣╮╰╯╭┫╰━━┫╰━╯┃╰╯╭╯┃\n\
+    ┃╭━╮┃╭━━┫┃╱╭┫╰━╯┃╰╮╭╯┃╭━━┫╭╮╭╯╭╮╰╮┃\n\
+    ┃┃╱┃┃┃╱╱┃╰━╯┃╭━╮┃╱┃┃╱┃╰━━┫┃┃╰╮┃╰━╯┃\n\
+    ╰╯╱╰┻╯╱╱╰━━━┻╯╱╰╯╱╰╯╱╰━━━┻╯╰━╯╰━━━╯\n\
+    \n')
+
     this.log('HPlayer3 starting...')
 
     // EVENT MANAGER
@@ -43,11 +53,11 @@ class System extends Module
     // AUDIO
     this.audio = new Audio(this)
 
-    // WIFI
-    this.wifi = new Wifi(this)
-
     // KIOSK
     this.kiosk = new Kiosk(this)
+    
+    // WIFI
+    this.wifi = new Wifi(this)
 
   }
 
@@ -55,7 +65,7 @@ class System extends Module
   {
     this.hp3 = this
     this.emit('ready')
-    this.log('READY')
+    this.log('READY\n')
   }
 
 

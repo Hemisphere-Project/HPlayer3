@@ -12,6 +12,8 @@ class Kiosk extends Baseplayer {
 
     init() 
     {    
+        this.log('starting')
+
         // CONFIG
         //
         this.getConf('kiosk.videorotate', 0)
@@ -102,7 +104,10 @@ class KioskPI extends Kiosk {
             this.kioskprocess.on('exit', (code, signal) => {
                 this.log('kioskprocess exited with ' + `code ${code} and signal ${signal}`);
                 this.kioskprocess = null
-                if (this.autorespawn) this.start()
+                if (this.autorespawn) {
+                    this.log('restarting..');
+                    this.start()
+                }
             });
 
             // LOGS
@@ -111,7 +116,7 @@ class KioskPI extends Kiosk {
             // this.kioskprocess.stderr.setEncoding('utf8');
             // this.kioskprocess.stderr.on('data', (data) => { this.log('stderr: ' + data); });
 
-            this.log('started.')
+            // this.log('started.')
         }
     }
 
