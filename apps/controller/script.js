@@ -40,27 +40,6 @@ $(function() {
     }
   }
 
-  // WIFI SSID
-  $('#wifiSsid').change(function() {
-    var newName = $('#wifiSsid > input').val()
-    hplayer3.wifi.setName(newName).then(data => {
-      refreshWifi()
-    })
-  })
-
-  // WIFI PASS
-  $('#wifiPass').change(function() {
-    var newPass = $('#wifiPass > input').val()
-    hplayer3.wifi.setPass(newPass).then(data => {
-      refreshWifi()
-    })
-  })
-
-  // REBOOT
-  $('.applywifi').click(function(){
-    hplayer3.wifi.apply()
-  })
-
   // INFOS
   $('.infosOpener').click(function(){
     var infosDiv = $(this).attr('href')
@@ -83,6 +62,7 @@ $(function() {
       location.reload()
     }, 20000)
   })
+
   // GIT PULL
   $('.git').click(function(){
     hplayer3.gitpull()
@@ -120,27 +100,36 @@ $(function() {
   var activeFolder
   var baseFolder = '/data'
 
-  //////////////////////////////////////////
-  function refreshableField(div) 
+  ////////////////// AUTO FIELD: automatted setter / getter with hplayer3 ////////////////////////
+
+  function autoField(div) 
   {
-    this.element = $(div)
+    this.element = $(div)   // NEEDED: div is the base selector which is watched for change (which triggers the setter)
 
     // PRIVATE
-    this._getter = null                                 // Promise used to remote get value
-    this._setter = null                                 // Promise used to remote set value
+    this._getter = null                       // INFO: Promise used to remote get value
+    this._setter = null                       // INFO: Promise used to remote set value
     this._getter_args = []
     this._setter_args = []
-    this._value = function(el){ return el.val() }       // Default method to obtain value from element => can be overwriten with value(clbck)
-    this._update = function(el, data){ el.val(data) }   // Default method to set value to element     => can be overwriten with update(clbck)
+    this._value = function(el){               // INFO: Default method to obtain value from element => can be overwriten with value(clbck)
+      if (el.is(':checkbox')) return el.is(':checked')            
+      else if (el.is(':radio')) return el.filter(':checked').val()
+      else return el.val()                                        
+    }       
+    this._update = function(el, data){        // INFO: Default method to set value to element     => can be overwriten with update(clbck)
+      if (el.is(':checkbox')) el.prop('checked', data);             
+      else if (el.is(':radio')) { el.prop('checked', false);  el.filter('[value="'+data+'"]').prop('checked', true);  }
+      else el.val(data) 
+    }   
 
     // PUBLIC
-    this.getter = function(src, ...args) {this._getter = src; this._getter_args=args; return this}
-    this.setter = function(dest, ...args) {this._setter = dest; this._setter_args=args; return this}
-    this.value = function(clbck) {this._value = clbck; return this}
-    this.update = function(clbck) {this._update = clbck; return this}
+    this.getter = function(src, ...args) {this._getter = src; this._getter_args=args; return this}    // NEEDED: define the method call, and optional args, to obtain field value
+    this.setter = function(dest, ...args) {this._setter = dest; this._setter_args=args; return this}  // NEEDED: define method call, and optional args, to set field value
+    this.value = function(clbck) {this._value = clbck; return this}                                   // OPTIONAL: custom way to obtain the field value
+    this.update = function(clbck) {this._update = clbck; return this}                                 // OPTIONAL: custom way to update the field when new value is received from server
 
     // INTERNAL
-    this.refresh = function() {
+    this.refresh = function() {                                                                       // NEEDED: call it at least one time to populate field with server value (can't be automated yet)
       this._getter(...this._getter_args).then((data) => {
         // console.log('getter',  data)
         this.element.off('change')
@@ -166,10 +155,6 @@ $(function() {
 
     // Tree
     refreshMedia()
-
-    // Wifi
-    refreshWifi()
-
   })
 
   hplayer3.on('disconnect', ()=>
@@ -179,7 +164,7 @@ $(function() {
   })
 
 
-  //////////////// REFRESHABLE FIELDS ////////////////
+  //////////////// MODULES LIST ////////////////
 
   // MODULES LIST
   hplayer3.getAvailableModules()
@@ -195,10 +180,9 @@ $(function() {
 
       // MODULE
       for(let mod of data)
-        new refreshableField(`input[name=module${mod}]`)
+        new autoField(`input[name=module${mod}]`)
           .getter(hplayer3.getModuleState, mod)
           .setter(hplayer3.setModuleState, mod)
-          .value( (el)=>{ return el.is(':checked') })
           .update( (el, data)=>{
             el.prop('checked', data);
             if(data) $('.'+el.val()).fadeIn(100)
@@ -225,7 +209,7 @@ $(function() {
     });
 
     // THEME SELECTOR
-    new refreshableField("#themeSelector")
+    new autoField("#themeSelector")
       .getter(hplayer3.kiosk.getTheme)
       .setter(hplayer3.kiosk.setTheme)
       .update( (el, data)=>{
@@ -237,18 +221,14 @@ $(function() {
 
 
   // VIDEOFLIP
-  new refreshableField('#videoflip')
+  new autoField('#videoflip')
     .getter(hplayer3.kiosk.getVideoflip)
     .setter(hplayer3.kiosk.setVideoflip)
-    .value( (el)=>{ return el.is(':checked') })
-    .update( (el, data)=>{
-      el.prop('checked', data);
-    })
-     .refresh()
+    .refresh()
 
 
   // VIDEO ROTATE
-  new refreshableField('#videorotate')
+  new autoField('#videorotate')
     .getter(hplayer3.kiosk.getVideorotate)
     .setter(hplayer3.kiosk.setVideorotate)
     .refresh()
@@ -257,7 +237,7 @@ $(function() {
   //////////////// AUDIO CONFIG ////////////////
 
   // AUDIO VOLUME
-  new refreshableField('div[name=audiovolume] > .faderValue')
+  new autoField('div[name=audiovolume] > .faderValue')
     .getter(hplayer3.audio.getVolume)
     .setter(hplayer3.audio.setVolume)
     .update( (el, data)=>{
@@ -278,39 +258,42 @@ $(function() {
       }
 
       // AUDIO OUT
-      new refreshableField('input:radio[name="audioout"]')
+      new autoField('input:radio[name="audioout"]')
         .getter(hplayer3.audio.getOutput)
         .setter(hplayer3.audio.setOutput)
-        .value( (el)=>{ 
-          let value = el.filter(':checked').val()
-          return value
-        })
-        .update( (el, data)=>{
-          el.prop('checked', false);
-          el.filter('[value="'+data+'"]').prop('checked', true);
-        })
         .refresh()
 
     })
 
   //////////////// WIFI CONFIG ////////////////
-  function refreshWifi()
-  {
-    hplayer3.wifi.getName()
-      .then(data => {
-        $('.deviceName').html(data);
-      })
+  new autoField('#wifiSsid')
+    .getter(hplayer3.wifi.getName)
+    .setter(hplayer3.wifi.setName)
+    .value( (el)=>{ 
+      return el.find('input').val()
+    })
+    .update( (el, data) => $('.deviceName').html(data) )
+    .refresh()
+  
+  new autoField('#wifiPass')
+    .getter(hplayer3.wifi.getPass)
+    .setter(hplayer3.wifi.setPass)
+    .value( (el)=>{ 
+      return el.find('input').val()
+    })
+    .update( (el, data) => $('.devicePassword').html(data) )
+    .refresh()
 
-    hplayer3.wifi.getPass()
-      .then(data => {
-        $('.devicePassword').html(data);
-      })
+  // APPLY WIFI
+  $('.applywifi').click(function(){
+    hplayer3.wifi.apply()
+  })
 
-    hplayer3.wifi.isConfigurable()
-      .then(data => {
-        if(!data) $('#sectionwifi').hide()
-      })
-  }
+  // HIDE SECTION
+  hplayer3.wifi.isConfigurable()
+    .then(data => {
+      if(!data) $('#sectionwifi').hide()
+    })
 
 
 
