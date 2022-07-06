@@ -16,7 +16,7 @@ class Socketio extends Module
     init() {
         this.uuid = crypto.randomUUID()
 
-        this.log('starting with UUID', this.uuid)
+        this.logi('starting')
 
         this.sio = socketio(this.hp3.webserver.http)  
 
