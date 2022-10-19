@@ -153,10 +153,11 @@ class HPlayer3 extends HModule {
     {
         if( this._players.hasOwnProperty(name) ) {
             console.error("A video player already exists with this name:", name)
-            return
+            return this._players[name]
         }
 
         this._players[name] = new VideoPlayer(videoEl, name)
+        return this._players[name]
     }
 
     //
@@ -198,7 +199,7 @@ class VideoPlayer {
 
         this.videoEl[0].addEventListener('loadedmetadata', () => {
             this.endWatchCounter = 0
-            console.log('[VIDEO/'+this.name+'] loaded');
+            console.log('[VIDEO/'+this.name+'] loaded', this.videoEl[0].videoWidth, this.videoEl[0].videoHeight);
         }, false);
 
         //  paused and playing events to control buttons
@@ -215,6 +216,7 @@ class VideoPlayer {
         this.videoEl[0].addEventListener("playing", () => {
             this.endWatchCounter = 0
             console.log('[VIDEO/'+this.name+'] playing');
+            this.videoEl.css('visibility', 'visible')
         }, false);
 
         this.videoEl[0].addEventListener("ended", () => {
@@ -228,14 +230,29 @@ class VideoPlayer {
         }, false);
 
         this.videoEl[0].addEventListener("timeupdate", () => {
-            // console.log('[VIDEO/'+this.name+'] time', this.videoEl.currentTime, this.videoEl.duration, this.videoEl.paused);
+            // console.log('[VIDEO/'+this.name+'] time', this.videoEl[0].currentTime, this.videoEl[0].duration, this.videoEl[0].paused);
         }, false);
 
 
         
     }
 
-    
+    play(media) {
+        this.videoEl.css('visibility','hidden') // Prevent pause image display before video is ready
+
+        this.videoEl[0].setAttribute('src', media)
+        this.videoEl[0].currentTime = 0
+        this.videoEl[0].play()
+    }
+
+    pause() {
+        this.videoEl[0].pause()
+    }
+
+    stop() {
+        this.videoEl[0].pause()
+        this.videoEl.css('visibility','hidden')
+    }
 
 }
 
@@ -249,27 +266,50 @@ class Divlogger {
 
         // OVERLAY LOG DIV
         //
-        this.logdiv = $('<div style="border: 1px solid green; width: 800px; right: 20px; top: 20px; max-height: 523px; overflow:auto; position: absolute; background-color: black; color: white; z-index:1000;" id="log">LOGS<br /></div>').hide().appendTo('body')
+        this.logdiv = $('<div style="font-size: 15px; line-height: 20px; border: 1px solid green; width: 800px; right: 20px; top: 20px; max-height: 523px; overflow:auto; position: absolute; background-color: black; color: white; z-index:1000;" id="log">CONSOLE LOGS<br /></div>').hide().appendTo('body')
 
         // SUPERCHARGE CONSOLE.LOG
         //
         if (typeof console  != "undefined") 
-            if (typeof console.log != 'undefined')
-                console.olog = console.log;
-            else
-                console.olog = function() {};
+            if (typeof console.log != 'undefined') console.olog = console.log;
+            else console.olog = function() {};
 
         console.log = function(...m) {
             var message = ''
             for (let i=0; i<m.length; i++) message += ' '+m[i]
             console.olog(message);
-            $('#log').append(message + '<br />');
+            $('#log').append('<div style="font-size: 15px; line-height: 20px;">[info] '+message+'</div>');
 
             var elem = document.getElementById('log');
             if (elem)
             elem.scrollTop = elem.scrollHeight;
         };
-        print = console.error = console.debug = console.info =  console.log
+
+        // SUPERCHARGE CONSOLE.ERROR
+        //
+        if (typeof console  != "undefined") 
+            if (typeof console.error != 'undefined') console.oerr = console.error;
+            else console.oerr = function() {};
+
+        console.error = function(...m) {
+            var message = ''
+            for (let i=0; i<m.length; i++) message += ' '+m[i]
+            console.oerr(message);
+            $('#log').append('<div style="font-size: 15px; line-height: 20px; color: red;">[erro] '+message+'</div>');
+
+            var elem = document.getElementById('log');
+            if (elem)
+            elem.scrollTop = elem.scrollHeight;
+        };
+
+        print = console.debug = console.info =  console.log
+
+        // Catch system ERROR
+        window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
+            console.error(errorMsg, url, lineNumber);
+            return false;
+        }
+
     }
 
     toggle(force) 
@@ -288,4 +328,17 @@ class Divlogger {
 function upperWord(str) {
     const capitalized = str.charAt(0).toUpperCase() + str.slice(1);
     return capitalized; 
+}
+
+
+// TOUCH DISABLE (prevent overflow) => Debounce touch
+function touchSafe(millis)
+{
+    if ( typeof touchSafe.touchEnable == 'undefined' )
+        touchSafe.touchEnable = true;
+
+    if(!touchSafe.touchEnable) return false
+    touchSafe.touchEnable = false
+    setTimeout(()=>{touchSafe.touchEnable = true}, millis)
+    return true;
 }
