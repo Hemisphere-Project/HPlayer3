@@ -5,6 +5,7 @@
 
 // SYSTEM
 - Zyre: discover and sync
+- Portail captif 10.0.0.1
 
 // CONTROLLER:
 - player ctrls
@@ -15,6 +16,7 @@
 // KIOSK
 - watch hdmi state to reload kiosk on hdmi-out change
 - test 2 kiosk on 2 hdmi..
+- debug suite: display console on screen 
 
 // MPV 
 - implement mpv player
