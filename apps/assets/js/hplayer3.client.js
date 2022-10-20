@@ -151,6 +151,8 @@ class HPlayer3 extends HModule {
     //
     registerPlayer(videoEl, name)
     {
+        if (name === undefined) name = 'player-'+Object.keys(this._players).length 
+            
         if( this._players.hasOwnProperty(name) ) {
             console.error("A video player already exists with this name:", name)
             return this._players[name]
@@ -174,88 +176,139 @@ class HPlayer3 extends HModule {
 
 // VIDEO PLAYER
 //
-class VideoPlayer {
+class VideoPlayer extends EventTarget {
 
-    constructor(videoEl, name) {
+    constructor(videoEl, name) 
+    {
+        super()
         this.videoEl = $(videoEl)
-        this.name = name
+        this.video = this.videoEl[0]
+        this.name = (name)?name:'player'
 
-        this.videoEl[0].loop = false
-        this.videoEl[0].mute = false
+        this.video.loop = false
+        this.video.mute = false
+
+        this.state = 'stop'     // stop - loading - playing - paused - stalled - stopping
+        this.videoEl.css('visibility','hidden')
 
         // ENDED HARDFIX WATCHER
         //
         this.endWatchCounter = 0
         this.endWatchMAX = 5
         this.endedWatcher = setInterval(()=>{
-            if ((this.videoEl[0].duration-this.videoEl[0].currentTime < 0.04 && !this.videoEl[0].paused)) 
+            if ((this.video.duration-this.video.currentTime < 0.04 && !this.video.paused)) 
                 if (this.endWatchCounter < this.endWatchMAX) this.endWatchCounter += 1
                 else
                 {
                     console.log('[VIDEO/'+this.name+'] ended (hard fix)')
-                    this.videoEl[0].pause()
+                    this.video.pause()
                 }
         }, 10)
 
-        this.videoEl[0].addEventListener('loadedmetadata', () => {
+        this.video.addEventListener('loadedmetadata', () => {
             this.endWatchCounter = 0
-            console.log('[VIDEO/'+this.name+'] loaded', this.videoEl[0].videoWidth, this.videoEl[0].videoHeight);
+            console.log('[VIDEO/'+this.name+'] loaded', this.video.videoWidth, this.video.videoHeight);
         }, false);
 
         //  paused and playing events to control buttons
-        this.videoEl[0].addEventListener("pause", () => {
+        this.video.addEventListener("pause", () => {
             console.log('[VIDEO/'+this.name+'] paused');
 
             // ENDED HARDFIX
             if (this.endWatchCounter == this.endWatchMAX) {
                 this.endWatchCounter = 0
-                this.videoEl[0].dispatchEvent( new Event('ended') );
+                this.video.dispatchEvent( new Event('ended') );
             }
+            // STOPPING
+            else if (this.state == 'stopping') {
+                this.videoEl.css('visibility','hidden')
+                this.state = 'stop'
+                this.dispatchEvent(new Event(this.state));
+            } 
+            // PAUSED
+            else {
+                this.state = 'paused'
+                this.dispatchEvent(new Event(this.state));
+            }
+
         }, false);
 
-        this.videoEl[0].addEventListener("playing", () => {
+        this.video.addEventListener("playing", () => {
             this.endWatchCounter = 0
             console.log('[VIDEO/'+this.name+'] playing');
             this.videoEl.css('visibility', 'visible')
+            this.state = 'playing'
+            this.dispatchEvent(new Event(this.state));
         }, false);
 
-        this.videoEl[0].addEventListener("ended", () => {
-            // BROKEN ! use hard fix instead
+        this.video.addEventListener("ended", () => {
+            this.videoEl.css('visibility','hidden')
             this.endWatchCounter = 0
             console.log('[VIDEO/'+this.name+'] ended');
+            this.state = 'stop'
+            this.dispatchEvent(new Event(this.state));
         }, false);
 
-        this.videoEl[0].addEventListener("stalled", () => {
+        this.video.addEventListener("stalled", () => {
             console.log('[VIDEO/'+this.name+'] stalled');
+            this.state = 'stalled'
+            this.dispatchEvent(new Event(this.state));
         }, false);
 
-        this.videoEl[0].addEventListener("timeupdate", () => {
-            // console.log('[VIDEO/'+this.name+'] time', this.videoEl[0].currentTime, this.videoEl[0].duration, this.videoEl[0].paused);
+        this.video.addEventListener("timeupdate", () => {
+            // console.log('[VIDEO/'+this.name+'] time', this.video.currentTime, this.video.duration, this.video.paused);
         }, false);
-
-
-        
     }
 
-    play(media) {
+    play(media) 
+    {
+        if (this.state == 'loading' || this.state == 'stopping') {
+            console.warn("Player already loading/stopping, sorry can't play a new media right now ...")
+            return
+        } 
+        else if (this.state != 'stop') {
+            this.on('stop', ()=>{ this.play(media) }, {once: true})
+            this.stop()
+            return
+        }
+
         this.videoEl.css('visibility','hidden') // Prevent pause image display before video is ready
-
-        this.videoEl[0].setAttribute('src', media)
-        this.videoEl[0].currentTime = 0
-        this.videoEl[0].play()
+        this.video.setAttribute('src', media)
+        this.video.currentTime = 0
+        this.state = 'loading'
+        this.dispatchEvent(new Event(this.state));
+        this.video.play()
     }
 
-    pause() {
-        this.videoEl[0].pause()
+    pause() 
+    {
+        if (this.state == 'stop') 
+            return 
+
+        if (this.state == 'loading')
+            this.on('playing', ()=>{ this.pause() }, {once: true})
+        else
+            this.video.pause()
     }
 
-    stop() {
-        this.videoEl[0].pause()
-        this.videoEl.css('visibility','hidden')
+    stop() 
+    {
+        if (this.state == 'stop' || this.state == 'stopping') return
+        
+        var stillLoading = (this.state == 'loading')
+        if (stillLoading) this.on('playing', ()=>{ this.stop() }, {once: true})
+
+        this.state = 'stopping'
+        this.dispatchEvent(new Event(this.state));
+        
+        if (!stillLoading) this.pause()
     }
 
+    on(event, clbck, options)
+    {
+        this.addEventListener(event, clbck, options)
+    }
 }
-
 
 
 // DIV-LOGGER
@@ -266,7 +319,7 @@ class Divlogger {
 
         // OVERLAY LOG DIV
         //
-        this.logdiv = $('<div style="font-size: 15px; line-height: 20px; border: 1px solid green; width: 800px; right: 20px; top: 20px; max-height: 523px; overflow:auto; position: absolute; background-color: black; color: white; z-index:1000;" id="log">CONSOLE LOGS<br /></div>').hide().appendTo('body')
+        this.logdiv = $('<div style="font-size: 15px; line-height: 20px; border: 1px solid green; width: 600px; right: 20px; top: 20px; max-height: 523px; overflow:auto; position: absolute; background-color: black; color: white; z-index:1000;" id="log">CONSOLE LOGS<br /></div>').hide().appendTo('body')
 
         // SUPERCHARGE CONSOLE.LOG
         //
@@ -281,8 +334,7 @@ class Divlogger {
             $('#log').append('<div style="font-size: 15px; line-height: 20px;">[info] '+message+'</div>');
 
             var elem = document.getElementById('log');
-            if (elem)
-            elem.scrollTop = elem.scrollHeight;
+            if (elem) elem.scrollTop = elem.scrollHeight;
         };
 
         // SUPERCHARGE CONSOLE.ERROR
@@ -295,11 +347,26 @@ class Divlogger {
             var message = ''
             for (let i=0; i<m.length; i++) message += ' '+m[i]
             console.oerr(message);
-            $('#log').append('<div style="font-size: 15px; line-height: 20px; color: red;">[erro] '+message+'</div>');
+            $('#log').append('<div style="font-size: 15px; line-height: 20px; color: red;">[err.] '+message+'</div>');
 
             var elem = document.getElementById('log');
-            if (elem)
-            elem.scrollTop = elem.scrollHeight;
+            if (elem) elem.scrollTop = elem.scrollHeight;
+        };
+
+        // SUPERCHARGE CONSOLE.WARN
+        //
+        if (typeof console  != "undefined") 
+            if (typeof console.warn != 'undefined') console.owarn = console.warn;
+            else console.owarn = function() {};
+
+        console.warn = function(...m) {
+            var message = ''
+            for (let i=0; i<m.length; i++) message += ' '+m[i]
+            console.owarn(message);
+            $('#log').append('<div style="font-size: 15px; line-height: 20px; color: yellow;">[warn] '+message+'</div>');
+
+            var elem = document.getElementById('log');
+            if (elem) elem.scrollTop = elem.scrollHeight;
         };
 
         print = console.debug = console.info =  console.log
@@ -332,13 +399,13 @@ function upperWord(str) {
 
 
 // TOUCH DISABLE (prevent overflow) => Debounce touch
-function touchSafe(millis)
+function debounce(millis)
 {
-    if ( typeof touchSafe.touchEnable == 'undefined' )
-        touchSafe.touchEnable = true;
+    if ( typeof debounce.enable == 'undefined' )
+        debounce.enable = true;
 
-    if(!touchSafe.touchEnable) return false
-    touchSafe.touchEnable = false
-    setTimeout(()=>{touchSafe.touchEnable = true}, millis)
+    if(!debounce.enable) return false
+    debounce.enable = false
+    setTimeout(()=>{debounce.enable = true}, millis)
     return true;
 }
