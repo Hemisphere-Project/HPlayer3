@@ -75,7 +75,7 @@ $(function()
   // During the 8 secs following the first user action, touch events are ignored & then triggered after 8 secs
   // --> User action will be triggered by the FIRST LAUNCH FIX, 
   //     waveShareTouchFix will enforce 8s delay before homepage display
-  var waveShareTouchFix = false
+  var waveShareTouchFix = true
 
   
   ////////////// LAGGY FIRST LAUNCH FIX //////
