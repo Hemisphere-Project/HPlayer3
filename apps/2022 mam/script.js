@@ -23,7 +23,8 @@ $(function()
             .then((grid) => {
 
               // onCLICK => PLAY VIDEO
-              grid.find('.item-video').on('click', function (){
+              grid.find('.item-video').on('click', function ()
+              {
                 $("#page_video").removeClass('fadeout').addClass('fadein')
                 player.play('/media/'+mediaSubfolder+'/'+$(this).data("media"))
               })
