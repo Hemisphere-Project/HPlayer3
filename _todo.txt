@@ -16,12 +16,12 @@
 // KIOSK
 - watch hdmi state to reload kiosk on hdmi-out change
 - test 2 kiosk on 2 hdmi..
-- debug suite: display console on screen 
+- video stalled => do something ?
 
 // MPV 
 - implement mpv player
 
-
 // UPGRADE:
 H: 01-GadagneA -> switch to hmsphr wifi
 H: 02-GadagneB -> upgrade HPlayer3 / Pi-tools / wifi profiles
+H: 03-GadagneC -> webplayer upgrade / boot plymouth / full system update

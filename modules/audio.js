@@ -102,7 +102,8 @@ class AudioPI extends Audio {
 
     getVolume() {
         var vol = 100
-        if (this.getOutput() == 'jack') vol = parseInt(execSync(`amixer -c0 get 'Headphone',0  |grep % |awk '{print $4}'|sed 's/[^0-9]//g'`).toString())
+        if (this.getOutput() == 'jack')
+            vol = parseInt(execSync(`amixer -c`+String(this.getJackCardNumber())+` get 'Headphone',0  |grep % |awk '{print $4}'|sed 's/[^0-9]//g'`).toString())
         return vol
     } 
     
@@ -110,13 +111,18 @@ class AudioPI extends Audio {
         if (vol > 100) vol = 100
         if (vol < 0) vol = 0
         
-        if (this.getOutput() == 'jack') execSync(`amixer -c0 set 'Headphone',0 ${vol}%`)
+        if (this.getOutput() == 'jack')
+            execSync(`amixer -c`+String(this.getJackCardNumber())+` set 'Headphone',0 ${vol}%`)
 
         vol = this.getVolume()
         this.setConf('audio.volume', vol)
         this.log('set volume', vol)
         this.emit('volume', vol)
         return vol
+    }
+
+    getJackCardNumber() {
+        return parseInt(String(execSync(`aplay -l | grep Headphone | aplay -l | grep Headphone | awk '{print $2}' `)).substring(0, 1))
     }
 }
 
