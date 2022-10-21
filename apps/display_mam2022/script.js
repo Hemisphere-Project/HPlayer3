@@ -8,11 +8,7 @@ $(function()
   var hplayer3 = new HPlayer3({divlogger:true, controls:true})
   
   //////////////// PLAYER ////////////////
-  var player = hplayer3.videoPlayer( "#page_video", { closer: false, scrollbar: true })
-
-  player.on('loading', () => {
-      $("#page_video").removeClass('fadeout').addClass('fadein')
-  })
+  var player = hplayer3.videoPlayer( "#page_video", { closer: false, scrollbar: false })
 
   player.on('playing', () => {
       $("#page_video").removeClass('fadeout').removeClass('fadein')
@@ -28,6 +24,7 @@ $(function()
 
               // onCLICK => PLAY VIDEO
               grid.find('.item-video').on('click', function (){
+                $("#page_video").removeClass('fadeout').addClass('fadein')
                 player.play('/media/'+mediaSubfolder+'/'+$(this).data("media"))
               })
 

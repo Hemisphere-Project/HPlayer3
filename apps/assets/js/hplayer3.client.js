@@ -308,6 +308,9 @@ class VideoPlayer extends EventTarget {
             this.on('stop', ()=>{ 
                 clearInterval(this.scrollBarUpdate)
                 this.scrollBar.hide() 
+                $('.scrollbar_left').css('width', '0%')
+                $('.scrollbar_tick').css('margin-left', '0%')
+                $('.scrollbar_time').text('')
             })
         }
         
