@@ -210,13 +210,13 @@ class HPlayer3 extends HModule {
                             let preview = $('<div class="item item-'+item.type+'" data-media="'+item.name+'"></div>').appendTo(grid)
 
                             // THUMBNAIL
-                            let thumb = $('<div class="image_wrapper"><img class="thumb" src="/assets/img/video-placeholder.jpg"></div>').appendTo(preview)
+                            let thumb = $('<div class="image_wrapper"></div>').appendTo(preview)
+                            thumb.css('background-image', 'url(/assets/img/not_found.png)')
                             allFiles.forEach((file, i) => {
                                 if((file.raw_name==item.raw_name)&&(file.type=='image')) 
                                 {
                                     let img = thumb.find('img')
-                                    img.on('load', ()=>{ img.css('height', img.width()*0.5625) })   // Image RATIO
-                                    img.attr('src', '/media/'+options.folder+'/'+file.name)         // Image SRC
+                                    thumb.css('background-image', 'url(/media/'+options.folder+'/'+file.name+')')
                                 }
                             });
 
