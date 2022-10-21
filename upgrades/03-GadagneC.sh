@@ -13,13 +13,11 @@ rw
 chmod -R 777 /tmp
 date -s "$(curl -s --head http://google.com | grep ^Date: | sed 's/Date: //g')"
 
+# Full system upgrade
 pacman -Syu --noconfirm --overwrite '/usr/lib/node_modules/npm/*'
 
-# KEEP WPE 2.36, the new version breaks fadeIN / fadeOUT !!
-pacman -U /var/cache/pacman/pkg/wpewebkit-2.36.1-1-aarch64.pkg.tar.xz  
-
-# KEEP LIBWPE 1.12, the new version prevents video play
-pacman -U /var/cache/pacman/pkg/libwpe-1.12.0-2-aarch64.pkg.tar.xz
+# RESOLUTION must be pumped from 720p to 1366x768 (COG bug: https://github.com/Igalia/cog/issues/489)
+sed -i "s/hdmi_mode=85            #/hdmi_mode=86            # 86: 1366x768 \//g" /boot/config.txt
 
 # Update HPLAYER3
 cd /opt/HPlayer3

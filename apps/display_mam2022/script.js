@@ -58,7 +58,8 @@ $(function()
     {
       timeClick = Date.now()
       player.play('/media/'+mediaSubfolder+'/'+this.item.name)
-      $('#page_video').stop( true, true ).fadeIn(700)
+      // $('#page_video').stop( true, true ).fadeIn(700)
+      $('#page_video').removeClass('fadeout').addClass('fadein')
     })
   }
 
@@ -68,16 +69,16 @@ $(function()
 
 
   //////////////// PAGES /////////////////
-  $('.pages').hide()
-  $('#page_black').show()
-  $('#page_browser').show()
-
+  // $('.pages').hide()
+  // $('#page_black').show()
+  // $('#page_browser').show()
+  $('#page_video').addClass('fadeout')
 
   ///// WAVESHARE SCREEN WORKAROUND /////
   // During the 8 secs following the first user action, touch events are ignored & then triggered after 8 secs
   // --> User action will be triggered by the FIRST LAUNCH FIX, 
   //     waveShareTouchFix will enforce 8s delay before homepage display
-  var waveShareTouchFix = false
+  var waveShareTouchFix = true
 
   
   ////////////// LAGGY FIRST LAUNCH FIX //////
@@ -119,7 +120,8 @@ $(function()
   player.on('stop', () => 
   {
     scrollbarStop()
-    $('#page_video').stop( true, true ).fadeOut(500)
+    // $('#page_video').stop( true, true ).fadeOut(500)
+    $('#page_video').removeClass('fadein').addClass('fadeout')
   });
 
 
