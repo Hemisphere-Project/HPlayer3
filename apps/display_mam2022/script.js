@@ -1,6 +1,7 @@
 
 // /media subdirectory
 var mediaSubfolder = ""
+var timeClick = 0
 
 $(function() 
 {
@@ -55,8 +56,9 @@ $(function()
     // onCLICK => PLAY VIDEO
     this.preview.on('click', () => 
     {
+      timeClick = Date.now()
       player.play('/media/'+mediaSubfolder+'/'+this.item.name)
-      $('#page_video').stop( true, true ).fadeIn(900)
+      $('#page_video').stop( true, true ).fadeIn(700)
     })
   }
 
@@ -75,7 +77,7 @@ $(function()
   // During the 8 secs following the first user action, touch events are ignored & then triggered after 8 secs
   // --> User action will be triggered by the FIRST LAUNCH FIX, 
   //     waveShareTouchFix will enforce 8s delay before homepage display
-  var waveShareTouchFix = true
+  var waveShareTouchFix = false
 
   
   ////////////// LAGGY FIRST LAUNCH FIX //////
@@ -103,6 +105,7 @@ $(function()
   player.on('playing', ()=>{
     $('#page_video').stop( true, true )
     scrollbarStart()
+    console.warn('Delta click-playing:', Date.now()-timeClick)
   })
 
   // onCLICK => STOP
