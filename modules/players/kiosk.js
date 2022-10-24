@@ -96,16 +96,23 @@ class KioskPI extends Kiosk {
         if (this.kioskprocess) this.restart()
         else 
         {
+            this.log('startink kiosk: ', 
+                '--url', `"http://localhost:${this.getConf('webserver.port')}/${this.getConf('kiosk.theme')}"`,
+                '--rotate', `${this.getVideomode()}`)
+
+
             this.kioskprocess = spawn('kiosk', [
                                         '--url', `"http://localhost:${this.getConf('webserver.port')}/${this.getConf('kiosk.theme')}"`,
                                         '--rotate', `${this.getVideomode()}`])
 
             // Program auto-respawn once terminated
-            this.kioskprocess.on('exit', (code, signal) => {
+            this.kioskprocess.on('exit', (code, signal) => 
+            {
                 this.log('kioskprocess exited with ' + `code ${code} and signal ${signal}`);
                 this.kioskprocess = null
                 if (this.autorespawn) {
                     this.log('restarting..');
+                    this.stop(this.autorespawn)
                     this.start()
                 }
             });
