@@ -29,6 +29,14 @@ class Kiosk extends Baseplayer {
         })
     }
 
+    stop() {
+        this.log('No kiosk available on this machine...')
+    }
+
+    start() {
+        this.log('No kiosk available on this machine...')
+    }
+
     restart() {
         this.log('No kiosk available on this machine...')
     }
@@ -56,7 +64,8 @@ class Kiosk extends Baseplayer {
 
     setTheme(theme)
     {
-        this.log("Can't set theme on this machine...")
+        // TODO : check if theme is valid !
+        if ( this.setConf('kiosk.theme', theme) ) this.restart()
     }
 }
 
@@ -181,13 +190,6 @@ class KioskPI extends Kiosk {
             this.setConf('kiosk.videoflip', doFlip)
             this.restart()
         }
-    }
-
-
-    setTheme(theme)
-    {
-        // TODO : check if theme is valid !
-        if ( this.setConf('kiosk.theme', theme) ) this.restart()
     }
 
 }
