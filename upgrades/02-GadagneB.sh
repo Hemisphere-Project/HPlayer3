@@ -18,14 +18,14 @@ pacman -Sy
 # Update HPLAYER3
 cd /opt/HPlayer3
 git checkout main
-git stash
+git stash --include-untracked
 git pull
 npm install
 
 # Update Pi-tools
 cd /opt/Pi-tools
 git checkout main
-git stash
+git stash --include-untracked
 git pull
 rm -f /boot/kiosk.conf
 systemctl daemon-reload 
