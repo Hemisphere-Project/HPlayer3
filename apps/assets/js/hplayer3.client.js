@@ -149,17 +149,19 @@ class HPlayer3 extends HModule {
     //
     // Video handler -> call this to link a front video Element to the backend
     //
-    registerPlayer(videoEl, name)
+    videoPlayer( div, opts )
     {
-        if (name === undefined) name = 'player-'+Object.keys(this._players).length 
+        opts = (opts) ? opts : {}
+
+        if (opts.name === undefined) opts.name = 'player-'+Object.keys(this._players).length 
             
-        if( this._players.hasOwnProperty(name) ) {
-            console.error("A video player already exists with this name:", name)
-            return this._players[name]
+        if( this._players.hasOwnProperty(opts.name) ) {
+            console.warn("A video player already exists with this name:", opts.name)
+            return this._players[opts.name]
         }
 
-        this._players[name] = new VideoPlayer(videoEl, name)
-        return this._players[name]
+        this._players[opts.name] = new VideoPlayer(div, opts)
+        return this._players[opts.name]
     }
 
     //
@@ -171,6 +173,79 @@ class HPlayer3 extends HModule {
     }
 
 
+    //
+    // MEDIA GRID: create a grid of media thumbnails
+    //
+    mediaGrid( div, opts ) 
+    {
+        let options = {...{
+        // default options
+        folder: '',
+        types: [],  // 'video', 'image', 'audio'
+        }, ...opts}
+
+        return new Promise((resolve, reject) => 
+        {
+            // Get media list
+            this.files.media.getTree(options.folder)
+                .catch( error => {
+                    console.warn(error) 
+                    reject(error)
+                })
+                .then( data => {
+
+                    // console.log(data)
+                    let allFiles = data.fileTree
+                    $(div).empty()
+                    let grid = $('<div class="mediagrid"></div>').appendTo(div)
+
+                    // For each file
+                    allFiles.forEach((item, i) => 
+                    {
+                        // Wanted type ?
+                        if(!options.types.includes(item.type)) return 
+
+                        // VIDEO
+                        if(item.type == 'video') {
+                            let preview = $('<div class="item item-'+item.type+'" data-media="'+item.name+'"></div>').appendTo(grid)
+
+                            // THUMBNAIL
+                            let thumb = $('<div class="image_wrapper"><img class="thumb" src="/assets/img/video-placeholder.jpg"></div>').appendTo(preview)
+                            allFiles.forEach((file, i) => {
+                                if((file.raw_name==item.raw_name)&&(file.type=='image')) 
+                                {
+                                    let img = thumb.find('img')
+                                    img.on('load', ()=>{ img.css('height', img.width()*0.5625) })   // Image RATIO
+                                    img.attr('src', '/media/'+options.folder+'/'+file.name)         // Image SRC
+                                }
+                            });
+
+                            // DESCRIPTION
+                            let title = item.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ")
+                            let desc = $('<div class="infos"><div class="title">'+title+'</div><div class="subtitle">a movie file ...</div></div>').appendTo(preview)
+                            const textExist = allFiles.some(file => ((file.raw_name === item.raw_name)&&(file.type === 'text')) );
+                            if (textExist) {
+                                $.get('/media/'+options.folder+'/'+item.raw_name +'.txt', (txt) => {
+                                    desc.empty()
+                                    desc.append(txt)
+                                }, 'text')
+                            }
+                        }
+
+                        // IMAGE
+                        // TODO
+
+                        // AUDIO
+                        // TODO
+                    
+                    });
+
+                    resolve(grid)
+                })
+        })
+    
+    }
+
 }
 
 
@@ -178,50 +253,116 @@ class HPlayer3 extends HModule {
 //
 class VideoPlayer extends EventTarget {
 
-    constructor(videoEl, name) 
+    constructor(div, opts) 
     {
         super()
-        this.videoEl = $(videoEl)
-        this.video = this.videoEl[0]
-        this.name = (name)?name:'player'
 
+        // OPTIONS
+        let options = {...{
+            // default options
+            name: undefined,
+            closer: true,
+            scrollbar: true,
+        }, ...opts}
+
+        this.name = (options.name)?options.name:'player'
+
+        this.div = $(div)
+        
+        // VIDEO ELEMENT
+        this.videoEl = $('<video id="videoplayer" src=""></video>').appendTo(div)
+        this.video = this.videoEl[0]
         this.video.loop = false
         this.video.mute = false
+        
+        // SCROLLBAR
+        this.scrollBar = (options.scrollbar)?$('<div class="scrollbar">').appendTo(div).hide():null
+        if (this.scrollBar) {
+            var sb_container = $('<div class="scrollbar_container">').appendTo(this.scrollBar)
+                $('<div class="scrollbar_left">').appendTo(sb_container)
+                $('<div class="scrollbar_tick">').appendTo(sb_container)
+                $('<div class="scrollbar_background">').appendTo(sb_container)
 
-        this.state = 'stop'     // stop - loading - playing - paused - stalled - stopping
-        this.videoEl.css('visibility','hidden')
+            $('<div class="scrollbar_time">00:00</div>').appendTo(this.scrollBar)
+
+            sb_container.on('click', (e) => 
+            {
+                // %
+                var percent = ( (e.pageX - sb_container.offset().left) / sb_container.width() ) * 100
+                this.timeClick = Date.now()
+                this.video.currentTime = percent * this.video.duration / 100
+                if(this.video.paused) this.video.play()
+            })
+
+            this.on('playing', ()=>{
+                clearInterval(this.scrollBarUpdate)
+                this.scrollBarUpdate = setInterval(() => {
+                    var currentTime = this.video.currentTime
+                    var percent = currentTime*100 / this.video.duration
+                    $('.scrollbar_left').css('width', percent+'%')
+                    $('.scrollbar_tick').css('margin-left', percent+'%')
+                    $('.scrollbar_time').text(secondsToTime(currentTime))
+                    }, 20)
+                this.scrollBar.show()
+            })
+            this.on('stop', ()=>{ 
+                clearInterval(this.scrollBarUpdate)
+                this.scrollBar.hide() 
+            })
+        }
+        
+        // CLOSER
+        this.videoCloser = (options.closer)?$('<div class="closer">').appendTo(div).hide():null
+        if (this.videoCloser) {
+            this.videoCloser.on('click', () => { this.stop() });
+            
+            this.on('playing', ()=>{ this.videoCloser.show() })
+            this.on('stop', ()=>{ this.videoCloser.hide() })
+        }
+        else this.videoEl.on('click', () => { this.stop() });
+
+
+        // TIME WATCH
+        this.timeClick = 0
+        
+        //
+        // VIDEO ELEMENT EVENTS
+        //
 
         // ENDED HARDFIX WATCHER
-        //
         this.endWatchCounter = 0
         this.endWatchMAX = 5
         this.endedWatcher = setInterval(()=>{
-            if ((this.video.duration-this.video.currentTime < 0.04 && !this.video.paused)) 
+            if ((this.video.duration-this.video.currentTime < 0.04 && this.state == 'playing')) 
                 if (this.endWatchCounter < this.endWatchMAX) this.endWatchCounter += 1
                 else
                 {
-                    console.log('[VIDEO/'+this.name+'] ended (hard fix)')
+                    console.log('['+this.name+'/video] ended (hard fix)')
                     this.video.pause()
                 }
         }, 10)
 
+        // LOADED
         this.video.addEventListener('loadedmetadata', () => {
             this.endWatchCounter = 0
-            console.log('[VIDEO/'+this.name+'] loaded', this.video.videoWidth, this.video.videoHeight);
+            // console.log('['+this.name+'/video] loaded', this.video.videoWidth, this.video.videoHeight);
         }, false);
 
-        //  paused and playing events to control buttons
-        this.video.addEventListener("pause", () => {
-            console.log('[VIDEO/'+this.name+'] paused');
+        // PLAYING
+        this.video.addEventListener("playing", () => {
+            this.state = 'playing'
+            this.dispatchEvent(new Event(this.state));
+        }, false);
 
+        // PAUSED - ENDED (hardfix) - STOP
+        this.video.addEventListener("pause", () => {
+            // console.log('['+this.name+'/video] pause', this.state);
             // ENDED HARDFIX
             if (this.endWatchCounter == this.endWatchMAX) {
-                this.endWatchCounter = 0
                 this.video.dispatchEvent( new Event('ended') );
             }
             // STOPPING
             else if (this.state == 'stopping') {
-                this.videoEl.css('visibility','hidden')
                 this.state = 'stop'
                 this.dispatchEvent(new Event(this.state));
             } 
@@ -230,36 +371,67 @@ class VideoPlayer extends EventTarget {
                 this.state = 'paused'
                 this.dispatchEvent(new Event(this.state));
             }
-
         }, false);
 
-        this.video.addEventListener("playing", () => {
-            this.endWatchCounter = 0
-            console.log('[VIDEO/'+this.name+'] playing');
-            this.videoEl.css('visibility', 'visible')
-            this.state = 'playing'
-            this.dispatchEvent(new Event(this.state));
-        }, false);
-
+        // ENDED
         this.video.addEventListener("ended", () => {
-            this.videoEl.css('visibility','hidden')
-            this.endWatchCounter = 0
-            console.log('[VIDEO/'+this.name+'] ended');
-            this.state = 'stop'
-            this.dispatchEvent(new Event(this.state));
+            if (this.state != 'stop') {
+                this.state = 'stop'
+                this.dispatchEvent(new Event(this.state));
+            }
         }, false);
 
+        // STALLED
         this.video.addEventListener("stalled", () => {
-            console.log('[VIDEO/'+this.name+'] stalled');
             this.state = 'stalled'
             this.dispatchEvent(new Event(this.state));
         }, false);
 
+        // TIME UPDATE
         this.video.addEventListener("timeupdate", () => {
-            // console.log('[VIDEO/'+this.name+'] time', this.video.currentTime, this.video.duration, this.video.paused);
+            // console.log('['+this.name+'/video] time', this.video.currentTime, this.video.duration, this.video.paused);
         }, false);
+
+
+        //
+        // VIDEO PLAYER EVENTS
+        //
+
+        this.on('loading', () => {
+            this.timeClick = Date.now()
+            console.log('['+this.name+'/player] loading');
+            this.videoEl.css('visibility','hidden') // Prevent pause image display before video is ready
+        })
+
+        this.on('playing', () => {
+            this.endWatchCounter = 0
+            this.videoEl.css('visibility', 'visible')
+            console.log('['+this.name+'/player] playing (load time = '+(Date.now()-this.timeClick)+'ms)');
+        })
+
+        this.on('paused', () => {
+            console.log('['+this.name+'/player] paused');
+        })
+
+        this.on('stalled', () => {
+            console.log('['+this.name+'/player] stalled');
+        })
+
+        this.on('stop', () => {
+            console.log('['+this.name+'/player] stop');
+            this.endWatchCounter = 0
+            this.videoEl.css('visibility','hidden')
+        })
+
+        //
+        // STATE INIT
+        //
+
+        this.state = 'stop'     // stop - loading - playing - paused - stalled - (stopping)
+        this.dispatchEvent(new Event(this.state));
     }
 
+    // CMD PLAY
     play(media) 
     {
         if (this.state == 'loading' || this.state == 'stopping') {
@@ -272,43 +444,62 @@ class VideoPlayer extends EventTarget {
             return
         }
 
-        this.videoEl.css('visibility','hidden') // Prevent pause image display before video is ready
+        // Loading
         this.video.setAttribute('src', media)
         this.video.currentTime = 0
         this.state = 'loading'
         this.dispatchEvent(new Event(this.state));
+        
+
+        // Play
         this.video.play()
+            .catch((error) => {
+                this.state = 'stop'
+                this.dispatchEvent(new Event(this.state));
+                console.error(error)
+            })
+
     }
 
+    // CMD PAUSE
     pause() 
     {
-        if (this.state == 'stop') 
-            return 
+        if (this.state == 'stop' || this.state == 'stopping') return
 
         if (this.state == 'loading')
             this.on('playing', ()=>{ this.pause() }, {once: true})
-        else
+        else {
             this.video.pause()
+        }
     }
 
+    // CMD STOP
     stop() 
     {
         if (this.state == 'stop' || this.state == 'stopping') return
         
-        var stillLoading = (this.state == 'loading')
-        if (stillLoading) this.on('playing', ()=>{ this.stop() }, {once: true})
-
-        this.state = 'stopping'
-        this.dispatchEvent(new Event(this.state));
-        
-        if (!stillLoading) this.pause()
+        if (this.state == 'loading') {
+            this.on('playing', ()=>{ this.stop() }, {once: true})
+        }
+        else {
+            this.state = 'stopping'
+            this.video.pause()
+        }
     }
 
+    // ON EVENT
     on(event, clbck, options)
     {
         this.addEventListener(event, clbck, options)
     }
+
+    // OFF EVENT
+    off(event, clbck, options)
+    {
+        this.removeEventListener(event, clbck, options)
+    }
 }
+
 
 
 // DIV-LOGGER
@@ -409,3 +600,13 @@ function debounce(millis)
     setTimeout(()=>{debounce.enable = true}, millis)
     return true;
 }
+
+  // UTILS
+  function secondsToTime(secs)
+  {
+    var minutes = Math.floor(secs / 60)
+    var seconds = Math.floor(secs - minutes * 60)
+    var x = minutes < 10 ? "0" + minutes : minutes
+    var y = seconds < 10 ? "0" + seconds : seconds
+    return x + ":" + y
+  }
