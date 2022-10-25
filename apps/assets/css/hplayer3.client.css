@@ -1,0 +1,158 @@
+/*
+  GLOBAL
+*/
+body
+{
+  font-family: Helvetica, Sans-Serif;
+  margin:0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overflow-y: hidden;
+  /* cursor: none; */
+  background-color: black;
+}
+img{
+  -webkit-user-drag: none;
+}
+
+
+/* 
+  VIDEOPLAYER 
+*/
+#videoplayer {
+  cursor:pointer;
+  z-index:1;
+  width: 100%;
+  height:100%;
+  max-height: 100%;
+}
+
+/* 
+  SCROLLBAR 
+*/
+.scrollbar {
+  color:white;
+  z-index:2;
+}
+.scrollbar .scrollbar_container{
+  position: absolute;
+  width: 80%;
+  bottom: calc(5vh + 30px);
+  left: 10%;
+  z-index: 10;
+  box-sizing: border-box;
+  cursor:pointer;
+}
+.scrollbar .scrollbar_container .scrollbar_left{
+  position: absolute;
+  background-color: #ababab;
+  height:10px;
+  padding: 15px 0 15px 0;
+  background-clip: content-box;
+  width:0%;
+}
+.scrollbar .scrollbar_container .scrollbar_tick{
+  position: absolute;
+  background-color: white;
+  height: 20px;
+  margin-left: 0%;
+  width: 3px;
+  margin-top: 10px;
+}
+.scrollbar .scrollbar_container .scrollbar_background{
+  position: absolute;
+  background-color: #ababab;
+  opacity:0.3;
+  height:10px;
+  padding: 15px 0 15px 0;
+  background-clip: content-box;
+  width:100%;
+}
+.scrollbar .scrollbar_time{
+  position: absolute;
+  color: #ababab;
+  right: 3%;
+  bottom: 4.5vh;
+  z-index: 10;
+}
+
+/*
+  CLOSER
+*/
+.closer {
+  z-index: 2;
+  cursor:pointer;
+  position: absolute;
+  right: 32px;
+  top: 32px;
+  width: 32px;
+  height: 32px;
+  opacity: 0.4;
+}
+.closer:hover {
+  opacity: 1;
+}
+.closer:before, .closer:after {
+  position: absolute;
+  left: 15px;
+  content: ' ';
+  height: 33px;
+  width: 2px;
+  background-color: white;
+}
+.closer:before {
+  transform: rotate(45deg);
+}
+.closer:after {
+  transform: rotate(-45deg);
+}
+
+/*
+  MEDIA GRID
+*/
+.mediagrid{
+  width:100%;
+  padding: 2% 5% 2% 5%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.mediagrid .item{
+  color:black;
+  background-color: #777;
+  cursor:pointer;
+  width:100%;
+  max-width: 50vw;
+  flex: 1;
+  min-width:20%;
+  margin: 1.5%;
+  overflow-wrap: break-word;
+}
+.mediagrid .item .infos *{
+  width:100%;
+}
+.mediagrid .item .image_wrapper{
+  width: 100%;
+  overflow-y: hidden;
+  object-fit: cover;
+}
+.mediagrid .item .image_wrapper img{
+  width: 100%;
+}
+.mediagrid .item .infos{
+  padding: 2em;
+  overflow-x: hidden;
+}
+.mediagrid .item .infos .title{
+  line-height:1em;
+  padding-bottom: 1em;
+}
+.mediagrid .item .infos .subtitle{
+  border-top: 1px solid black;
+  padding-top: 1em;
+  margin-bottom: 1em;
+}

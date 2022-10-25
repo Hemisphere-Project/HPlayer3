@@ -8,8 +8,9 @@
 - Portail captif 10.0.0.1
 
 // CONTROLLER:
+- modules enable/disable
 - player ctrls
-- Video -> select resolution (auto, ...)
+- Video -> select resolution (auto, ...) (!! minimum 1024x768)
 - if not pi: can't change theme
 - Discover others
 
