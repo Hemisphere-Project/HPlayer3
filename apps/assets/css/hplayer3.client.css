@@ -117,20 +117,35 @@ img{
 .mediagrid{
   width:100%;
   padding: 2% 5% 2% 5%;
-  display: flex;
-  flex-wrap: wrap;
   justify-content: center;
+  display: grid;
+  gap: 3% 2%;
+  grid-template-columns: repeat(12, 1fr);
 }
 .mediagrid .item{
+  grid-column: span 3;
   color:black;
   background-color: #777;
   cursor:pointer;
-  width:100%;
-  max-width: 50vw;
-  flex: 1;
-  min-width:20%;
-  margin: 1.5%;
   overflow-wrap: break-word;
+}
+.mediagrid .item:first-child:nth-last-child(1), 
+.mediagrid .item:first-child:nth-last-child(1) ~ * {
+  grid-column: 4 / span 6; 
+}
+.mediagrid .item:first-child:nth-last-child(2), 
+.mediagrid .item:first-child:nth-last-child(2) ~ * {
+  grid-column: span 6; 
+}
+.mediagrid .item:first-child:nth-last-child(3), 
+.mediagrid .item:first-child:nth-last-child(3) ~ *,
+.mediagrid .item:first-child:nth-last-child(5), 
+.mediagrid .item:first-child:nth-last-child(5) ~ *,
+.mediagrid .item:first-child:nth-last-child(6), 
+.mediagrid .item:first-child:nth-last-child(6) ~ *,
+.mediagrid .item:first-child:nth-last-child(9), 
+.mediagrid .item:first-child:nth-last-child(9) ~ * {
+  grid-column: span 4; 
 }
 .mediagrid .item .infos *{
   width:100%;
