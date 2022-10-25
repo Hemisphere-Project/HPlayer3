@@ -147,24 +147,19 @@ img{
 .mediagrid .item:first-child:nth-last-child(9) ~ * {
   grid-column: span 4; 
 }
-.mediagrid .item .infos *{
-  width:100%;
-}
 .mediagrid .item .image_wrapper{
   width:  100%;
-  padding-top: 56.25%;
+  padding-top: 56.25%;      /* 16:9 ratio */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
-.mediagrid .item .image_wrapper img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 .mediagrid .item .infos{
   padding: 2em;
   overflow-x: hidden;
+}
+.mediagrid .item .infos *{
+  width:100%;
 }
 .mediagrid .item .infos .title{
   line-height:1em;
