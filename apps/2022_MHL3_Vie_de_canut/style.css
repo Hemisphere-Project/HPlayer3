@@ -1,0 +1,103 @@
+
+body
+{
+  font-family: Helvetica, Sans-Serif;
+  margin:0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overflow-y: hidden;
+  /* cursor: none; */
+  /* background-color: black; */
+}
+img{
+  -webkit-user-drag: none;
+}
+
+/*HIDE SCROLLBAR*/
+*{
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/*FONTS*/
+@font-face {
+    font-family: 'unknown';
+    src: url('assets/fonts/unknown.otf');
+}
+/*TYPO*/
+*{
+  font-family: 'unknown';
+  font-size: 16px;
+}
+/*INTERACT*/
+.btn, .scrollbar_container, .item, #videoplayer{
+  cursor:pointer;
+}
+.btn{
+  opacity: 0.9;
+}
+.btn:hover{
+  opacity: 1;
+}
+.btn:active{
+  opacity: 0.7;
+}
+
+
+/*PAGES*/
+.page{
+  position: absolute;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  overflow-y: hidden;
+  display:none;
+}
+
+#page_home{
+
+}
+
+#page_selection * {
+ margin-bottom: 10px;
+}
+
+
+#page_selection .title{
+
+}
+#page_selection .infos{
+
+}
+#page_selection #go{
+ display:none;
+}
+
+#page_selection .group_title{
+ text-decoration: underline;
+}
+#page_selection .keyword{
+ border: 1px solid black;
+ width: fit-content;
+ cursor: pointer;
+}
+.selected{
+ border: 1px solid black;
+ color:white;
+ background-color: black;
+}
+
+#page_text{
+
+}
+#page_text .text{
+  display:none;
+}
