@@ -102,7 +102,7 @@ $(function() {
 
   ////////////////// AUTO FIELD: automatted setter / getter with hplayer3 ////////////////////////
 
-  function autoField(div) 
+  function autoField(div)
   {
     this.element = $(div)   // NEEDED: div is the base selector which is watched for change (which triggers the setter)
 
@@ -112,15 +112,15 @@ $(function() {
     this._getter_args = []
     this._setter_args = []
     this._value = function(el){               // INFO: Default method to obtain value from element => can be overwriten with value(clbck)
-      if (el.is(':checkbox')) return el.is(':checked')            
+      if (el.is(':checkbox')) return el.is(':checked')
       else if (el.is(':radio')) return el.filter(':checked').val()
-      else return el.val()                                        
-    }       
+      else return el.val()
+    }
     this._update = function(el, data){        // INFO: Default method to set value to element     => can be overwriten with update(clbck)
-      if (el.is(':checkbox')) el.prop('checked', data);             
+      if (el.is(':checkbox')) el.prop('checked', data);
       else if (el.is(':radio')) { el.prop('checked', false);  el.filter('[value="'+data+'"]').prop('checked', true);  }
-      else el.val(data) 
-    }   
+      else el.val(data)
+    }
 
     // PUBLIC
     this.getter = function(src, ...args) {this._getter = src; this._getter_args=args; return this}    // NEEDED: define the method call, and optional args, to obtain field value
@@ -232,7 +232,7 @@ $(function() {
     .getter(hplayer3.kiosk.getVideorotate)
     .setter(hplayer3.kiosk.setVideorotate)
     .refresh()
-  
+
 
   //////////////// AUDIO CONFIG ////////////////
 
@@ -269,16 +269,16 @@ $(function() {
   new autoField('#wifiSsid')
     .getter(hplayer3.wifi.getName)
     .setter(hplayer3.wifi.setName)
-    .value( (el)=>{ 
+    .value( (el)=>{
       return el.find('input').val()
     })
     .update( (el, data) => $('.deviceName').html(data) )
     .refresh()
-  
+
   new autoField('#wifiPass')
     .getter(hplayer3.wifi.getPass)
     .setter(hplayer3.wifi.setPass)
-    .value( (el)=>{ 
+    .value( (el)=>{
       return el.find('input').val()
     })
     .update( (el, data) => $('.devicePassword').html(data) )
@@ -509,9 +509,13 @@ $(function() {
   $('.editCode').click(function(){
     editedFile = $(this).attr('file')
     $('.overlayEditor').fadeIn(100)
+
+    editedLanguage = $(this).attr('language')
+    codeEditor.setOption("mode", editedLanguage)
+
     $.get('/conf/'+editedFile, function(txt) {
       codeEditor.setValue(txt)
-      codeEditor.setSize("100%", "50vh")
+      codeEditor.setSize("100%", "60vh")
       codeEditor.refresh()
     }, 'text')
   })
@@ -523,6 +527,7 @@ $(function() {
     })
 
   })
+
 
 
 

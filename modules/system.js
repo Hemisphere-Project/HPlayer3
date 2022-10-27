@@ -10,6 +10,8 @@ const os = require("os");
 const Files = require('./files.js');
 const { EventEmitter2 } = require('eventemitter2')
 const Kiosk = require('./players/kiosk.js')
+var isPi = require('detect-rpi');
+
 
 class System extends Module
 {
@@ -32,7 +34,7 @@ class System extends Module
     // EVENT MANAGER
     this.events = new EventEmitter2({
       wildcard: true,
-      delimiter: '.', 
+      delimiter: '.',
       maxListeners: 100,
       verboseMemoryLeak: true,
       ignoreErrors: false
@@ -55,13 +57,20 @@ class System extends Module
 
     // KIOSK
     this.kiosk = new Kiosk(this)
-    
+
     // WIFI
     this.wifi = new Wifi(this)
 
+    // CONNECTOR
+    if (isPi()){
+      const HConnector = require('../conf/hconnector.js')
+      this.hconnector = new HConnector(this)
+    }
+
+
   }
 
-  start() 
+  start()
   {
     this.hp3 = this
     this.emit('ready')
