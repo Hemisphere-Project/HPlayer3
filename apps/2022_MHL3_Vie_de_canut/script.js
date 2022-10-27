@@ -29,11 +29,12 @@ $(function()
 
     var textId = ''
     $('.selected').each(function(index,div){
-      textId += $(div).attr('id')+'-'
+      textId += $(div).attr('id')
     })
 
     $('#page_selection').fadeOut(200)
     $('#page_text').fadeIn(200)
+    // $('#QRCode').attr('src', 'assets/img/'+textId+'.png')
     $('#'+textId).fadeIn(200)
 
   })
@@ -60,7 +61,7 @@ $(function()
       }
 
       function timerReset() {
-        var idleTime = 30000
+        var idleTime = 60000
         clearTimeout(timerInactivity)
         timerInactivity = setTimeout(timerElapsed, idleTime)
       }

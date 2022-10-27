@@ -100,4 +100,6 @@ img{
 }
 #page_text .text{
   display:none;
+  white-space: pre-line;
+
 }
