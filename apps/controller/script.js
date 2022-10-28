@@ -197,7 +197,14 @@ $(function() {
   new autoField('input:radio[name="playerType"]')
     .getter(hplayer3.getPlayerType)
     .setter(hplayer3.setPlayerType)
+    .update( (el, data)=>{
+      el.prop('checked', false);
+      el.filter('[value="'+data+'"]').prop('checked', true);
+      $('.option.player').fadeOut(100)
+      $('.option.player.'+data).fadeIn(100)
+    })
     .refresh()
+
 
   //////////////// KIOSK CONFIG ////////////////
 
@@ -208,8 +215,7 @@ $(function() {
     // BUILD LIST
     $('#themeSelector').empty()
     data.fileTree.forEach((item, i) => {
-      if(item.type =='folder'){
-        console.log(item.name)
+      if((item.type =='folder')&&(item.name!='controller')&&(item.name!='assets')){
         $('#themeSelector').append('<option value="'+item.name+'" >'+item.name+'</option>')
       }
     });
