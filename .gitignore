@@ -5,3 +5,4 @@ media/*
 !media/.gitkeep
 conf/*
 !conf/.gitkeep
+!conf/hconnector.js
