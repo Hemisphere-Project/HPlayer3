@@ -192,6 +192,12 @@ $(function() {
 
     })
 
+  //////////////// PLAYER TYPE ////////////////
+
+  new autoField('input:radio[name="playerType"]')
+    .getter(hplayer3.getPlayerType)
+    .setter(hplayer3.setPlayerType)
+    .refresh()
 
   //////////////// KIOSK CONFIG ////////////////
 
