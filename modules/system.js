@@ -90,7 +90,6 @@ class System extends Module
     setTimeout(function(){process.exit()}, 1000)
   }
 
-
   getModuleState(module){
     return this.config.get('module.'+module)
   }
@@ -100,7 +99,15 @@ class System extends Module
   }
 
   getAvailableModules(){
-    return ['kiosk', 'connector', 'serial', 'synchro']
+    return ['connector', 'serial', 'synchro']
+  }
+
+  getPlayerType(){
+    return this.getConf('player', 'video')
+  }
+
+  setPlayerType(value){
+    this.setConf('player', value)
   }
 
 }

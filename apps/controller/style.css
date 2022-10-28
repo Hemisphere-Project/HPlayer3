@@ -58,7 +58,7 @@ img{
 }
 .minigrid{
   display:grid;
-  grid-template-columns: 33% 33% 33%;
+  grid-template-columns: 24% 24% 24% 24%;
 }
 .title > *, .title_small > *{
   margin-left: 10px;
