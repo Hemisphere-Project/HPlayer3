@@ -50,6 +50,13 @@ $(function()
     setTimeout(()=>
     {
       console.log('Kiosk starting...')
+
+      // count element with class .item-video
+      if ($('.item-video').length === 0) {
+        $('#page_black').find('.title').text('No video found..')
+        console.log('No video found..')
+        return
+      };
       
       // Simulate user click on first item
       $('.item-video')[0].click()
