@@ -17,3 +17,7 @@ hplayer3.inactivity( 60, ()=> {
 mediaCarrousel(hplayer3, "#page_carrousel", { folder: "", types: ['video', 'image', 'pdf'] })
     .then((carrousel) => { })
 
+
+////// TODO:
+// - swipe threshold weird on touchscreens
+// - hplayer3-ify video players
