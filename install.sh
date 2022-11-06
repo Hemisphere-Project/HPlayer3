@@ -1,6 +1,7 @@
 
 # TODO
 
-dependencies: 
+system dependencies: 
 - nodejs
 - pigpio (apt / pikaur)
+
