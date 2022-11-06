@@ -13,11 +13,6 @@ rw
 chmod -R 777 /tmp
 date -s "$(curl -s --head http://google.com | grep ^Date: | sed 's/Date: //g')"
 
-# Full system upgrade
-# pacman -Syu --noconfirm --overwrite '/usr/lib/node_modules/npm/*'
-
-# RESOLUTION must be pumped from 720p to 1366x768 (COG bug: https://github.com/Igalia/cog/issues/489)
-# sed -i "s/hdmi_mode=85            #/hdmi_mode=86            # 86: 1366x768 \//g" /boot/config.txt
 
 # GPIO
 pikaur -Sy --noconfirm pigpio
@@ -47,3 +42,13 @@ echo "SUCCESS !"
 reboot
 
 exit 0
+
+
+
+# DISCARDED UPGRADES:
+
+# Full system upgrade
+# pacman -Syu --noconfirm --overwrite '/usr/lib/node_modules/npm/*'
+
+# RESOLUTION must be pumped from 720p to 1366x768 (COG bug: https://github.com/Igalia/cog/issues/489)
+# sed -i "s/hdmi_mode=85            #/hdmi_mode=86            # 86: 1366x768 \//g" /boot/config.txt

@@ -53,6 +53,7 @@
   overflow-y: scroll;
   flex-wrap: wrap;
 }
+
 #page_grid .mediagrid .item{
   background-color: rgb(216,97,99);
 }

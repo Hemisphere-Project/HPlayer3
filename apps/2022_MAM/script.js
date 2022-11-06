@@ -19,7 +19,7 @@ $(function()
   })
 
   //////////////// MEDIA GRID ////////////////
-  hplayer3.mediaGrid("#page_grid", { folder: mediaSubfolder, types: ['video'] })
+  mediaGrid(hplayer3, "#page_grid", { folder: mediaSubfolder, types: ['video'] })
             .then((grid) => {
 
               // onCLICK => PLAY VIDEO
