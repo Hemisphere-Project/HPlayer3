@@ -340,8 +340,15 @@ input[type="file"]{
   display:block;
 }
 
-
-
+/*LOGS*/
+.miniLogs {
+  height: 100px;
+  overflow-y: scroll;
+  border: 1px solid white;
+  padding: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 
 
 

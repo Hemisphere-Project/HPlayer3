@@ -171,11 +171,22 @@ class Directory extends Module {
       })
     }
 
+    // READ FILE
+    readFile(path){
+      var content = null
+      try {
+        content = fs.readFileSync(fspath.join(this.path, path), 'utf8');
+      }
+      catch (error) {
+        this.log('Error while reading file: ', error);
+      }
+      return content
+    }
 
     // WRITE FILE
     writeFile(path, value){
       try {
-        fs.writeFileSync(this.path+path, value, 'utf8');
+        fs.writeFileSync(fspath.join(this.path, path), value, 'utf8');
         this.log('saved !');
       }
       catch (error) {

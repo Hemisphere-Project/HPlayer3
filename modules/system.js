@@ -4,6 +4,7 @@ const Config = require('./config.js')
 const Wifi = require('./wifi.js')
 const Webserver = require('./webserver.js')
 const Socketio = require('./socketio.js')
+const Gpio = require('./gpio.js')
 const { execSync } = require('child_process');
 const fs = require('fs')
 const os = require("os");
@@ -31,6 +32,9 @@ class System extends Module
 
     this.log('HPlayer3 starting...')
 
+    // REQUESTS STACK
+    this.requestStack = []
+
     // EVENT MANAGER
     this.events = new EventEmitter2({
       wildcard: true,
@@ -55,20 +59,14 @@ class System extends Module
     // AUDIO
     this.audio = new Audio(this)
 
-    // KIOSK
+    // // KIOSK
     this.kiosk = new Kiosk(this)
 
     // WIFI
     this.wifi = new Wifi(this)
 
     // CONNECTOR
-    if (isPi()){
-      const HConnector = require('../conf/hconnector.js')
-      this.hconnector = new HConnector(this)
-    }
-
-
-
+    this.gpio = new Gpio(this)
 
   }
 
@@ -105,11 +103,11 @@ class System extends Module
   }
 
   getPlayerType(){
-    return this.getConf('player', 'video')
+    return this.getConf('player.type', 'video')
   }
 
   setPlayerType(value){
-    this.setConf('player', value)
+    this.setConf('player.type', value)
   }
 
 }

@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title></title>
+
+    <link href="style.css" rel="stylesheet">
+    <!-- LIBS -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/lib/jquery-3.6.0.min.js"></script>
+    <script src="/assets/lib/eventemitter2.js"></script>
+    <!-- COMMON JS -->
+    <script src="/assets/js/hplayer3.client.js"></script>
+  </head>
+
+  <body>
+
+    <div id="ctrls"></div>
+    <div id="time"></div>
+    <div id="log"></div>
+
+    <video id="thevideo">
+      <source src="/media/gravity-2.webm"      type="video/webm" />
+    </video>
+
+    <script src="script.js"></script>
+    <script>
+
+      $( document ).ready(function()
+      {
+
+        var video = document.getElementById('thevideo');
+        controls(video)
+        console.log( "ready!" );
+
+      });
+    </script>
+
+  </body>
+</html>

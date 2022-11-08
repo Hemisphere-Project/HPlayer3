@@ -75,6 +75,9 @@ class HPlayer3 extends HModule {
         }
         for(var prop in config) this.config[prop]=config[prop];  
 
+        // SUBSCRIPTIONS
+        this.subscriptions = {}
+
         // LOGS
         //
         if (this.config.divlogger)
@@ -95,23 +98,33 @@ class HPlayer3 extends HModule {
 
         this.sio.onAny((event, ...args) => {
             console.log(`got ${event}`, args);
+            this.emit(event, ...args)
         });
-
         this.sio.on("connect", () => {
-            this.emit('connect')
+            this.emit('client.connect')
+        });
+        this.sio.on("disconnect", () => {
+            this.emit('client.disconnect')
         });
         this.sio.on("uuid", (uuid) => {
             if (!this.serverUUID) this.serverUUID = uuid
             else if (this.serverUUID != uuid) location.reload()
         });
-        this.sio.on("disconnect", () => {
-            this.emit('disconnect')
-        });
-
+        
         return new Proxy(this, this);
     }
 
-
+    //
+    // subscribe event
+    //
+    on(event, callback) {
+        // this.subscriptions[event] = callback
+        if (!event.startsWith('client.')) {
+            this.sio.emit('subscribe', event)
+            console.log('subscribe', event)
+        }
+        super.on(event, callback)
+    }
 
     //
     // access sub-property recursively until hit a function call -> relay to server
@@ -337,6 +350,7 @@ class VideoPlayer extends EventTarget {
 
         // ENDED
         this.video.addEventListener("ended", () => {
+            this.dispatchEvent(new Event('ended'));
             if (this.state != 'stop') {
                 this.state = 'stop'
                 this.dispatchEvent(new Event(this.state));
@@ -377,6 +391,10 @@ class VideoPlayer extends EventTarget {
 
         this.on('stalled', () => {
             console.log('['+this.name+'/player] stalled');
+        })
+
+        this.on('ended', () => {
+            console.log('['+this.name+'/player] ended');
         })
 
         this.on('stop', () => {

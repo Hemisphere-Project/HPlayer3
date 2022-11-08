@@ -148,7 +148,7 @@ $(function() {
 
   var hplayer3 = new HPlayer3()
 
-  hplayer3.on('connect', ()=>{
+  hplayer3.on('client.connect', ()=>{
 
     // Connect status
     $('.connectionInfo').removeClass('disconnected').addClass('connected')
@@ -157,7 +157,7 @@ $(function() {
     refreshMedia()
   })
 
-  hplayer3.on('disconnect', ()=>
+  hplayer3.on('client.disconnect', ()=>
   {
     // Connect status
     $('.connectionInfo').removeClass('connected').addClass('disconnected')
@@ -307,7 +307,15 @@ $(function() {
       if(!data) $('#sectionwifi').hide()
     })
 
+    
+  //////////////// HCONNECTOR ////////////////
 
+  // GPIO info
+  hplayer3.on('gpio.state', (pin, value)=>{
+    console.log(pin, value)
+    $('#gpioLogs').append(`<div class="logline">GPIO ${pin} : ${value}</div>`)
+    $('#gpioLogs').scrollTop($('#gpioLogs')[0].scrollHeight)
+  })  
 
   //////////////// FILES ////////////////
 
@@ -525,11 +533,20 @@ $(function() {
     editedLanguage = $(this).attr('language')
     codeEditor.setOption("mode", editedLanguage)
 
-    $.get('/conf/'+editedFile, function(txt) {
-      codeEditor.setValue(txt)
-      codeEditor.setSize("100%", "60vh")
-      codeEditor.refresh()
-    }, 'text')
+    hplayer3.files.conf.readFile(editedFile)
+      .then( txt => {
+        codeEditor.setValue(txt)
+        codeEditor.setSize("100%", "60vh")
+        codeEditor.refresh()
+        console.log('loaded', editedFile)
+      })
+
+    // $.get('/conf/'+editedFile, function(txt) {
+    //   codeEditor.setValue(txt)
+    //   codeEditor.setSize("100%", "60vh")
+    //   codeEditor.refresh()
+    //   console.log('loaded', '/conf/'+editedFile)
+    // }, 'text')
   })
 
   $('.saveCode').click(function(){

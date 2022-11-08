@@ -21,10 +21,16 @@ class Kiosk extends Baseplayer {
         this.getConf('kiosk.theme', 'controller')
 
         // Start kiosk now
-        this.start()
+        if (this.getConf('player.type') == 'kiosk')
+            setTimeout( ()=>{this.start()}, 1000)   // BLOCKS OTHER ExecSync if launched too early...   
 
         // Restart on audio output change
-        this.on('audio.output', (out)=>{
+        this.on('config.audio.output', (out)=>{
+            this.restart()
+        })
+
+        // Restart on player type change
+        this.on('config.player.type', (out)=>{
             this.restart()
         })
     }
@@ -34,10 +40,12 @@ class Kiosk extends Baseplayer {
     }
 
     start() {
+        if (this.getConf('player.type') != 'kiosk') return
         this.log('No kiosk available on this machine...')
     }
 
     restart() {
+        if (this.getConf('player.type') != 'kiosk') return
         this.log('No kiosk available on this machine...')
     }
     
@@ -99,7 +107,12 @@ class KioskPI extends Kiosk {
     }
 
     start() 
-    {
+    {   
+        if (this.getConf('player.type') != 'kiosk') {
+            this.stop(false)
+            return
+        }
+
         this.autorespawn = true
 
         if (this.kioskprocess) this.restart()

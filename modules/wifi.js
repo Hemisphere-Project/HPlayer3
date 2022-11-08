@@ -186,4 +186,4 @@ class WifiPI extends Wifi
 }
 
 module.exports = Wifi
-if (isPi()) module.exports = WifiPI
+// if (isPi()) module.exports = WifiPI

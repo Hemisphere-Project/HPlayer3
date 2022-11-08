@@ -20,6 +20,7 @@
     "node-network-manager": "^1.0.9",
     "node-wifi": "^2.0.16",
     "pigpio": "^3.3.1",
+    "shelljs": "^0.8.5",
     "socket.io": "^4.5.0",
     "wifi-name": "^3.1.1"
   }
