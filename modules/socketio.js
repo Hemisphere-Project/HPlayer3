@@ -8,7 +8,7 @@ class Socketio extends Module
     {   
         super('socketio', hplayer3)
 
-        this.mute = true
+        this.mute = false
 
         this.requires('webserver')
     }
@@ -33,10 +33,20 @@ class Socketio extends Module
                 this.log('client disconnected')
             })
 
+            // on subscribe
+            socket.on('subscribe', (event) => {
+                this.log('client subscribed to', event)
+                this.hp3.on(event, (...data) => {
+                    socket.emit(event, ...data)
+                })
+            })
+
+
             //
             // Method call: data = ['path.to.method', arg1, arg2, ...]
             //
             socket.on('call', (data, callback) => {
+                // this.log('sio-call', data)
                 try {
                     if (!Array.isArray(data)) data = [data]
                     // this.log(data)
@@ -45,7 +55,7 @@ class Socketio extends Module
 
                     var path = this.hp3 
                     for(const a of attributes) path = path[a]
-
+                    
                     let result
                     if (path[method]) {
                         result = path[method].call(path, ...data)
@@ -54,12 +64,12 @@ class Socketio extends Module
                     else {
                         var err = "Call unknown method: "+attributes.join('.')+'.'+method+'()'
                         this.log(err)
-                        callback( false, err)
+                        if (callback) callback( false, err)
                     }
                 } 
                 catch(err) {
                     this.log(err)
-                    callback( false, String(err) )
+                    if (callback) callback( false, String(err) )
                 }
             })
 

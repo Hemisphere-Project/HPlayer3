@@ -125,11 +125,11 @@
             <div class="minisection">
               <div class="title_small">PLAYER TYPE</div>
               <input type="radio" name="playerType" value="audio">
-              <label for="standard">Audio</label><br>
+              <label for="audio">Audio</label><br>
               <input type="radio" name="playerType" value="video">
-              <label for="kiosk">Video</label><br>
+              <label for="video">Video</label><br>
               <input type="radio" name="playerType" value="kiosk">
-              <label for="synchro">Kiosk</label><br>
+              <label for="kiosk">Kiosk</label><br>
             </div>
 
             <div class="minisection" id="sectionmodules">
@@ -188,13 +188,14 @@
           <div class="option connector">
             <div class="title_small">Connector<div class="btn infosOpener" href="infos-HConnector">&#9432;</div></div>
             <div class="btn textBtn editCode" file="hconnector.js" language="javascript">EDIT SCENARIO</div>
+            <div class="miniLogs" id="gpioLogs"></div>
           </div>
 
           <!-- ///////////////////// SERIAL ///////////////////// -->
           <div class="option serial">
             <div class="title_small">Serial<div class="btn infosOpener" href="infos-Serial">&#9432;</div></div>
             Logs
-            <div class="serialLogs"></div>
+            <div class="miniLogs" id="serialLogs"></div>
           </div>
 
           <!-- ///////////////////// SYNCHRO ///////////////////// -->

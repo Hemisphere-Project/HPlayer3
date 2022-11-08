@@ -13,7 +13,7 @@ class Audio extends Module{
 
     init() {
         this.setOutput( this.getConf('audio.output') )
-        this.setVolume( this.getConf('audio.volume') )
+        this.setVolume( this.getConf('audio.volume') )   
     }
 
     listOuputs() {
@@ -65,6 +65,11 @@ class Audio extends Module{
 
 class AudioPI extends Audio {
 
+    init() {
+        this.jackCard = parseInt(String(execSync(`aplay -l | grep Headphone | awk '{print $2}' `)).substring(0, 1))
+        super.init()
+    }
+
     listOuputs() {
         return ['jack', 'hdmi0', 'hdmi1']
     }
@@ -73,7 +78,7 @@ class AudioPI extends Audio {
         if (out == 'hdmi') out = 'hdmi0'
         if (!this.listOuputs().includes(out)) out = this.listOuputs()[0] // Check if new out is valid
         try {
-            let currentOut = String(execSync("sed -n -e '/^pcm.!default/p' /etc/asound.conf")).trim().split(' ')[1]     // get current mode
+            let currentOut = String(execSync("cat /etc/asound.conf | grep pcm.\!default")).trim().split(' ')[1]     // get current mode
             if (out != currentOut) {
                 execSync("rw")
                 execSync("sed -i 's/pcm.!default .*/pcm.!default "+out+"/g' /etc/asound.conf")
@@ -102,8 +107,12 @@ class AudioPI extends Audio {
 
     getVolume() {
         var vol = 100
-        if (this.getOutput() == 'jack')
-            vol = parseInt(execSync(`amixer -c`+String(this.getJackCardNumber())+` get 'Headphone',0  |grep % |awk '{print $4}'|sed 's/[^0-9]//g'`).toString())
+        if (this.getOutput() == 'jack') {
+            this.log('get jack volume')
+            vol = execSync(`amixer -c`+String(this.jackCard)+` get 'Headphone',0  |grep % |awk '{print $4}'`).toString()
+            vol = parseInt(vol.substring(1, vol.length-3))
+            this.log('volume is', vol)
+        }
         return vol
     } 
     
@@ -112,17 +121,13 @@ class AudioPI extends Audio {
         if (vol < 0) vol = 0
         
         if (this.getOutput() == 'jack')
-            execSync(`amixer -c`+String(this.getJackCardNumber())+` set 'Headphone',0 ${vol}%`)
+            execSync(`amixer -c`+String(this.jackCard)+` set 'Headphone',0 ${vol}%`)
 
         vol = this.getVolume()
         this.setConf('audio.volume', vol)
         this.log('set volume', vol)
         this.emit('volume', vol)
         return vol
-    }
-
-    getJackCardNumber() {
-        return parseInt(String(execSync(`aplay -l | grep Headphone | aplay -l | grep Headphone | awk '{print $2}' `)).substring(0, 1))
     }
 }
 
