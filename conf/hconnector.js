@@ -1,17 +1,20 @@
-function HConnector(hc) {
+module.exports = (gpio) => 
+{
 
-  hc.setInput('T1', (Tnum, value) => {
-    if (value) hc.log('PLAY FILE 01')
-  })
+  gpio.setInput('T1')
+  gpio.setInput('T2')
+  gpio.setInput('T3')
 
-  hc.setInput('T2', (Tnum, value) => {
-    if (value) hc.log('PLAY FILE 02')
-  })
+  // gpio.setInput('T1', (pin, value) => {
+  //   if (value) hc.log('PLAY FILE 01')
+  // })
 
-  hc.setInput('T3', (Tnum, value) => {
-    if (value) hc.log('PLAY FILE 03')
-  })
+  // gpio.setInput('T2', (pin, value) => {
+  //   if (value) hc.log('PLAY FILE 02')
+  // })
+
+  // gpio.setInput('T3', (pin, value) => {
+  //   if (value) hc.log('PLAY FILE 03')
+  // })
 
 }
-
-module.exports = HConnector
