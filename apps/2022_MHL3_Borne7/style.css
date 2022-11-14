@@ -1,23 +1,16 @@
-
-body
-{
-  font-family: Helvetica, Sans-Serif;
-  margin:0;
+/*----------------GLOBALS----------------*/
+body{
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  overflow-y: hidden;
-  /* cursor: none; */
-  /* background-color: black; */
 }
 img{
   -webkit-user-drag: none;
 }
-
-/*HIDE SCROLLBAR*/
+/*----------------HIDE SCROLLBAR----------------*/
 *{
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -25,17 +18,87 @@ img{
 *::-webkit-scrollbar {
   display: none;
 }
-
-/*FONTS*/
+/*----------------FONTS----------------*/
 @font-face {
-    font-family: 'unknown';
-    src: url('assets/fonts/unknown.otf');
+    font-family: 'GGcanut_ExtraBold';
+    src: url('assets/fonts/GGcanut_ExtraBold.otf');
 }
-/*TYPO*/
+@font-face {
+    font-family: 'GGcanut_Bold';
+    src: url('assets/fonts/GGcanut_Bold.otf');
+}
+@font-face {
+    font-family: 'GGcanut_Medium';
+    src: url('assets/fonts/GGcanut_Medium.otf');
+}
+@font-face {
+    font-family: 'GGcanut_Regular';
+    src: url('assets/fonts/GGcanut_Regular.otf');
+}
+/*----------------TYPO----------------*/
 *{
-  font-family: 'unknown';
-  font-size: 16px;
+  font-family: 'GGcanut_Medium';
+  color: rgb(242,150,37);
+  -webkit-font-smoothing: antialiased;
 }
+.lightyellow{
+  color: rgb(250,222,164);
+}
+.big_extrabold{
+  font-family: 'GGcanut_ExtraBold';
+  font-size: 28pt;
+  line-height:35pt;
+}
+.big_bold{
+  font-family: 'GGcanut_Bold';
+  font-size: 28pt;
+  line-height:35pt;
+}
+.big_medium{
+  font-family: 'GGcanut_Medium';
+  font-size: 28pt;
+  line-height:35pt;
+}
+.normal_extrabold{
+  font-family: 'GGcanut_ExtraBold';
+  font-size: 22pt;
+  line-height:28pt;
+}
+.normal_bold{
+  font-family: 'GGcanut_Bold';
+  font-size: 22pt;
+  line-height:28pt;
+}
+.normal_medium{
+  font-family: 'GGcanut_Medium';
+  font-size: 22pt;
+  line-height:28pt;
+}
+.normal_regular{
+  font-family: 'GGcanut_Regular';
+  font-size: 22pt;
+  line-height:28pt;
+}
+.little_bold{
+  font-family: 'GGcanut_Bold';
+  font-size: 15pt;
+}
+.capslock{
+  text-transform: uppercase;
+}
+
+body{
+  background-image: url("assets/img/BG.png");
+}
+
+
+
+
+
+
+
+
+
 /*INTERACT*/
 .btn, .scrollbar_container, .item, #videoplayer{
   cursor:pointer;
