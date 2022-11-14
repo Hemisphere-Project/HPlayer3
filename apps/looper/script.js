@@ -2,30 +2,24 @@ $( document ).ready(function()
 {
 
     //////////////// HPLAYER3 ////////////////
-    var hplayer3 = new HPlayer3({divlogger:true, controls:true})
+    var hplayer3 = new HPlayer3({divlogger:false, controls:true})
 
     //////////////// PLAYER ////////////////
-    hplayer3.registerPlayer( "#videoplayer", "player")
+    var player = hplayer3.videoPlayer( "#videoplayer", { closer: false, scrollbar: false })
 
     /////////////// MEDIA LIST ///////////////
+    let video
     hplayer3.files.media.getTree()
         .then( data => {
             console.log(data)
-            data.fileTree.forEach((item, i) => {
-                if(item.type=='video') {
-                    $('#videoplayer')[0].setAttribute('src', '/media/'+item.name)
-                    $('#videoplayer')[0].currentTime = 0
-                    $("#videoplayer")[0].play()
-                    return
-                }
-            });
+
+            video = data.fileTree.filter((item) => item.type === 'video')[0]
+            player.play('/media'+video.path)
         })
     
     // LOOP
-    $('#videoplayer').on('ended',function(){
-        $('#videoplayer')[0].currentTime = 0
-        $("#videoplayer")[0].play()
+    player.on('ended',() => {
+        player.play('/media'+video.path)
     });
-
 
 });
