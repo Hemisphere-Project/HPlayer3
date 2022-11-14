@@ -25,17 +25,16 @@ $(function(){
   player.on('stop', () => $("#page_video").fadeOut(300) )
 
   /// BUILD GRIDS ///
-  $("div[type='mediagrid']").each((i, d) => {
+  $("div[type='mediagrid']").each((i, div) => {
 
-    // Find destination
-    let folder = $(d).attr('dest')
-    let dest = '#'+folder
+    // Folder from id
+    let folder = $(div).attr('id')
     
     // Clear destination
-    $(dest).empty()
+    $(div).empty()
 
     // Fill Grid
-    mediaGrid(hplayer3, dest, folder)
+    mediaGrid(hplayer3, div, folder)
       .then((grid) => {
 
         // onCLICK => PLAY VIDEO
@@ -48,7 +47,7 @@ $(function(){
       })
 
     // add Close Btn
-    $('<div class="closeDiv">').appendTo(dest)
+    $('<div class="closeDiv">').appendTo(div)
       .on('click', function () {
         $(this).parent().fadeOut(300)
         $('#page_home').show()
