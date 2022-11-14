@@ -233,11 +233,13 @@ class VideoPlayer extends EventTarget {
         let options = {...{
             // default options
             name: undefined,
-            closer: true,
+            closer: 'cross',    // cross, touch or false
             scrollbar: true,
+            media: null
         }, ...opts}
 
         this.name = (options.name)?options.name:'player'
+        this.lastmedia = options.media
 
         this.div = $(div)
         
@@ -287,15 +289,15 @@ class VideoPlayer extends EventTarget {
         }
         
         // CLOSER
-        this.videoCloser = (options.closer)?$('<div class="closer">').appendTo(div).hide():null
-        if (this.videoCloser) {
-            this.videoCloser.on('click', () => { this.stop() });
-            
+        if (options.closer == 'cross') {
+            this.videoCloser = $('<div class="closer">').appendTo(div).hide()
+            this.videoCloser.on('click', ()=>{ this.stop() })
             this.on('playing', ()=>{ this.videoCloser.show() })
             this.on('stop', ()=>{ this.videoCloser.hide() })
         }
-        else this.videoEl.on('click', () => { this.stop() });
-
+        else if (options.closer == 'touch') {
+            this.videoEl.on('click', () => { this.stop() });
+        }
 
         // TIME WATCH
         this.timeClick = 0
@@ -366,6 +368,7 @@ class VideoPlayer extends EventTarget {
         // TIME UPDATE
         this.video.addEventListener("timeupdate", () => {
             // console.log('['+this.name+'/video] time', this.video.currentTime, this.video.duration, this.video.paused);
+            this.dispatchEvent(new Event("timeupdate"));
         }, false);
 
 
@@ -414,6 +417,9 @@ class VideoPlayer extends EventTarget {
     // CMD PLAY
     play(media) 
     {
+        if (media == null) media = this.lastmedia
+        else this.lastmedia = media
+
         if (this.state == 'loading' || this.state == 'stopping') {
             console.warn("Player already loading/stopping, sorry can't play a new media right now ...")
             return
