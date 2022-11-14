@@ -8,7 +8,7 @@ $(function()
   var hplayer3 = new HPlayer3({divlogger:true, controls:true})
   
   //////////////// PLAYER ////////////////
-  var player = hplayer3.videoPlayer( "#page_video", { closer: false, scrollbar: false })
+  var player = hplayer3.videoPlayer( "#page_video", { closer: 'touch', scrollbar: false })
 
   player.on('playing', () => {
       $("#page_video").removeClass('fadeout').removeClass('fadein')

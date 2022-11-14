@@ -18,10 +18,10 @@ $(function(){
 
   /// PAGES ///
   $('.page').hide()
-  $('#page_home').fadeIn(200)
+  $('#page_home').show()
 
   /// VIDEO PLAYER ///
-  var player = hplayer3.videoPlayer( "#page_video", { closer: false, scrollbar: true })
+  var player = hplayer3.videoPlayer( "#page_video", { closer: 'touch', scrollbar: false })
   player.on('stop', () => $("#page_video").fadeOut(300) )
 
   /// BUILD GRIDS ///
@@ -58,7 +58,6 @@ $(function(){
   /// ACTIONS ///
   $('.folder_icon').click(function(){
     var dest = $(this).attr("dest")
-    var type = $(this).attr("type")
 
     $('#page_home').fadeOut(200)
     $("#"+dest).fadeIn(200)

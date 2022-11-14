@@ -258,6 +258,9 @@ $(function() {
     .setter(hplayer3.kiosk.setVideorotate)
     .refresh()
 
+  $('#kioskRestart').click(()=>{
+    hplayer3.kiosk.restartProcess()
+  })
 
   //////////////// AUDIO CONFIG ////////////////
 
