@@ -111,7 +111,6 @@ body{
   width:100vw;
   height:100vh;
   overflow-y: hidden;
-  display: none;
 }
 /*---------------- PAGE HOME ----------------*/
 #page_home #folder1{
@@ -133,4 +132,25 @@ body{
   position: fixed;
   left: 58%;
   top: 56vh;
+}
+
+/*---------------- PAGE PLAYER ----------------*/
+#page_video{
+  background-color: black;
+}
+
+
+/*---------------- CLOSE ----------------*/
+.closeDiv {
+  /* display: none; */
+  position: absolute;
+  background-color: transparent;
+  background-size: contain;
+  background-image: url('assets/img/cross.png');
+  background-repeat: no-repeat;
+  border-radius: 0;
+  width: 65px;
+  height: 65px;
+  top: 32px;
+  right: 32px
 }
