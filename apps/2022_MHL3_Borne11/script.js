@@ -27,9 +27,9 @@ $(function(){
   /// BUILD GRIDS ///
   $("div[type='mediagrid']").each((i, d) => {
 
-    // Get Link attributes
-    let folder = $(d).attr('id')
-    let dest = '#'+$(d).attr('dest')
+    // Find destination
+    let folder = $(d).attr('dest')
+    let dest = '#'+folder
     
     // Clear destination
     $(dest).empty()
@@ -63,10 +63,6 @@ $(function(){
 
     $('#page_home').fadeOut(200)
     $("#"+dest).fadeIn(200)
-
-    
-    console.log(type)
-    console.log(dest)
   })
 
 
