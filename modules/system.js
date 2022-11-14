@@ -11,6 +11,7 @@ const os = require("os");
 const Files = require('./files.js');
 const { EventEmitter2 } = require('eventemitter2')
 const Kiosk = require('./players/kiosk.js')
+const Mpv = require('./players/mpv.js')
 var isPi = require('detect-rpi');
 
 
@@ -59,20 +60,32 @@ class System extends Module
     // AUDIO
     this.audio = new Audio(this)
 
-    // // KIOSK
-    this.kiosk = new Kiosk(this)
-
     // WIFI
     this.wifi = new Wifi(this)
 
     // CONNECTOR
     this.gpio = new Gpio(this)
 
+    // KIOSK
+    this.kiosk = new Kiosk(this)
+
+    // MPV
+    this.mpv = new Mpv(this)
+  
+
   }
 
   start()
   {
     this.hp3 = this
+
+    // MAIN PLAYER 
+    this.player = this.getPlayerType() == 'mpv' ? this.mpv : this.kiosk
+    this.on('config.player.type', (type)=>{
+      this.player = type == 'mpv' ? this.mpv : this.kiosk
+    })
+    
+
     this.emit('ready')
     this.log('READY\n')
   }
@@ -103,7 +116,7 @@ class System extends Module
   }
 
   getPlayerType(){
-    return this.getConf('player.type', 'video')
+    return this.getConf('player.type', 'mpv')
   }
 
   setPlayerType(value){

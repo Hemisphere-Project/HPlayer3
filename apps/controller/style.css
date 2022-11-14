@@ -343,6 +343,7 @@ input[type="file"]{
 /*LOGS*/
 .miniLogs {
   height: 100px;
+  width: 50%;
   overflow-y: scroll;
   border: 1px solid white;
   padding: 5px;

@@ -35,7 +35,7 @@ class GpioPI extends Gpio {
         const path = this.getConf('path.conf')+'/hconnector.js'
         try {
             const Hcon = require(path)
-            Hcon(this)
+            Hcon(this.hp3)
             this.log(path+' loaded')
         } catch (e) {
             this.log(path+' not found', e)

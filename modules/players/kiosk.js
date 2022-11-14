@@ -22,29 +22,29 @@ class Kiosk extends Baseplayer {
 
         // Start kiosk now
         if (this.getConf('player.type') == 'kiosk')
-            setTimeout( ()=>{this.start()}, 1000)   // BLOCKS OTHER ExecSync if launched too early...   
+            setTimeout( ()=>{this.startProcess()}, 1000)   // BLOCKS OTHER ExecSync if launched too early...   
 
         // Restart on audio output change
         this.on('config.audio.output', (out)=>{
-            this.restart()
+            this.restartProcess()
         })
 
         // Restart on player type change
         this.on('config.player.type', (out)=>{
-            this.restart()
+            this.restartProcess()
         })
     }
 
-    stop() {
+    stopProcess() {
         this.log('No kiosk available on this machine...')
     }
 
-    start() {
+    startProcess() {
         if (this.getConf('player.type') != 'kiosk') return
         this.log('No kiosk available on this machine...')
     }
 
-    restart() {
+    restartProcess() {
         if (this.getConf('player.type') != 'kiosk') return
         this.log('No kiosk available on this machine...')
     }
@@ -73,14 +73,14 @@ class Kiosk extends Baseplayer {
     setTheme(theme)
     {
         // TODO : check if theme is valid !
-        if ( this.setConf('kiosk.theme', theme) ) this.restart()
+        if ( this.setConf('kiosk.theme', theme) ) this.restartProcess()
     }
 }
 
 
 class KioskPI extends Kiosk {
 
-    stop(allowrespawn) 
+    stopProcess(allowrespawn) 
     {
         this.autorespawn = allowrespawn
 
@@ -106,16 +106,16 @@ class KioskPI extends Kiosk {
         }
     }
 
-    start() 
+    startProcess() 
     {   
         if (this.getConf('player.type') != 'kiosk') {
-            this.stop(false)
+            this.stopProcess(false)
             return
         }
 
         this.autorespawn = true
 
-        if (this.kioskprocess) this.restart()
+        if (this.kioskprocess) this.restartProcess()
         else 
         {
             this.log('startink kiosk: ', 
@@ -134,8 +134,8 @@ class KioskPI extends Kiosk {
                 this.kioskprocess = null
                 if (this.autorespawn) {
                     this.log('restarting..');
-                    this.stop(this.autorespawn)
-                    this.start()
+                    this.stopProcess(this.autorespawn)
+                    this.startProcess()
                 }
             });
 
@@ -149,10 +149,10 @@ class KioskPI extends Kiosk {
         }
     }
 
-    restart()
+    restartProcess()
     {
-        if (this.kioskprocess) this.stop(true)
-        else this.start()
+        if (this.kioskprocess) this.stopProcess(true)
+        else this.startProcess()
     }
 
 
@@ -189,7 +189,7 @@ class KioskPI extends Kiosk {
         if (newMode != currentMode) 
         {
             this.setConf('kiosk.videorotate', degree)
-            this.restart()
+            this.restartProcess()
         }
     }
 
@@ -201,7 +201,7 @@ class KioskPI extends Kiosk {
         if (newMode != currentMode) 
         {
             this.setConf('kiosk.videoflip', doFlip)
-            this.restart()
+            this.restartProcess()
         }
     }
 

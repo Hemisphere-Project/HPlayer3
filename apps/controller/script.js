@@ -40,6 +40,19 @@ $(function() {
     }
   }
 
+  // LIVE PLAYER
+  $('.livePlayer .play').click(function(){
+    hplayer3.player.resume()
+  })
+  $('.livePlayer .stop').click(function(){
+    hplayer3.player.stop()
+  })
+  $('.livePlayer .pause').click(function(){
+    hplayer3.player.pause()
+  })
+  
+  
+
   // INFOS
   $('.infosOpener').click(function(){
     var infosDiv = $(this).attr('href')
@@ -396,7 +409,7 @@ $(function() {
     if((this.type=='audio')||(this.type=='video')){
       this.play =  $('<img class="btn add small" src="img/play2.svg">').prependTo(this.preview)
       this.play.click(function(){
-        console.log('PLAY ME')
+        hplayer3.player.play(that.path)
         $('.selectedMedia').html(that.name)
       })
     }
