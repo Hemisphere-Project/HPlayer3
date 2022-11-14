@@ -1,26 +1,47 @@
 
 
-// DEBUG - retours denys :
-- freeze sur player, image freezée, son  (observé 1 fois)
 
+
+
+//
 // SYSTEM
+//
+
 - Zyre: discover and sync
 - Portail captif 10.0.0.1
 
+//
 // CONTROLLER:
+//
+
 - modules enable/disable
-- player ctrls
+
+- live player ctrls 
+    => state linked to hp3.player
+    => link kiosk "main" player ?
+    => playlist ?
+    => loop
+
 - Video -> select resolution (auto, ...) (!! minimum 1024x768)
 - if not pi: can't change theme
 - Discover others
 
+//
 // KIOSK
+//
+
 - watch hdmi state to reload kiosk on hdmi-out change
 - test 2 kiosk on 2 hdmi..
 - video stalled => do something ?
 
+//
 // MPV 
-- implement mpv player
+//
+
+- more events / ctrls / settings
+- make video work!
+
+
 
 // UPGRADE:
 H: 01-GadagneA -> switch to hmsphr wifi
