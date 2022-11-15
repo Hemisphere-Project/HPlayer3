@@ -51,15 +51,12 @@ $(function()
 
   // IDLE
   var inactivityTime = function() {
-
       var timerInactivity
       $('body').click(function(){ timerReset() })
       document.ontouchstart = timerReset
-
       function timerElapsed() {
         location.reload()
       }
-
       function timerReset() {
         var idleTime = 60000
         clearTimeout(timerInactivity)
