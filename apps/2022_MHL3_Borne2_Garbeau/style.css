@@ -1,0 +1,159 @@
+/*GLOBALS*/
+body{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+img{
+  -webkit-user-drag: none;
+}
+
+/*HIDE SCROLLBAR*/
+*{
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+/*FONTS*/
+@font-face {
+    font-family: 'GGcanut_ExtraBold';
+    src: url('assets/fonts/GGcanut_ExtraBold.otf');
+}
+@font-face {
+    font-family: 'GGcanut_Bold';
+    src: url('assets/fonts/GGcanut_Bold.otf');
+}
+@font-face {
+    font-family: 'GGcanut_Medium';
+    src: url('assets/fonts/GGcanut_Medium.otf');
+}
+@font-face {
+    font-family: 'GGcanut_Regular';
+    src: url('assets/fonts/GGcanut_Regular.otf');
+}
+
+/*TYPO*/
+*{
+  font-family: 'GGcanut_Medium';
+  color: rgb(242,150,37);
+}
+.big_extrabold{
+  font-family: 'GGcanut_ExtraBold';
+  font-size: 28pt;
+  line-height:35pt;
+}
+.big_bold{
+  font-family: 'GGcanut_Bold';
+  font-size: 28pt;
+  line-height:35pt;
+}
+.big_medium{
+  font-family: 'GGcanut_Medium';
+  font-size: 28pt;
+  line-height:35pt;
+}
+.normal_extrabold{
+  font-family: 'GGcanut_ExtraBold';
+  font-size: 22pt;
+}
+.normal_bold{
+  font-family: 'GGcanut_Bold';
+  font-size: 22pt;
+}
+.normal_medium{
+  font-family: 'GGcanut_Medium';
+  font-size: 22pt;
+}
+.normal_regular{
+  font-family: 'GGcanut_Regular';
+  font-size: 22pt;
+}
+.legend{
+  font-family: 'GGcanut_Bold';
+  font-size: 15pt;
+}
+.capslock{
+  text-transform: uppercase;
+}
+
+body{
+  background-image: url("assets/img/BG.png");
+}
+
+
+/* PAGES */
+.page{
+  position: absolute;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  overflow-y: hidden;
+}
+
+
+.btn:active{
+  opacity: 0.9;
+}
+
+
+/* VITRINE */
+#page_vitrine .title{
+  margin-left: 14%;
+  position: absolute;
+  margin-top: 120px;
+  visibility: hidden;
+}
+#page_vitrine .content{
+  margin-left: 60%;
+  position: absolute;
+  margin-top: 250px;
+}
+#page_vitrine .content .introtitle{
+  width:68%;
+}
+#page_vitrine .content .introtitle .spacer{
+  height:8px;
+  background-color: rgb(242,150,37);
+  margin-bottom:15px;
+  margin-top:15px;
+}
+
+.vitrine{
+  margin-left: 14%;
+  width: 40%;
+  position: absolute;
+  margin-top: 250px;
+}
+.vitrine .cartel{
+  background-color: rgb(76,57,100); /*setup colorimetre sRVB*/
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.vitrine .cartel:active{
+  background-color: rgb(165,145,149);
+}
+.vitrine .ligne1 #cartel2{
+  border-top-left-radius: 60px 60px;
+  border-top-right-radius: 60px 60px;
+  height: 130px;
+  width:100%;
+}
+.vitrine .ligne2{
+  display: grid;
+  grid-template-columns: 4fr 6fr;
+  grid-gap: 50px;
+}
+#cartel1{
+  height: 420px;
+}
+#cartel3, #cartel4, #cartel5{
+  height: 120px;
+}

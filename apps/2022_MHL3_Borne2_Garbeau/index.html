@@ -1,0 +1,95 @@
+
+<!doctype html>
+<HTML>
+  <HEAD>
+    <title>HPLAYER - Display</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <!-- LIBS -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/lib/jquery-3.6.0.min.js"></script>
+    <script src="/assets/lib/eventemitter2.js"></script>
+
+    <!-- HPLAYER3 -->
+    <script src="/assets/js/hplayer3.client.js"></script>
+    <link href="/assets/css/hplayer3.client.css" rel="stylesheet" type="text/css">
+
+    <!-- THEME -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="/conf/complement.css">
+    <script src="script.js"></script>
+
+  </HEAD>
+
+  <BODY>
+
+    <div class="page" id="page_home">
+
+      <div class="btn folder_icon" dest="page_folder1">
+        <img src="assets/img/folder_letempsdesfoires.png">
+        <img src="assets/img/btn_open.png">
+      </div>
+      <div class="btn folder_icon" dest="page_folder2">
+        <img src="assets/img/folder_legarbeau.png">
+        <img src="assets/img/btn_open.png">
+      </div>
+      <div class="btn folder_icon" dest="page_vitrine">
+        <img src="assets/img/folder_lesobjets.png">
+        <img src="assets/img/btn_open.png">
+      </div>
+    </div>
+
+    <div class="page" id="page_vitrine">
+      <!-- TITLE -->
+      <div class="title">
+        <div class="normal_extrabold capslock">Les objets dans l’échoppe,</div>
+        <div class="normal_medium capslock">Cliquez sur la vitrine pour en savoir plus</div>
+      </div>
+      <!-- VITRINE -->
+      <div class="vitrine big_extrabold">
+        <div class="ligne1">
+          <div class="cartel" id="cartel2">2</div>
+        </div>
+        <div class="ligne2">
+          <div class="column">
+            <div class="cartel" id="cartel1">1</div>
+          </div>
+          <div class="column">
+            <div class="cartel" id="cartel3">3</div>
+            <div class="cartel" id="cartel4">4</div>
+            <div class="cartel" id="cartel5">5</div>
+          </div>
+        </div>
+      </div>
+      <!-- CONTENT -->
+      <div class="content">
+        <div class="introtitle">
+          <div class="spacer"></div>
+          <div class="big_extrabold capslock">Les objets dans l’échoppe</div>
+          <div class="big_medium capslock">Cliquez sur la vitrine pour en savoir plus</div>
+          <div class="spacer"></div>
+        </div>
+        <div class="content" id="content1">
+          <div class="title">
+
+          </div>
+          <div class="main">
+
+          </div>
+          <div class="spacer">
+
+          </div>
+          <div class="legend">
+
+          </div>
+          <div class="legend">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </BODY>
+
+</HTML>
