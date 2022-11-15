@@ -142,15 +142,14 @@ body{
 
 /*---------------- CLOSE ----------------*/
 .closeDiv {
-  /* display: none; */
   position: absolute;
   background-color: transparent;
   background-size: contain;
-  background-image: url('assets/img/cross.png');
+  background-image: url(assets/img/back.png);
   background-repeat: no-repeat;
   border-radius: 0;
-  width: 65px;
+  width: 100px;
   height: 65px;
   top: 32px;
-  right: 32px
+  left: 5%;
 }
