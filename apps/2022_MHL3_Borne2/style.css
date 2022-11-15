@@ -114,32 +114,32 @@ body{
   display: none;
 }
 /*---------------- PAGE HOME ----------------*/
-#page_home #folder1{
+#page_home #icon_folder1{
   position: fixed;
   left: 32%;
   top: 11vh;
 }
-#page_home #folder1 .opener{
+#page_home #icon_folder1 .opener{
   position: fixed;
   left: 48%;
   top: 35vh;
 }
-#page_home #folder2{
+#page_home #icon_folder2{
   position: fixed;
   left: 17%;
   top: 53vh;
 }
-#page_home #folder2 .opener{
+#page_home #icon_folder2 .opener{
   position: fixed;
   left: 17%;
   top: 75vh;
 }
-#page_home #folder3{
+#page_home #icon_folder3{
   position: fixed;
   left: 62%;
   top: 53vh;
 }
-#page_home #folder3 .opener{
+#page_home #icon_folder3 .opener{
   position: fixed;
   left: 62%;
   top: 75vh;

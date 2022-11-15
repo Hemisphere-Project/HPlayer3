@@ -114,22 +114,22 @@ body{
   display: none;
 }
 /*---------------- PAGE HOME ----------------*/
-#page_home #folder1{
+#page_home #icon_folder1{
   position: fixed;
   left: 18%;
   top: 34vh;
 }
-#page_home #folder1 .opener{
+#page_home #icon_folder1 .opener{
   position: fixed;
   left: 18%;
   top: 56vh;
 }
-#page_home #folder2{
+#page_home #icon_folder2{
   position: fixed;
   left: 58%;
   top: 34vh;
 }
-#page_home #folder2 .opener{
+#page_home #icon_folder2 .opener{
   position: fixed;
   left: 58%;
   top: 56vh;
