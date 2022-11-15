@@ -22,31 +22,28 @@ $(function(){
     if(dest=="page_vitrine"){
       loadVitrine()
     }
-
-
-    // VITRINE
-    function loadVitrine(){
-      $('.uppertitle').hide()
-      $('.cartel_content').hide()
-      $('.element').removeClass('selected')
-    }
-
-    // VITRINE SELECTOR
-    $('.element').click(function(){
-      // titles
-      $('.introtitle').hide()
-      $('.uppertitle').show()
-      // colors
-      $('.element').removeClass('selected')
-      $(this).addClass('selected')
-      // content
-      var dest = $(this).attr('dest')
-      $('.cartel_content').hide()
-      $('#'+dest).fadeIn(50)
-    })
-
   })
 
+  // VITRINE
+  function loadVitrine(){
+    $('.uppertitle').hide()
+    $('.cartel_content').hide()
+    $('.element').removeClass('selected')
+  }
+
+  // VITRINE SELECTOR
+  $('.element').click(function(){
+    // titles
+    $('.introtitle').hide()
+    $('.uppertitle').show()
+    // colors
+    $('.element').removeClass('selected')
+    $(this).addClass('selected')
+    // content
+    var dest = $(this).attr('dest')
+    $('.cartel_content').hide()
+    $('#'+dest).fadeIn(50)
+  })
 
   // IDLE
   var inactivityTime = function() {
