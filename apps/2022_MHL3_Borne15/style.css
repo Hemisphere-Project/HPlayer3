@@ -116,21 +116,31 @@ body{
 /*---------------- PAGE HOME ----------------*/
 #page_home #folder1{
   position: fixed;
-  left: 18%;
-  top: 34vh;
+  left: 33%;
+  top: 8vh;
 }
 #page_home #folder1 .opener{
   position: fixed;
-  left: 18%;
-  top: 56vh;
+  left: 33%;
+  top: 26vh;
 }
 #page_home #folder2{
   position: fixed;
-  left: 58%;
-  top: 34vh;
+  left: 9.5%;
+  top: 52vh;
 }
 #page_home #folder2 .opener{
   position: fixed;
-  left: 58%;
-  top: 56vh;
+  left: 30%;
+  top: 75vh;
+}
+#page_home #folder3{
+  position: fixed;
+  left: 57%;
+  top: 41vh;
+}
+#page_home #folder3 .opener{
+  position: fixed;
+  left: 74%;
+  top: 65vh;
 }
