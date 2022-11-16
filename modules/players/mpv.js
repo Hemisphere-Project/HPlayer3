@@ -11,6 +11,7 @@ class Mpv extends Baseplayer {
     constructor(hp3) {
         super('mpv', hp3)
         this.requires('config')
+        this.requires('gpio')
         this.player = null
         this.manualStop = false
     }
@@ -46,7 +47,7 @@ class Mpv extends Baseplayer {
         return
       }
 
-      if (this.player) await this.player.stopProcess()
+      // if (this.player) await this.player.quit()
     
       this.player = new mpvAPI({
           "audio_only": false,

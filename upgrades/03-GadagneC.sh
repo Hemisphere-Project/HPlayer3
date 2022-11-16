@@ -17,6 +17,12 @@ date -s "$(curl -s --head http://google.com | grep ^Date: | sed 's/Date: //g')"
 # GPIO
 pikaur -Sy --noconfirm pigpio
 
+# MPV (RC2)
+pacman -Sy mpv --noconfirm
+pacman -S freetype2 fribidi fontconfig yasm git autoconf pkg-config libtool \
+  lua luajit libvdpau libva libxv libjpeg libxkbcommon libxrandr libv4l libxss libcaca sdl2 \
+  base-devel libx264 mesa fbida libbluray alsa-lib alsa-firmware ttf-roboto --noconfirm --needed
+
 # Update HPLAYER3
 cd /opt/HPlayer3
 git checkout main
@@ -34,7 +40,6 @@ git pull
 sed -i '$ s/$/ vt.global_cursor_default=0/' /boot/cmdline.txt
 sed -i '$ s/vt.global_cursor_default=0 vt.global_cursor_default=0/vt.global_cursor_default=0/' /boot/cmdline.txt
 plymouth-set-default-theme -R spinner
-
 
 echo "H: 03-GadagneC" >> /boot/VERSION
 

@@ -10,6 +10,7 @@ class Wifi extends Module{
     {
         super('wifi', hp3)
         this.requires('config')
+        this.requires('gpio')
     }
 
     init() 
@@ -186,4 +187,4 @@ class WifiPI extends Wifi
 }
 
 module.exports = Wifi
-// if (isPi()) module.exports = WifiPI
+if (isPi()) module.exports = WifiPI

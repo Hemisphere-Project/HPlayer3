@@ -8,6 +8,7 @@ class Kiosk extends Baseplayer {
     constructor(hp3) {
         super('kiosk', hp3)
         this.requires('config')
+        this.requires('gpio')
     }
 
     init() 
@@ -21,8 +22,8 @@ class Kiosk extends Baseplayer {
         this.getConf('kiosk.theme', 'controller')
 
         // Start kiosk now
-        if (this.getConf('player.type') == 'kiosk')
-            setTimeout( ()=>{this.startProcess()}, 1000)   // BLOCKS OTHER ExecSync if launched too early...   
+        if (this.getConf('player.type') == 'kiosk') 
+            this.startProcess()  
 
         // Restart on audio output change
         this.on('config.audio.output', (out)=>{
