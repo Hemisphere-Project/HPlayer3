@@ -12,7 +12,7 @@ $(function(){
 
   /// VIDEO PLAYER ///
   var player = hplayer3.videoPlayer( "#page_video", { closer: 'touch', scrollbar: false })
-  player.on('stop', () => $("#page_video").fadeOut(0))
+  player.on('stop', () => $("#page_video").fadeOut(300))
 
   // /// DISABLE ZOOM ///
   hplayer3.disableZoom()
