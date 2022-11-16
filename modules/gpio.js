@@ -31,14 +31,14 @@ class GpioPI extends Gpio {
 
         this.gpio = {}
         
-        // LOAD HCONNECTOR SCENARIO
+        // LOAD HCONNECTOR SCENARIO 
         const path = this.getConf('path.conf')+'/hconnector.js'
         try {
             const Hcon = require(path)
             Hcon(this.hp3)
             this.log(path+' loaded')
         } catch (e) {
-            this.log(path+' not found', e)
+            this.log('WARNING: '+path+' not found')
         }
     }
 

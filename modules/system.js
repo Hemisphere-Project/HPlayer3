@@ -48,6 +48,9 @@ class System extends Module
     // LOAD CONFIG
     this.config = new Config(this, forcedConf)
 
+    // CONNECTOR
+    this.gpio = new Gpio(this)
+
     // FILES
     this.files = new Files(this)
 
@@ -63,16 +66,13 @@ class System extends Module
     // WIFI
     this.wifi = new Wifi(this)
 
-    // CONNECTOR
-    this.gpio = new Gpio(this)
-
     // KIOSK
     this.kiosk = new Kiosk(this)
 
     // MPV
     this.mpv = new Mpv(this)
   
-
+    
   }
 
   start()
