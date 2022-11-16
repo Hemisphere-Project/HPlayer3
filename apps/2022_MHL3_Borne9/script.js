@@ -5,15 +5,18 @@ $(function(){
 
   ///////// ON-SCREEN LOGGER /////////////
   // hplayer3.logger.toggle(true)
+
+  /// ENABLE SWIPE EVENTS ///
+  hplayer3.swiper()
   
   // /// DISABLE ZOOM ///
   hplayer3.disableZoom()
 
-  // /// GO HOME WHEN INACTIVE ///
-  hplayer3.inactivity( 60, ()=> {
-    // $('.closeDiv').trigger('click')
-    location.reload()
-  })
+  /// GO HOME WHEN INACTIVE ///
+  // hplayer3.inactivity( 60, ()=> {
+  //   // $('.closeDiv').trigger('click')
+  //   location.reload()
+  // })
 
   /// BUILD GRIDS ///
   $("div[type='gallery']").each((i, page) => {
@@ -25,7 +28,11 @@ $(function(){
     $(page).empty().show()
 
     // Fill Galleries
-    carrouselFolder(hplayer3, page, folder)
+    carrouselFolder(hplayer3, page, folder, {wrapAround: true})
+      .then((carrousel) =>
+      {
+        carrousel.find('.carrousel-close-button').hide()
+      })
 
   })
 

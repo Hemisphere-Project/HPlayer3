@@ -1,7 +1,7 @@
 //
 // CARROUSEL: create a slide show of media files 
 //
-function carrouselFolder( hplayer3, dest, folder )   
+function carrouselFolder( hplayer3, dest, folder, opts )   
 {
     return new Promise((resolve, reject) => 
     {
@@ -60,7 +60,7 @@ function carrouselFolder( hplayer3, dest, folder )
                 }
                 
                 // Flickity
-                var carouselFlickity = carrouselDiv.flickity({
+                var options = {
                     // options
                     cellAlign: 'left',
                     pageDots: false,
@@ -70,7 +70,10 @@ function carrouselFolder( hplayer3, dest, folder )
                     draggable: false,
                     lazyLoad: 2,
                     // fade: true
-                });
+                }
+                if (opts) options = { ...options, ...opts }
+
+                var carouselFlickity = carrouselDiv.flickity(options);
             
                 carouselFlickity.on('change.flickity', function(event, index) 
                 {
