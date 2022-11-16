@@ -169,14 +169,14 @@ body{
 
 #page_devenirs .prev{
   position: fixed;
-  top:48vh;
+  top:46vh;
   left:2%;
   opacity:0.5;
   width:2.5%;
 }
 #page_devenirs .next{
   position: fixed;
-  top:48vh;
+  top:46vh;
   right:2%;
   opacity:0.5;
   width:2.5%;
