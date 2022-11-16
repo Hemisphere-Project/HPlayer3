@@ -192,3 +192,18 @@ body{
   top: 10vh;
   width: 85%;
 }
+
+.closeBtn {
+  /* display: none; */
+  z-index: 12;
+  position: absolute;
+  background-color: transparent;
+  background-size: contain;
+  background-image: url('./assets/img/cross.png');
+  background-repeat: no-repeat;
+  border-radius: 0;
+  width: 66px;
+  height: 66px;
+  top: 32px;
+  right: 32px;
+}

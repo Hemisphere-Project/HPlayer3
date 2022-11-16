@@ -37,7 +37,7 @@ function mediaGrid( hplayer3, dest, folder )
 
                         // DESCRIPTION
                         let title = item.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ")
-                        let desc = $('<div class="infos"><div class="title">'+title+'</div><div class="subtitle">a movie file ...</div></div>').appendTo(preview)
+                        let desc = $('<div class="infos"><div class="title">'+title+'</div><div class="subtitle"></div></div>').appendTo(preview)
                         const textExist = allFiles.some(file => ((file.raw_name === item.raw_name)&&(file.type === 'text')) );
                         if (textExist) {
                             $.get('/media/'+folder+'/'+item.raw_name +'.txt', (txt) => {
