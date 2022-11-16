@@ -13,6 +13,9 @@ $(function(){
   // /// DISABLE ZOOM ///
   hplayer3.disableZoom()
 
+  /// ENABLE SWIPE EVENTS ///
+  hplayer3.swiper()
+
   // /// GO HOME WHEN INACTIVE ///
   hplayer3.inactivity( 60, ()=> {
     // $('.closeDiv').trigger('click')
@@ -58,31 +61,6 @@ $(function(){
 
   })
 
-  /// BUILD SLIDESHOW ///
-  $("div[type='gallery']").each((i, page) => {
-
-    // Folder from id
-    let folder = $(page).attr('id')
-
-    // Clear destination
-    $(page).empty().show()
-
-    // Fill Galleries
-    carrouselFolder(hplayer3, page, folder)
-      .then((carrousel) =>
-      {
-        // supercharge close btn
-        carrousel.find('.closeDiv')
-          .on('click', () => {
-            $(page).hide()
-            $('#page_home').show()
-          })
-
-        // hide page
-        $(page).hide()
-      })
-
-  })
 
   /// ACTIONS ///
   $('.folder_icon').click(function(){
@@ -122,6 +100,9 @@ $(function(){
     sheet --
     showFeuille()
   })
+
+  document.addEventListener('swipeleft', () => $('.next').click())
+  document.addEventListener('swiperight', () => $('.prev').click())
 
   function showFeuille(){
 

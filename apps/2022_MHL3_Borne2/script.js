@@ -20,8 +20,7 @@ $(function(){
   hplayer3.inactivity( 60, ()=> 
   {
     // location.reload()
-    if ($('#page_home').is(':visible')) 
-      return
+    if ($('#page_home').is(':visible')) return   // already on home page
     
     closePages()
     $(('.carrousel-close-button')).click()  // rewind carrousel
@@ -46,8 +45,6 @@ $(function(){
       {
         // supercharge close btn to close page
         carrousel.find('.carrousel-close-button').click( closePages )
-
-        // hide page
         $(page).hide()
       })
 
