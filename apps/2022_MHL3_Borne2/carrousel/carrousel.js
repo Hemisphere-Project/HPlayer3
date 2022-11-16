@@ -65,9 +65,10 @@ function carrouselFolder( hplayer3, dest, folder )
                     cellAlign: 'left',
                     pageDots: false,
                     contain: true,
-                    selectedAttraction: 0.2,
-                    friction: 0.8,
-                    dragThreshold: 1
+                    selectedAttraction: 0.37,
+                    friction: 1,
+                    draggable: false,
+                    lazyLoad: 2,
                     // fade: true
                 });
             
@@ -85,8 +86,18 @@ function carrouselFolder( hplayer3, dest, folder )
                             cellPlayers[index].play()
                 });
 
+                // SWIPE
+                document.addEventListener('swipeleft', function(e) {
+                    if (carouselFlickity.is(':visible'))
+                        carouselFlickity.flickity('next')
+                })
+                document.addEventListener('swiperight', function(e) {
+                    if (carouselFlickity.is(':visible'))
+                        carouselFlickity.flickity('previous')
+                })
+
                 // CLOSE button
-                $('<div class="closeDiv">').appendTo(carrouselDiv)
+                $('<div class="carrousel-close-button">').appendTo(carrouselDiv)
                     .on('click', () => {
                         // Rewind Carrousel
                         carrouselDiv.flickity('select', 0)
