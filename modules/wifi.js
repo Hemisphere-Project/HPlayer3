@@ -9,7 +9,6 @@ class Wifi extends Module{
     constructor(hp3) 
     {
         super('wifi', hp3)
-        this.requires('config')
         this.requires('gpio')
     }
 

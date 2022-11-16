@@ -8,7 +8,6 @@ class Audio extends Module{
 
     constructor(hp3) {
         super('audio', hp3)
-        this.requires('config')
         this.requires('gpio')
     }
 

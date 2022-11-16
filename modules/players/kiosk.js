@@ -7,7 +7,6 @@ class Kiosk extends Baseplayer {
 
     constructor(hp3) {
         super('kiosk', hp3)
-        this.requires('config')
         this.requires('gpio')
     }
 
