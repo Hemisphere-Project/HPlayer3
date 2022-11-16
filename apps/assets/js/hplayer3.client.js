@@ -216,6 +216,8 @@ class HPlayer3 extends HModule {
         document.onclick = resetTimer;
         document.onscroll = resetTimer;
 
+        document.addEventListener('videorunning', resetTimer)
+
         resetTimer()
     }
 
@@ -404,6 +406,7 @@ class VideoPlayer extends EventTarget {
         this.video.addEventListener("timeupdate", () => {
             // console.log('['+this.name+'/video] time', this.video.currentTime, this.video.duration, this.video.paused);
             this.dispatchEvent(new Event("timeupdate"));
+            document.dispatchEvent(new Event("videorunning"));
         }, false);
 
 

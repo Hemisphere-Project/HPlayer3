@@ -58,7 +58,7 @@
   width: 66px;
   height: 66px;
   top: 32px;
-  right: 12px;
+  right: 32px;
 }
 
 
@@ -88,12 +88,12 @@
 }
 
 .flickity-prev-next-button.previous {
-  left: 32px;
+  left: 50px;
 }
 
 .flickity-prev-next-button.next {
   background-image: url('./btn_next.png');
-  right: 32px;
+  right: 50px;
 }
 
 .flickity-button:focus, 

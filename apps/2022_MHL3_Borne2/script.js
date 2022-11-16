@@ -9,7 +9,7 @@ $(function(){
 
   ///////// ON-SCREEN LOGGER /////////////
   // hplayer3.logger.toggle(true)
-  
+
   /// DISABLE ZOOM ///
   hplayer3.disableZoom()
 
@@ -17,9 +17,14 @@ $(function(){
   hplayer3.swiper()
 
   // /// GO HOME WHEN INACTIVE ///
-  hplayer3.inactivity( 60, ()=> {
-    // $('.closeDiv').trigger('click')
-    location.reload()
+  hplayer3.inactivity( 60, ()=> 
+  {
+    // location.reload()
+    if ($('#page_home').is(':visible')) 
+      return
+    
+    closePages()
+    $(('.carrousel-close-button')).click()  // rewind carrousel
   })
 
   /// PAGES ///
@@ -31,24 +36,20 @@ $(function(){
 
     // Folder from id
     let folder = $(page).attr('id')
-    
+
     // Clear destination
     $(page).empty().show()
 
     // Fill Galleries
     carrouselFolder(hplayer3, page, folder)
-      .then((carrousel) => 
+      .then((carrousel) =>
       {
-        // supercharge close btn
-        carrousel.find('.carrousel-close-button')
-          .on('click', () => {
-            $(page).hide()
-            $('#page_home').fadeIn(400)
-          })
+        // supercharge close btn to close page
+        carrousel.find('.carrousel-close-button').click( closePages )
 
         // hide page
         $(page).hide()
-      })   
+      })
 
   })
 
@@ -68,10 +69,19 @@ $(function(){
     }
   })
 
+  /// CLOSE ///
+  function closePages() {
+    $(".page").hide()
+    $('#page_home').fadeIn(400)
+  }
+  
+  $('.closeBtn').click( closePages )
+
   // VITRINE
   function loadVitrine(){
     $('.introtitle').show()
     $('.uppertitle').hide()
+    $('.introtitle').show()
     $('.cartel_content').hide()
     $('.element').removeClass('selected')
   }
