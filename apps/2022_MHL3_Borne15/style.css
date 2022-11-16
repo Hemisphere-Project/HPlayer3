@@ -145,6 +145,12 @@ body{
   top: 65vh;
 }
 
+/*---------------- PAGE PLAYER ----------------*/
+#page_video{
+  background-color: black;
+  z-index: 100;
+}
+
 /*---------------- PAGE DEVENIRS ----------------*/
 #page_devenirs .feuille{
   display: none;

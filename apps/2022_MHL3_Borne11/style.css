@@ -137,6 +137,7 @@ body{
 /*---------------- PAGE PLAYER ----------------*/
 #page_video{
   background-color: black;
+  z-index: 100;
 }
 
 

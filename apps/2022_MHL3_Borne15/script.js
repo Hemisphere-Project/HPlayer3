@@ -12,7 +12,7 @@ $(function(){
 
   /// VIDEO PLAYER ///
   var player = hplayer3.videoPlayer( "#page_video", { closer: 'touch', scrollbar: false })
-  player.on('stop', () => $("#page_video").fadeOut(300) )
+  player.on('stop', () => $("#page_video").fadeOut(0))
 
   // /// DISABLE ZOOM ///
   hplayer3.disableZoom()
@@ -51,7 +51,7 @@ $(function(){
         // onCLICK => PLAY VIDEO
         grid.find('.item-video').on('click', function ()
         {
-          $("#page_video").fadeIn(500)
+          $("#page_video").fadeIn(0)
           player.play('/media/'+folder+'/'+$(this).data("media"))
         })
 
@@ -65,8 +65,8 @@ $(function(){
     var dest = $(this).attr("dest")
 
     // SHOW PAGE
-    $('#page_home').hide()
-    $("#"+dest).show()
+    $('#page_home').fadeOut(400)
+    $("#"+dest).fadeIn(450)
 
     // REWIND GALLERY
     $("#"+dest).find('.carrousel').flickity('select', 0)
