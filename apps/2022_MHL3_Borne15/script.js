@@ -9,7 +9,7 @@ $(function(){
 
   ///////// ON-SCREEN LOGGER /////////////
   // hplayer3.logger.toggle(true)
-  
+
   // /// DISABLE ZOOM ///
   hplayer3.disableZoom()
 
@@ -32,7 +32,7 @@ $(function(){
 
     // Folder from id
     let folder = $(div).attr('id')
-    
+
     // Clear destination
     $(div).empty()
 
@@ -63,13 +63,13 @@ $(function(){
 
     // Folder from id
     let folder = $(page).attr('id')
-    
+
     // Clear destination
     $(page).empty().show()
 
     // Fill Galleries
     carrouselFolder(hplayer3, page, folder)
-      .then((carrousel) => 
+      .then((carrousel) =>
       {
         // supercharge close btn
         carrousel.find('.closeDiv')
@@ -80,7 +80,7 @@ $(function(){
 
         // hide page
         $(page).hide()
-      })   
+      })
 
   })
 
@@ -94,6 +94,56 @@ $(function(){
 
     // REWIND GALLERY
     $("#"+dest).find('.carrousel').flickity('select', 0)
+
+    if(dest=="page_devenirs"){
+      $('.feuille').hide()
+      sheet = 1
+      showFeuille(sheet)
+    }
   })
+
+  //////////////////////////////////////////////
+  // PAGE DEVENIRS D'USINES
+  //////////////////////////////////////////////
+
+  $('.closeDiv').on('click', function () {
+    $(this).parent().fadeOut(300)
+    $('#page_home').show()
+  })
+
+  var sheet
+  var interval
+
+  $('.next').click(() => {
+    sheet ++
+    showFeuille()
+  })
+  $('.prev').click(() => {
+    sheet --
+    showFeuille()
+  })
+
+  function showFeuille(){
+
+    if(sheet>12){ sheet=1 }
+    else if(sheet==0){ sheet=12 }
+    $('.feuille.visible').removeClass('visible').hide()
+    $('#feuille'+sheet).addClass('visible').show()
+
+    $('.after').fadeOut(0)
+    $('.before').fadeIn(0)
+    clearInterval(interval)
+
+    interval = setInterval(function(){
+      console.log('GO')
+      if($('#feuille'+sheet+' img.after').is(':visible')){
+       $('#feuille'+sheet+' img.after').fadeOut(500)
+       $('#feuille'+sheet+' img.before').fadeIn(500)
+      }else{
+        $('#feuille'+sheet+' img.before').fadeOut(500)
+        $('#feuille'+sheet+' img.after').fadeIn(500)
+      }
+    }, 3000);
+  }
 
 });

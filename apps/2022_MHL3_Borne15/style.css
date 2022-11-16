@@ -144,3 +144,51 @@ body{
   left: 74%;
   top: 65vh;
 }
+
+/*---------------- PAGE DEVENIRS ----------------*/
+#page_devenirs .feuille{
+  display: none;
+}
+#page_devenirs .before, #page_devenirs .after{
+  position: absolute;
+  margin-left: 7%;
+  top: 10vh;
+  width: 49%;
+  max-height: 86vh;
+}
+#page_devenirs .content{
+  position: absolute;
+  margin-left: 58%;
+  top: 10vh;
+  width: 35%;
+}
+#page_devenirs .text{
+  margin-top: 25px;
+  white-space: pre-line;
+}
+
+#page_devenirs .prev{
+  position: fixed;
+  top:48vh;
+  left:2%;
+  opacity:0.5;
+  width:2.5%;
+}
+#page_devenirs .next{
+  position: fixed;
+  top:48vh;
+  right:2%;
+  opacity:0.5;
+  width:2.5%;
+}
+#page_devenirs .close{
+  position: fixed;
+  top:0;
+  right: 0;
+}
+#page_devenirs .feuille.credits{
+  position: absolute;
+  margin-left: 7%;
+  top: 10vh;
+  width: 85%;
+}
