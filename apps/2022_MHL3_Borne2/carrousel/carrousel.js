@@ -65,7 +65,7 @@ function carrouselFolder( hplayer3, dest, folder, opts )
                     cellAlign: 'left',
                     pageDots: false,
                     contain: true,
-                    selectedAttraction: 0.37,
+                    selectedAttraction: 0.2,
                     friction: 1,
                     draggable: false,
                     lazyLoad: 2,

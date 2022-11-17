@@ -91,18 +91,18 @@ body{
   background-image: url("assets/img/BG.png");
 }
 /*---------------- BTNS ----------------*/
-.btn:active{
+/* .btn:active{
   opacity: 0.9;
-}
-.opener{
+} */
+/* .opener{
   height: 140px;
   width: 140px;
   background-repeat: no-repeat;
   background-image: url("assets/img/btn_open.png")
-}
-.folder_icon:active .opener, .opener:active{
+} */
+/* .folder_icon:active .opener, .opener:active{
   background-image: url("assets/img/btn_open_active.png")
-}
+} */
 /*---------------- PAGES ----------------*/
 .page{
   position: absolute;

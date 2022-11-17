@@ -23,7 +23,7 @@ $(function(){
 
   /// VIDEO PLAYER ///
   var player = hplayer3.videoPlayer( "#page_video", { closer: 'touch', scrollbar: false })
-  player.on('stop', () => $("#page_video").fadeOut(300) )
+  player.on('stop', () => $("#page_video").fadeOut(0) )
 
   /// BUILD GRIDS ///
   $("div[type='mediagrid']").each((i, page) => {
@@ -56,15 +56,15 @@ $(function(){
   $('.folder_icon').click(function(){
     var dest = $(this).attr("dest")
 
-    $('#page_home').fadeOut(400)
-    $("#"+dest).fadeIn(450)
+    $('#page_home').fadeOut(0)
+    $("#"+dest).fadeIn(0)
   })
 
   /// CLOSE ///
   function closePages() {
     player.stop()
     $(".page").hide()
-    $('#page_home').fadeIn(400)
+    $('#page_home').fadeIn(0)
   }
   
   $('.closeBtn').click( closePages )

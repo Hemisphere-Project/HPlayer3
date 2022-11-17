@@ -55,8 +55,8 @@ $(function(){
     var dest = $(this).attr("dest")
 
     // SHOW PAGE
-    $('#page_home').fadeOut(400)
-    $("#"+dest).fadeIn(450)
+    $('#page_home').fadeOut(0)
+    $("#"+dest).fadeIn(0)
 
     // REWIND GALLERY (triggers video play if first slide is video)
     $("#"+dest).find('.carrousel').flickity('select', 0)

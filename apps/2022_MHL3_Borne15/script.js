@@ -65,11 +65,8 @@ $(function(){
     var dest = $(this).attr("dest")
 
     // SHOW PAGE
-    $('#page_home').fadeOut(400)
-    $("#"+dest).fadeIn(450)
-
-    // REWIND GALLERY
-    $("#"+dest).find('.carrousel').flickity('select', 0)
+    $('#page_home').fadeOut(0)
+    $("#"+dest).fadeIn(0)
 
     if(dest=="page_devenirs"){
       $('.feuille').hide()
@@ -120,11 +117,11 @@ $(function(){
     interval = setInterval(function(){
       console.log('GO')
       if($('#feuille'+sheet+' img.after').is(':visible')){
-       $('#feuille'+sheet+' img.after').fadeOut(500)
-       $('#feuille'+sheet+' img.before').fadeIn(500)
+       $('#feuille'+sheet+' img.after').fadeOut(0)
+       $('#feuille'+sheet+' img.before').fadeIn(0)
       }else{
-        $('#feuille'+sheet+' img.before').fadeOut(500)
-        $('#feuille'+sheet+' img.after').fadeIn(500)
+        $('#feuille'+sheet+' img.before').fadeOut(0)
+        $('#feuille'+sheet+' img.after').fadeIn(0)
       }
     }, 3000);
   }
