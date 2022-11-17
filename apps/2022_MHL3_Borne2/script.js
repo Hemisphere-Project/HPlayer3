@@ -9,7 +9,7 @@ $(function(){
 
   ///////// ON-SCREEN LOGGER /////////////
   // hplayer3.logger.toggle(true)
-  
+
   // /// DISABLE ZOOM ///
   hplayer3.disableZoom()
 
@@ -28,13 +28,13 @@ $(function(){
 
     // Folder from id
     let folder = $(page).attr('id')
-    
+
     // Clear destination
     $(page).empty().show()
 
     // Fill Galleries
     carrouselFolder(hplayer3, page, folder)
-      .then((carrousel) => 
+      .then((carrousel) =>
       {
         // supercharge close btn
         carrousel.find('.closeDiv')
@@ -45,7 +45,7 @@ $(function(){
 
         // hide page
         $(page).hide()
-      })   
+      })
 
   })
 
@@ -65,9 +65,15 @@ $(function(){
     }
   })
 
+  $('.closeDiv').click(() => {
+      $("#page_vitrine").hide()
+      $('#page_home').show()
+    })
+
   // VITRINE
   function loadVitrine(){
     $('.uppertitle').hide()
+    $('.introtitle').show()
     $('.cartel_content').hide()
     $('.element').removeClass('selected')
   }
