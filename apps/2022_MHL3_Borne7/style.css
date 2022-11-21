@@ -259,6 +259,7 @@ body{
 #page_text #QRCode{
   float: right;
   width: 25%;
+  margin-right: -10px;
 }
 #page_text .column.left{
   margin-top: 10vh;

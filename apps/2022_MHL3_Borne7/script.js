@@ -56,7 +56,7 @@ $(function()
     var genre = $('#'+textID+'_titre').attr('genre')
     $('#profil_pic').attr('src', 'assets/img/profil_'+genre+'.png')
     // QR CODE
-    $('#QRCode').attr('src', 'assets/img/QR_'+textID+'.png')
+    $('#QRCode').attr('src', 'assets/img/QRCodes/'+textID+'.png')
     // URL
     window.location.hash = textID
     // SHOW PAGE
