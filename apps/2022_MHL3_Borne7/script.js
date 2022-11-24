@@ -1,6 +1,3 @@
-
-
-
 $(function()
 {
 
@@ -23,6 +20,15 @@ $(function()
       $('#title_go').hide()
       $('#title').show()
     }
+  })
+
+  // QR CODE
+  var qrcode = new QRCode(document.getElementById("qrcode"), {
+    text: "",
+    width: 200,
+    height: 200,
+    colorDark : "#382353",
+    colorLight : "#FCEACA"
   })
 
   // GO
@@ -56,7 +62,8 @@ $(function()
     var genre = $('#'+textID+'_titre').attr('genre')
     $('#profil_pic').attr('src', 'assets/img/profil_'+genre+'.png')
     // QR CODE
-    $('#QRCode').attr('src', 'assets/img/QRCodes/'+textID+'.png')
+    qrcode.clear()
+    qrcode.makeCode("https://www.gadagne-lyon.fr/sites/gadagne/files/medias/images/2022-11/"+textID+".png")
     // URL
     window.location.hash = textID
     // SHOW PAGE
@@ -92,13 +99,6 @@ $(function()
       }
   }
   inactivityTime()
-
-
-
-
-
-
-
 
 
 

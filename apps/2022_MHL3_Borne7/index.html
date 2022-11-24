@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <!-- LIBS -->
     <script src="assets/lib/jquery-3.6.0.min.js"></script>
+    <!-- https://github.com/davidshimjs/qrcodejs -->
+    <script src="assets/lib/qrcode.min.js"></script>
     <!-- INT -->
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="script.js"></script>
@@ -14,11 +16,13 @@
 
   <BODY>
 
-
+    <!-- HOME -->
     <div class="page" id="page_home">
       <img class="title" src="assets/img/home.png">
     </div>
 
+
+    <!-- SELECTION -->
     <div class="page" id="page_selection">
       <img class="title" id="title" src="assets/img/TXT.png">
       <img class="title" id="title_go" src="assets/img/TXT_GO.png">
@@ -46,7 +50,7 @@
       </div>
     </div>
 
-
+    <!-- TEXT -->
     <div class="page" id="page_text">
 
       <div class="column left">
@@ -58,16 +62,7 @@
         </div>
         <div class="giant_bold purple" id="phrase_main">Vous êtes un ouvrier en soie</div>
         <div class="hashtags normal_bold capslock">#TeamJeanneMarie<br>#AlwaysCanuts</div>
-        <img id="QRCode" src="assets/img/QRCodes/AAAA.png">
-
-        <!--
-        QR CODE GENERATOR
-        https://www.qrcode-monkey.com/
-        Foreground Purple #382353
-        Background lightyellow ##FCEACA
-        200 x 200 px
-        -->
-
+        <div id="qrcode"></div>
       </div>
 
       <div class="column right">
@@ -75,13 +70,15 @@
         <div id="text_displayed" class="text_bold purple">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.  It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</div>
       </div>
 
-
       <img id="restart" src="assets/img/cross.png">
 
+    </div>
 
 
+    <!-- CONTENU-->
+    <div class="content">
 
-      <!-- CONTENU GLOBAL-->
+      <!-- GLOBAL -->
       <div class="phrase" id="phrase_A">Vous travaillez avec JEANNE-MARIE</div>
       <div class="phrase" id="phrase_B">Vous obtenez un LIVRET D’OUVRIER</div>
       <div class="phrase" id="phrase_C">Vous avez lu le JOURNAL</div>
@@ -93,7 +90,7 @@
       <div class="phrase" id="phrase_I">Vous avez reçu un BOULET DE CANON</div>
       <div class="phrase" id="phrase_J">Vous avez protégé la MAISON BRUNET</div>
 
-      <!-- CONTENU -->
+      <!-- PERSONNAGES -->
       <div class="perso" id="ACFH_titre" genre="homme">Vous êtes un ouvrier très talentueux</div>
       <div class="text" id="ACFH_text">Vous êtes un ouvrier en soie particulièrement doué, né en 1806. Motivé dès votre enfance à fabriquer des tissus complexes, vous avez gagné très tôt l’estime de votre cheffe d’atelier Jeanne-Marie. Votre façon d’être calme et posé a inspiré autour de vous le respect. Toujours habillé simplement, sauf peut-être pour les bals, où vous vous autorisiez à l’occasion un brin de fantaisie, vous étiez quelqu’un de discret, mais de franc : à vingt ans, vous avez protesté au nez et à la barbe d’un négociant, sans rougir.
       Votre vie a été celle d’un esprit réfléchi et savant : on vous confiait la tâche de relater les nouvelles du journal, et parfois même d’écrire aux rédacteurs pour donner votre version d’un événement. Chacun savait que votre cœur était anobli par les revendications de la cause des ouvriers en soie. « VIVRE EN TRAVAILLANT ET MOURIR EN COMBATTANT ! », c’était le principe qui fit bouger votre vie, dès 1831. Fier pacifiste, mais aussi résolu que les autres, et entouré d’un grand nombre d’amis, vous avez été suivi, vous et votre drapeau noir, dans les manifestations et les révoltes !
@@ -292,8 +289,6 @@
       </div>
 
     </div>
-
-
 
 
   </BODY>

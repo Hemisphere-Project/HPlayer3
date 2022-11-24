@@ -53,8 +53,8 @@ img{
 }
 .giant_bold{
   font-family: 'GGcanut_Bold';
-  font-size: 70pt;
-  line-height:70pt;
+  font-size: 68pt;
+  line-height:68pt;
 }
 .big_extrabold{
   font-family: 'GGcanut_ExtraBold';
@@ -251,15 +251,13 @@ body{
   border-bottom: 5px solid rgb(56, 35, 83);
   padding-top: 30px;
   padding-bottom: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 #page_text .hashtags{
   float: left;
 }
-#page_text #QRCode{
+#page_text #qrcode{
   float: right;
-  width: 25%;
-  margin-right: -10px;
 }
 #page_text .column.left{
   margin-top: 10vh;
@@ -284,7 +282,7 @@ body{
   column-count: 2;
 }
 
-#page_text .text, #page_text .phrase, #page_text .perso{
+.content{
   display:none;
 }
 
