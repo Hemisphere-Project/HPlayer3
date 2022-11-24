@@ -93,7 +93,7 @@ $(function()
         location.reload()
       }
       function timerReset() {
-        var idleTime = 60000
+        var idleTime = 90000
         clearTimeout(timerInactivity)
         timerInactivity = setTimeout(timerElapsed, idleTime)
       }
