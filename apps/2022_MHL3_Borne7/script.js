@@ -86,14 +86,23 @@ $(function()
 
   // IDLE
   var inactivityTime = function() {
+
       var timerInactivity
+
       $('body').click(function(){ timerReset() })
       document.ontouchstart = timerReset
+      window.onload = timerReset;
+      document.onkeypress = timerReset;
+      document.onmousedown = timerReset;
+      document.ontouchstart = timerReset;
+      document.onclick = timerReset;
+      document.onscroll = timerReset;
+
       function timerElapsed() {
         location.reload()
       }
       function timerReset() {
-        var idleTime = 90000
+        var idleTime = 9000
         clearTimeout(timerInactivity)
         timerInactivity = setTimeout(timerElapsed, idleTime)
       }
