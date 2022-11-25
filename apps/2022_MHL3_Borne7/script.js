@@ -25,8 +25,8 @@ $(function()
   // QR CODE
   var qrcode = new QRCode(document.getElementById("qrcode"), {
     text: "",
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     colorDark : "#382353",
     colorLight : "#FCEACA"
   })
