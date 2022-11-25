@@ -99,10 +99,11 @@ $(function()
       document.onscroll = timerReset;
 
       function timerElapsed() {
+        window.location.hash = ''
         location.reload()
       }
       function timerReset() {
-        var idleTime = 9000
+        var idleTime = 90000
         clearTimeout(timerInactivity)
         timerInactivity = setTimeout(timerElapsed, idleTime)
       }
