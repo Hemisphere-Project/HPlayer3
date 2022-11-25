@@ -17,11 +17,11 @@ $(function(){
   hplayer3.swiper()
 
   // /// GO HOME WHEN INACTIVE ///
-  hplayer3.inactivity( 60, ()=> 
+  hplayer3.inactivity( 120, ()=> 
   {
     // location.reload()
     if ($('#page_home').is(':visible')) return   // already on home page
-    
+
     closePages()
     $(('.carrousel-close-button')).click()  // rewind carrousel
   })
@@ -71,7 +71,7 @@ $(function(){
     $(".page").hide()
     $('#page_home').fadeIn(400)
   }
-  
+
   $('.closeBtn').click( closePages )
 
   // VITRINE
@@ -98,7 +98,3 @@ $(function(){
   })
 
 });
-
-
-
-                                
