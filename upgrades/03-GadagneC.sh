@@ -22,6 +22,7 @@ pacman -Sy mpv --noconfirm
 pacman -S freetype2 fribidi fontconfig yasm git autoconf pkg-config libtool \
   lua luajit libvdpau libva libxv libjpeg libxkbcommon libxrandr libv4l libxss libcaca sdl2 \
   base-devel libx264 mesa fbida libbluray alsa-lib alsa-firmware ttf-roboto --noconfirm --needed
+pacman -S llvm-libs --noconfirm
 
 # Update HPLAYER3
 cd /opt/HPlayer3
