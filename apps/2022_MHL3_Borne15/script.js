@@ -9,91 +9,121 @@ $(function(){
 
   ///////// ON-SCREEN LOGGER /////////////
   // hplayer3.logger.toggle(true)
-  
+
+  /// VIDEO PLAYER ///
+  var player = hplayer3.videoPlayer( "#page_video", { closer: 'touch', scrollbar: false })
+  player.on('stop', () => $("#page_video").fadeOut(300))
+
   // /// DISABLE ZOOM ///
   hplayer3.disableZoom()
 
+  /// ENABLE SWIPE EVENTS ///
+  hplayer3.swiper()
+
   // /// GO HOME WHEN INACTIVE ///
   hplayer3.inactivity( 60, ()=> {
-    // $('.closeDiv').trigger('click')
-    location.reload()
+    // location.reload()
+    closePages()
+    player.stop()
   })
 
   /// PAGES ///
   $('.page').hide()
   $('#page_home').show()
 
-  /// VIDEO PLAYER ///
-  var player = hplayer3.videoPlayer( "#page_video", { closer: 'touch', scrollbar: false })
-  player.on('stop', () => $("#page_video").fadeOut(300) )
-
+  
   /// BUILD GRIDS ///
-  $("div[type='mediagrid']").each((i, div) => {
+  $("div[type='mediagrid']").each((i, page) => {
 
     // Folder from id
-    let folder = $(div).attr('id')
-    
+    let folder = $(page).attr('id')
+
     // Clear destination
-    $(div).empty()
+    $(page).empty()
+
+    // Close BTN
+    $('<div class="closeBtn">').appendTo(page)
 
     // Fill Grid
-    mediaGrid(hplayer3, div, folder)
+    mediaGrid(hplayer3, page, folder)
       .then((grid) => {
 
         // onCLICK => PLAY VIDEO
         grid.find('.item-video').on('click', function ()
         {
-          $("#page_video").fadeIn(500)
+          $("#page_video").fadeIn(0)
           player.play('/media/'+folder+'/'+$(this).data("media"))
         })
 
       })
 
-    // add Close Btn
-    $('<div class="closeDiv">').appendTo(div)
-      .on('click', function () {
-        $(this).parent().fadeOut(300)
-        $('#page_home').show()
-      })
-
   })
 
-  /// BUILD SLIDESHOW ///
-  $("div[type='gallery']").each((i, page) => {
-
-    // Folder from id
-    let folder = $(page).attr('id')
-    
-    // Clear destination
-    $(page).empty().show()
-
-    // Fill Galleries
-    carrouselFolder(hplayer3, page, folder)
-      .then((carrousel) => 
-      {
-        // supercharge close btn
-        carrousel.find('.closeDiv')
-          .on('click', () => {
-            $(page).hide()
-            $('#page_home').show()
-          })
-
-        // hide page
-        $(page).hide()
-      })   
-
-  })
 
   /// ACTIONS ///
   $('.folder_icon').click(function(){
     var dest = $(this).attr("dest")
 
     // SHOW PAGE
-    $('#page_home').hide()
-    $("#"+dest).show()
+    $('#page_home').fadeOut(0)
+    $("#"+dest).fadeIn(0)
 
-    // REWIND GALLERY
-    $("#"+dest).find('.carrousel').flickity('select', 0)
+    if(dest=="page_devenirs"){
+      $('.feuille').hide()
+      sheet = 1
+      showFeuille(sheet)
+    }
   })
+
+  /// CLOSE ///
+  function closePages() {
+    player.stop()
+    $(".page").hide()
+    $('#page_home').fadeIn(400)
+  }
+  
+  $('.closeBtn').click( closePages )
+
+  //////////////////////////////////////////////
+  // PAGE DEVENIRS D'USINES
+  //////////////////////////////////////////////
+
+  var sheet
+  var interval
+
+  $('.next').click(() => {
+    sheet ++
+    showFeuille()
+  })
+  $('.prev').click(() => {
+    sheet --
+    showFeuille()
+  })
+
+  document.addEventListener('swipeleft', () => $('.next').click())
+  document.addEventListener('swiperight', () => $('.prev').click())
+
+  function showFeuille(){
+
+    if(sheet>12){ sheet=1 }
+    else if(sheet==0){ sheet=12 }
+    $('.feuille.visible').removeClass('visible').hide()
+    $('#feuille'+sheet).addClass('visible').show()
+
+    $('.after').fadeOut(0)
+    $('.before').fadeIn(0)
+    clearInterval(interval)
+
+    interval = setInterval(function(){
+      console.log('GO')
+      if($('#feuille'+sheet+' img.after').is(':visible')){
+       $('#feuille'+sheet+' img.after').fadeOut(0)
+       $('#feuille'+sheet+' img.before').fadeIn(0)
+      }else{
+        $('#feuille'+sheet+' img.before').fadeOut(0)
+        $('#feuille'+sheet+' img.after').fadeIn(0)
+      }
+    }, 3000);
+  }
 
 });

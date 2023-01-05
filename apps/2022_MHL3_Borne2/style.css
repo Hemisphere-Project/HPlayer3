@@ -90,19 +90,7 @@ img{
 body{
   background-image: url("assets/img/BG.png");
 }
-/*---------------- BTNS ----------------*/
-.btn:active{
-  opacity: 0.9;
-}
-.opener{
-  height: 140px;
-  width: 140px;
-  background-repeat: no-repeat;
-  background-image: url("assets/img/btn_open.png")
-}
-.folder_icon:active .opener, .opener:active{
-  background-image: url("assets/img/btn_open_active.png")
-}
+
 /*---------------- PAGES ----------------*/
 .page{
   position: absolute;
@@ -148,17 +136,19 @@ body{
 
 /*---------------- PAGE VITRINE ----------------*/
 #page_vitrine .uppertitle{
-  margin-left: 14%;
+  margin-left: 4%;
   position: absolute;
-  margin-top: 120px;
+  margin-top: 50px;
 }
 #page_vitrine .content{
-  margin-left: 60%;
+  margin-left: 52%;
   position: absolute;
-  margin-top: 250px;
+  margin-top: 170px;
 }
 #page_vitrine .content .introtitle{
   width:68%;
+  margin-left:20%;
+  /* margin-top: 212px; */
 }
 #page_vitrine .content .introtitle .spacer{
   height:8px;
@@ -167,7 +157,7 @@ body{
   margin-top:15px;
 }
 #page_vitrine .content .cartel_content{
-  width:83%;
+  width:90%;
 }
 #page_vitrine .content .cartel_content .spacer{
   height:4px;
@@ -175,12 +165,15 @@ body{
   margin-bottom:15px;
   margin-top:15px;
 }
+#page_vitrine .closeDiv{
+  position: fixed;
+}
 /*---------------- VITRINE ----------------*/
 #page_vitrine .vitrine{
-  margin-left: 14%;
-  width: 40%;
+  margin-left: 4%;
+  width: 44%;
   position: absolute;
-  margin-top: 250px;
+  margin-top: 170px;
 }
 #page_vitrine .vitrine .element{
   margin-bottom: 30px;

@@ -216,8 +216,45 @@ class HPlayer3 extends HModule {
         document.onclick = resetTimer;
         document.onscroll = resetTimer;
 
+        document.addEventListener('videorunning', resetTimer)
+
         resetTimer()
     }
+
+    //
+    // SWIPE GESTURE
+    //
+    swiper(threshold) 
+    {
+        // SLIDE HANDLE
+        this.swipeThreshold = threshold || 10;
+        this.xDown = this.yDown = null;
+
+        document.addEventListener('touchstart', (e) => {
+            this.xDown = e.touches[0].clientX;                                      
+            this.yDown = e.touches[0].clientY;
+        }, false);        
+
+        document.addEventListener('touchmove', (e) => 
+        {
+            if ( ! this.xDown || ! this.yDown ) return
+
+            var xDiff = this.xDown - e.touches[0].clientX;
+            var yDiff = this.yDown - e.touches[0].clientY;         
+
+            if ( Math.abs( xDiff ) > this.swipeThreshold ) {
+                if ( xDiff > 0 ) document.dispatchEvent(new Event('swipeleft'));
+                else document.dispatchEvent(new Event('swiperight'));
+                this.xDown = this.yDown = null;
+            }
+            else if ( Math.abs( yDiff ) > this.swipeThreshold ) {
+                if ( yDiff > 0 ) document.dispatchEvent(new Event('swipeup'));
+                else document.dispatchEvent(new Event('swipedown'));
+                this.xDown = this.yDown = null;
+            }
+        }, false);
+    }
+
 }
 
 
@@ -369,6 +406,7 @@ class VideoPlayer extends EventTarget {
         this.video.addEventListener("timeupdate", () => {
             // console.log('['+this.name+'/video] time', this.video.currentTime, this.video.duration, this.video.paused);
             this.dispatchEvent(new Event("timeupdate"));
+            document.dispatchEvent(new Event("videorunning"));
         }, false);
 
 

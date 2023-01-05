@@ -9,14 +9,21 @@ $(function(){
 
   ///////// ON-SCREEN LOGGER /////////////
   // hplayer3.logger.toggle(true)
-  
-  // /// DISABLE ZOOM ///
+
+  /// DISABLE ZOOM ///
   hplayer3.disableZoom()
 
+  /// ENABLE SWIPE EVENTS ///
+  hplayer3.swiper()
+
   // /// GO HOME WHEN INACTIVE ///
-  hplayer3.inactivity( 60, ()=> {
-    // $('.closeDiv').trigger('click')
-    location.reload()
+  hplayer3.inactivity( 120, ()=> 
+  {
+    // location.reload()
+    if ($('#page_home').is(':visible')) return   // already on home page
+
+    closePages()
+    $(('.carrousel-close-button')).click()  // rewind carrousel
   })
 
   /// PAGES ///
@@ -28,24 +35,18 @@ $(function(){
 
     // Folder from id
     let folder = $(page).attr('id')
-    
+
     // Clear destination
     $(page).empty().show()
 
     // Fill Galleries
     carrouselFolder(hplayer3, page, folder)
-      .then((carrousel) => 
+      .then((carrousel) =>
       {
-        // supercharge close btn
-        carrousel.find('.closeDiv')
-          .on('click', () => {
-            $(page).hide()
-            $('#page_home').show()
-          })
-
-        // hide page
+        // supercharge close btn to close page
+        carrousel.find('.carrousel-close-button').click( closePages )
         $(page).hide()
-      })   
+      })
 
   })
 
@@ -54,10 +55,10 @@ $(function(){
     var dest = $(this).attr("dest")
 
     // SHOW PAGE
-    $('#page_home').hide()
-    $("#"+dest).show()
+    $('#page_home').fadeOut(0)
+    $("#"+dest).fadeIn(0)
 
-    // REWIND GALLERY
+    // REWIND GALLERY (triggers video play if first slide is video)
     $("#"+dest).find('.carrousel').flickity('select', 0)
 
     if(dest=="page_vitrine"){
@@ -65,9 +66,19 @@ $(function(){
     }
   })
 
+  /// CLOSE ///
+  function closePages() {
+    $(".page").hide()
+    $('#page_home').fadeIn(400)
+  }
+
+  $('.closeBtn').click( closePages )
+
   // VITRINE
   function loadVitrine(){
+    $('.introtitle').show()
     $('.uppertitle').hide()
+    $('.introtitle').show()
     $('.cartel_content').hide()
     $('.element').removeClass('selected')
   }
@@ -76,14 +87,14 @@ $(function(){
   $('.element').click(function(){
     // titles
     $('.introtitle').hide()
-    $('.uppertitle').show()
+    $('.uppertitle').fadeIn(200)
     // colors
     $('.element').removeClass('selected')
     $(this).addClass('selected')
     // content
     var dest = $(this).attr('dest')
     $('.cartel_content').hide()
-    $('#'+dest).show()
+    $('#'+dest).fadeIn(300)
   })
 
 });
