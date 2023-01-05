@@ -1,5 +1,9 @@
 
-
+//
+// WIFI
+//
+- Fallback on Hotspot when service goes away
+- 60 min switch of hotspot
 
 
 
