@@ -65,13 +65,26 @@ chromium-browser \
 ###
 sudo apt install python3 python3-pip python3-setuptools python3-wheel 
 sudo apt install git wget imagemagick htop build-essential 
-sudo apt install nodejs npm 
 sudo apt install pigpio
+
+sudo apt install nodejs npm 
+sudo npm install n -g
+sudo n stable
+hash -r
 
 # HPlayer3
 cd ~ 
 git clone https://github.com/Hemisphere-Project/HPlayer3.git
+cd HPlayer3
+npm install
 
+### Audio 
+sudo cp ./asound.conf /etc/asound.conf
+
+### /data
+sudo mkdir /data
+sudo mkdir /data/conf
+sudo chown -R pi:pi /data
 
 ### RPi.GPIO
 ### (might conflict with pigpio ?)
