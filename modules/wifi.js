@@ -3,6 +3,7 @@ const Module = require('./module.js')
 const os = require("os");
 const isPi = require('detect-rpi');
 const { execSync } = require('child_process');
+const { Stats } = require('fs');
 
 class Wifi extends Module{
 
@@ -54,48 +55,57 @@ class Wifi extends Module{
 
 class WifiPI extends Wifi 
 {
+    constructor(hp3) 
+    {
+        super(hp3)
+        this.network = require("node-network-manager")
+    }
 
     start() 
     {
+        this.mode = "unknown"
+
+        // Start wifi
         return new Promise((resolve, reject) => {
             
             // Try service connection
-            this.serviceMode()
+            this.network.deviceDisconnect("wlan0").catch(()=>{}).finally(()=>{
+                this.serviceMode()
                 .then(resolve)
                 .catch(()=>{
-
-                    // Then try connect as client
-                    this.clientMode()
-                        .then(resolve)
-                        .catch(()=>{
-
-                            // Fallback to Hotspot Access point
-                            this.hotspotMode()
-                                .then(resolve)
-                                .catch(reject)
-                        })
+                    // Fallback to Hotspot Access point
+                    this.network.deviceDisconnect("wlan0").catch(()=>{}).finally(()=>{
+                        this.hotspotMode()
+                            .then(resolve)
+                            .catch(reject)
+                    })
                 })
+            })
         })
     }
 
+    // try to connect to wlan0-service
     serviceMode()
     {
-        const network = require("node-network-manager")
-
-        // try to connect to wlan0-service
         return new Promise((resolve, reject) => 
         {
             this.log('connecting to wlan0-service..')
-            network
+            this.network
                 .connectionUp("wlan0-service")
                 .then((data) => {
                     this.log('connected to wlan0-service')
                     this.mode = "service"
                     this.emit('connected', this.mode)
+
+                    // Service connection watcher
+                    if (this.watcher) clearTimeout(this.watcher)
+                    this.watcher = setInterval(() => {
+                        this.watchService()
+                    }, 5000)
+
                     resolve()
                 })
                 .catch((error) => {
-
                     this.log("Error: wlan0-service not found")
                     this.mode = "error"
                     reject()
@@ -103,15 +113,13 @@ class WifiPI extends Wifi
         })
     }
 
+    // create AP based on wlan0-hotspot
     hotspotMode()
     {
-        const network = require("node-network-manager")
-
-        // create AP based on wlan0-hotspot
         return new Promise((resolve, reject) => 
         {
             this.log('creating wlan0-hotspot Access point..')
-            network
+            this.network
                 .connectionUp("wlan0-hotspot")
                 .then((data) => {
                     this.log('Access Point created:', this.getName())
@@ -127,29 +135,26 @@ class WifiPI extends Wifi
         })
     }
 
-    clientMode()
+    // watch for wlan0-service disconnect
+    watchService() 
     {
-        const network = require("node-network-manager")
-
-        // try to connect to wlan0-client
-        return new Promise((resolve, reject) => 
-        {
-            this.log('connecting to wlan0-client..')
-            network
-                .connectionUp("wlan0-client")
-                .then((data) => {
-                    this.log('connected to wlan0-client')
-                    this.mode = "client"
-                    this.emit('connected', this.mode)
-                    resolve()
-                })
-                .catch((error) => {
-
-                    this.log(error)
-                    this.mode = "error"
-                    reject()
-                })
-        })
+        this.network
+            .deviceStatus()
+            .then((result) => {
+                for (var status of result) {
+                    if (status['device'] == "wlan0") {
+                        if (status['state'] == "disconnected") 
+                        {
+                            this.log('wlan0 disconnected')
+                            if (this.watcher) clearTimeout(this.watcher)
+                            this.emit('disconnected', this.mode)
+                            this.start()
+                        }
+                        break;
+                    }
+                }
+            })
+            .catch((error) => console.log(error));
     }
 
     isConfigurable() {

@@ -1,3 +1,7 @@
+html {
+    touch-action:none;
+  }
+  
 body {
     background-color: black;
     color: white;
