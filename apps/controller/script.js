@@ -312,6 +312,13 @@ $(function() {
     .update( (el, data) => $('.devicePassword').html(data) )
     .refresh()
 
+  // WIFI OFF
+  new autoField('#wifiOff')
+    .getter(hplayer3.wifi.getTurnoff)
+    .setter(hplayer3.wifi.setTurnoff)
+    .value( (el)=>{ return el.is(':checked') ? 30 : 0     /* 30 minutes */})
+    .refresh()
+
   // APPLY WIFI
   $('.applywifi').click(function(){
     hplayer3.wifi.apply()
