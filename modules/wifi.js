@@ -4,7 +4,6 @@ const os = require("os");
 const isPi = require('detect-rpi');
 const { execSync } = require('child_process');
 const { Stats } = require('fs');
-const { time } = require('console');
 
 class Wifi extends Module{
 
@@ -95,26 +94,33 @@ class WifiPI extends Wifi
     // try to connect to wlan0-service
     serviceMode()
     {
+        
+        
         return new Promise((resolve, reject) => 
         {
-            this.log('connecting to wlan0-service..')
-            this.network
-                .wifiConnect("hmsphr", "hemiproject")
-                .then((data) => {
-                    this.log('connected to wlan0-service')
-                    this.mode = "service"
-                    this.emit('connected', this.mode)
+            this.log('connecting to wlan-service..')
 
-                    // Service connection watcher
-                    this.watchService()
+            // connect to ssid:password using nmcli
+            try { execSync('nmcli dev disconnect wlan0').toString() }
+            catch (error) { console.log('error disconnecting wlan0') }
 
-                    resolve()
-                })
-                .catch((error) => {
-                    this.log("Error: wlan0-service not found")
-                    this.mode = "error"
-                    reject()
-                })
+            console.log( execSync('nmcli dev wifi rescan').toString() )
+            console.log( execSync('nmcli dev wifi list').toString() )
+            
+            var resut = execSync("nmcli c up wlan0-service");
+
+            if (resut.toString().indexOf('successfully') > -1) {
+                this.log('connected to wlan-service' )
+                this.mode = "service"
+                this.emit('connected', this.mode)
+                this.watchService()
+                resolve();
+            }
+            else {
+                this.log('wlan-service connection error:', resut.toString())
+                this.mode = "error"
+                reject();
+            }
         })
     }
 
@@ -160,7 +166,7 @@ class WifiPI extends Wifi
                             this.log('wlan0 disconnected')
                             if (this.watcher) clearTimeout(this.watcher)
                             this.emit('disconnected', this.mode)
-                            this.start()
+                            this.hotspotMode()
                         }
                         break;
                     }
