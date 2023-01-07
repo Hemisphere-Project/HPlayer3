@@ -1,6 +1,9 @@
 
 
 /*----------------GLOBALS----------------*/
+html {
+  touch-action:none;
+}
 body{
   -webkit-touch-callout: none;
   -webkit-user-select: none;
