@@ -4,6 +4,7 @@ const os = require("os");
 const isPi = require('detect-rpi');
 const { execSync } = require('child_process');
 const { Stats } = require('fs');
+const { time } = require('console');
 
 class Wifi extends Module{
 
@@ -16,8 +17,7 @@ class Wifi extends Module{
     init() 
     {
         this.log('starting')
-
-        this.wifiOff = this.getConf('wifi.off',  0)
+        this.getConf('wifi.off',  0)
 
         return this.start()
     }
@@ -46,6 +46,15 @@ class Wifi extends Module{
         return false
     }
 
+    getTurnoff() {
+        return 0
+    }
+
+    setTurnoff(timeout) {
+        this.log("Can't set Turn off timeout on this machine...")
+        return false
+    }
+
     apply() {
         this.log("Can't control Wifi on this machine...")
         return false
@@ -64,6 +73,8 @@ class WifiPI extends Wifi
     start() 
     {
         this.mode = "unknown"
+
+        if (this.turnoffWatcher) clearTimeout(this.turnoffWatcher)
 
         // Start wifi
         return new Promise((resolve, reject) => {
@@ -98,10 +109,7 @@ class WifiPI extends Wifi
                     this.emit('connected', this.mode)
 
                     // Service connection watcher
-                    if (this.watcher) clearTimeout(this.watcher)
-                    this.watcher = setInterval(() => {
-                        this.watchService()
-                    }, 5000)
+                    this.watchService()
 
                     resolve()
                 })
@@ -124,6 +132,10 @@ class WifiPI extends Wifi
                 .then((data) => {
                     this.log('Access Point created:', this.getName())
                     this.mode = "hotspot"
+                    
+                    // Hotspot turnoff
+                    this.watchTurnoff()
+
                     this.emit('connected', this.mode)
                     resolve()
                 })
@@ -138,7 +150,10 @@ class WifiPI extends Wifi
     // watch for wlan0-service disconnect
     watchService() 
     {
-        this.network
+        if (this.watcher) clearInterval(this.watcher)
+        this.watcher = setInterval(() => 
+        {
+            this.network
             .deviceStatus()
             .then((result) => {
                 for (var status of result) {
@@ -155,6 +170,31 @@ class WifiPI extends Wifi
                 }
             })
             .catch((error) => console.log(error));
+        }, 5000)        
+    }
+
+    // watch for hotspot turnoff
+    watchTurnoff()
+    {
+        if (this.turnoffWatcher) clearTimeout(this.turnoffWatcher)
+
+        if (this.getTurnoff() == 0) return
+        if (this.mode != "hotspot") return
+
+        this.turnoffWatcher = setTimeout(() => {
+            this.log('turning off hotspot')
+            this.turnoffWatcher = null
+            this.network
+                .connectionDown("wlan0-hotspot")
+                .then((data) => {
+                    this.log('hotspot turned off')
+                    this.mode = "off"
+                    this.emit('disconnected', this.mode)
+                })
+                .catch((error) => {
+                    this.log('hotspot turn off error:', error)
+                });
+        }, this.getTurnoff() * 1000 * 60)
     }
 
     isConfigurable() {
@@ -181,6 +221,19 @@ class WifiPI extends Wifi
         execSync('ro')
         this.log("hotspot password updated to", this.getPass())
         return true
+    }
+
+    getTurnoff() {
+        return parseInt(this.getConf('wifi.off',  0))        
+    }
+
+    setTurnoff(timeout) {
+        timeout = parseInt(timeout)
+        this.setConf('wifi.off', timeout)
+        this.log('set turnoff', timeout)
+        this.watchTurnoff()
+
+        return false
     }
 
     apply() {
