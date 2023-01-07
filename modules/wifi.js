@@ -80,17 +80,14 @@ class WifiPI extends Wifi
         return new Promise((resolve, reject) => {
             
             // Try service connection
-            this.network.deviceDisconnect("wlan0").catch(()=>{}).finally(()=>{
-                this.serviceMode()
-                .then(resolve)
-                .catch(()=>{
-                    // Fallback to Hotspot Access point
-                    this.network.deviceDisconnect("wlan0").catch(()=>{}).finally(()=>{
-                        this.hotspotMode()
-                            .then(resolve)
-                            .catch(reject)
-                    })
-                })
+            this.serviceMode()
+            .then(resolve)
+            .catch(()=>{
+
+                // Fallback to Hotspot Access point
+                this.hotspotMode()
+                    .then(resolve)
+                    .catch(reject)
             })
         })
     }
@@ -102,7 +99,7 @@ class WifiPI extends Wifi
         {
             this.log('connecting to wlan0-service..')
             this.network
-                .connectionUp("wlan0-service")
+                .wifiConnect("hmsphr", "hemiproject")
                 .then((data) => {
                     this.log('connected to wlan0-service')
                     this.mode = "service"

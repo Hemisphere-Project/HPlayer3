@@ -1,12 +1,3 @@
-
-//
-// WIFI
-//
-- Fallback on Hotspot when service goes away
-- 60 min switch of hotspot
-
-
-
 //
 // SYSTEM
 //
@@ -33,7 +24,7 @@
     => playlist ?
     => loop
 
-- Video -> select resolution (auto, ...) (!! minimum 1024x768)
+- Video -> select resolution (auto, ...)
 - if not pi: can't change theme
 - Discover others
 
@@ -53,8 +44,8 @@
 - make video work!
 
 
-
 // UPGRADE:
 H: 01-GadagneA -> switch to hmsphr wifi
 H: 02-GadagneB -> upgrade HPlayer3 / Pi-tools / wifi profiles
 H: 03-GadagneC -> webplayer upgrade / boot plymouth / full system update
+H: 04-GadagneD -> upgrade HPlayer3 / Pi-tools / wifi profiles / XORG/CHROMIUM Kiosk 
