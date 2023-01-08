@@ -52,9 +52,83 @@ cd kiosk-chromium
 ### spinner splash
 plymouth-set-default-theme -R spinner
 
-### wifi 
-sed -i '/^mode=ap/a channel=6' /boot/wifi/wlan0-hotspot.nmconnection
-sed -i '/^mode=ap/a band=bg' /boot/wifi/wlan0-hotspot.nmconnection
+### Pi-tools
+systemctl disable starter
+systemctl enable extendfs
+systemctl enable uplink-fwd@eth0
+rm -Rf /boot/wifi
+rm -f /boot/starter.txt
+rm -f /etc/systemd/system/hostrename@.service
+rm -f /usr/local/bin/hostrename
+rm -f /etc/systemd/system/setnet.service
+rm -f /usr/local/bin/setnet
+rm -f /etc/systemd/system/starter.service
+rm -f /usr/local/bin/starter
+
+# Add wifi profiles
+rm /etc/NetworkManager/system-connections/*
+
+echo "[connection]
+id=wlan0-service
+type=wifi
+interface-name=wlan0
+autoconnect=true
+autoconnect-retries=0
+
+[wifi]
+hidden=false
+mode=infrastructure
+ssid=hmsphr
+
+[wifi-security]
+key-mgmt=wpa-psk
+psk=hemiproject
+
+[ipv4]
+method=auto
+route-metric=70
+" > /etc/NetworkManager/system-connections/wlan0-service.nmconnection
+
+echo "[connection]
+id=wlan0-hotspot
+type=wifi
+interface-name=wlan0
+autoconnect=false
+
+[wifi]
+hidden=false
+mode=ap
+band=bg
+channel=6
+ssid=HBerry
+
+[wifi-security]
+key-mgmt=wpa-psk
+psk=Gadagne69*
+
+[ipv4]
+method=manual
+address1=10.0.0.1/16,10.0.0.1
+" > /etc/NetworkManager/system-connections/wlan0-hotspot.nmconnection
+
+echo "[connection]
+id=eth0-dhcp
+type=ethernet
+interface-name=eth0
+permissions=
+
+[ethernet]
+mac-address-blacklist=
+
+[ipv4]
+dns-search=
+method=auto
+" > /etc/NetworkManager/system-connections/eth0-dhcp.nmconnection
+
+chmod 600 -R /etc/NetworkManager/system-connections/
+
+### touch fix (iiyama)
+sed -i '$ s/$/ usbhid.mousepoll=0/' /boot/cmdline.txt
 
 echo "H: 04-GadagneD" >> /boot/VERSION
 

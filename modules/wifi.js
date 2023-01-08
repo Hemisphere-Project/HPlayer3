@@ -20,7 +20,7 @@ class Wifi extends Module{
 
         return this.start()
     }
-
+    
     start() {}
 
     isConfigurable() {
@@ -54,7 +54,7 @@ class Wifi extends Module{
         return false
     }
 
-    apply() {
+    reset() {
         this.log("Can't control Wifi on this machine...")
         return false
     }
@@ -70,58 +70,55 @@ class WifiPI extends Wifi
     }
 
     start() 
-    {
-        this.mode = "unknown"
+    {   
+        this.status = null
 
+        this.checkRate = 5000                           // 5s
+        this.discoCounter = 30 * 1000/this.checkRate    // 20s
+
+        // Disable watchers
         if (this.turnoffWatcher) clearTimeout(this.turnoffWatcher)
+        if (this.connectedWatcher) clearInterval(this.connectedWatcher)
 
-        // Start wifi
-        return new Promise((resolve, reject) => {
-            
-            // Try service connection
-            this.serviceMode()
-            .then(resolve)
-            .catch(()=>{
-
-                // Fallback to Hotspot Access point
-                this.hotspotMode()
-                    .then(resolve)
-                    .catch(reject)
-            })
-        })
-    }
-
-    // try to connect to wlan0-service
-    serviceMode()
-    {
-        
-        
-        return new Promise((resolve, reject) => 
+        // Watch for wifi status
+        this.connectedWatcher = setInterval(() => 
         {
-            this.log('connecting to wlan-service..')
+            this.network
+                .deviceStatus()
+                .then((result) => {
+                    for (var status of result) {
+                        if (status['device'] == "wlan0") 
+                        {
+                            // State changed
+                            if (!this.status || this.status['state'] != status['state'] || this.status['connection'] != status['connection']) {
+                                var s =  status['state'].split(' ')[0]
+                                this.log('wlan0 status:', s, status['connection'])
+                                this.emit(s, status['connection'])
+                            }
+                            
+                            // Wifi disconnected
+                            if (status['state'] == "disconnected") 
+                            {
+                                // Previous state was connected OR maxretry reached => create hotspot
+                                if ((this.status && this.status['state'] == 'connected') || this.discoCounter-- == 0)
+                                {
+                                    this.log('wlan0 disconnected -> enabling hotspot')
+                                    this.hotspotMode()
+                                }
+                                else this.log('wlan0 disconnected, waiting for connection..')
+                            }
+                            
+                            // Save status
+                            this.status = status
+                            
+                            break;
+                        }
+                    }
+                })
+                .catch((error) => console.log(error));
 
-            // connect to ssid:password using nmcli
-            try { execSync('nmcli dev disconnect wlan0').toString() }
-            catch (error) { console.log('error disconnecting wlan0') }
+        }, this.checkRate) 
 
-            console.log( execSync('nmcli dev wifi rescan').toString() )
-            console.log( execSync('nmcli dev wifi list').toString() )
-            
-            var resut = execSync("nmcli c up wlan0-service");
-
-            if (resut.toString().indexOf('successfully') > -1) {
-                this.log('connected to wlan-service' )
-                this.mode = "service"
-                this.emit('connected', this.mode)
-                this.watchService()
-                resolve();
-            }
-            else {
-                this.log('wlan-service connection error:', resut.toString())
-                this.mode = "error"
-                reject();
-            }
-        })
     }
 
     // create AP based on wlan0-hotspot
@@ -134,47 +131,19 @@ class WifiPI extends Wifi
                 .connectionUp("wlan0-hotspot")
                 .then((data) => {
                     this.log('Access Point created:', this.getName())
-                    this.mode = "hotspot"
                     
                     // Hotspot turnoff
                     this.watchTurnoff()
 
-                    this.emit('connected', this.mode)
                     resolve()
                 })
                 .catch((error) => {
                     this.log('Access Point error:', error)
-                    this.mode = "error"
                     reject()
                 });
         })
     }
 
-    // watch for wlan0-service disconnect
-    watchService() 
-    {
-        if (this.watcher) clearInterval(this.watcher)
-        this.watcher = setInterval(() => 
-        {
-            this.network
-            .deviceStatus()
-            .then((result) => {
-                for (var status of result) {
-                    if (status['device'] == "wlan0") {
-                        if (status['state'] == "disconnected") 
-                        {
-                            this.log('wlan0 disconnected')
-                            if (this.watcher) clearTimeout(this.watcher)
-                            this.emit('disconnected', this.mode)
-                            this.hotspotMode()
-                        }
-                        break;
-                    }
-                }
-            })
-            .catch((error) => console.log(error));
-        }, 5000)        
-    }
 
     // watch for hotspot turnoff
     watchTurnoff()
@@ -182,7 +151,6 @@ class WifiPI extends Wifi
         if (this.turnoffWatcher) clearTimeout(this.turnoffWatcher)
 
         if (this.getTurnoff() == 0) return
-        if (this.mode != "hotspot") return
 
         this.turnoffWatcher = setTimeout(() => {
             this.log('turning off hotspot')
@@ -191,8 +159,6 @@ class WifiPI extends Wifi
                 .connectionDown("wlan0-hotspot")
                 .then((data) => {
                     this.log('hotspot turned off')
-                    this.mode = "off"
-                    this.emit('disconnected', this.mode)
                 })
                 .catch((error) => {
                     this.log('hotspot turn off error:', error)
@@ -206,21 +172,26 @@ class WifiPI extends Wifi
 
     setName(name) {
         if (!name) return false
-        execSync('hostrename '+name)
+        execSync('rw')
+        execSync(`sed -i -E 's/^ssid=.*/ssid='${name}'/' /etc/NetworkManager/system-connections/wlan0-hotspot.nmconnection`)
+        execSync(`hostnamectl set-hostname ${name}`)
+        execSync('systemctl restart avahi-daemon')
+        execSync('ro')
+
+        this.log("hotspot ssid updated to", name)
         this.log("hostname changed to ", this.getName())
-        this.log("hotspot ssid updated to", this.getName())
         return true
     }
 
     getPass() {
-        var pass = execSync("sed -n -e '/^psk=/p' /boot/wifi/wlan0-hotspot.nmconnection").toString().split('psk=')
+        var pass = execSync("sed -n -e '/^psk=/p' /etc/NetworkManager/system-connections/wlan0-hotspot.nmconnection").toString().split('psk=')
         if (pass.length > 1) return pass[1]
         else return ''
     }
 
     setPass(pass) {
         execSync('rw')
-        execSync(`sed -i -E 's/^psk=.*/psk='${pass}'/' /boot/wifi/wlan0-hotspot.nmconnection`)
+        execSync(`sed -i -E 's/^psk=.*/psk='${pass}'/' /etc/NetworkManager/system-connections/wlan0-hotspot.nmconnection`)
         execSync('ro')
         this.log("hotspot password updated to", this.getPass())
         return true
@@ -234,15 +205,23 @@ class WifiPI extends Wifi
         timeout = parseInt(timeout)
         this.setConf('wifi.off', timeout)
         this.log('set turnoff', timeout)
-        this.watchTurnoff()
+
+        if (this.status['connection'] == "wlan0-hotspot")
+            this.watchTurnoff()
 
         return false
     }
 
-    apply() {
-        execSync('setnet')
-        setTimeout(()=> this.start(), 1000)
-        this.log("config applied, reloading NetworkManager..")
+    reset()
+    {
+        // Disable watchers
+        if (this.turnoffWatcher) clearTimeout(this.turnoffWatcher)
+        if (this.connectedWatcher) clearInterval(this.connectedWatcher)
+
+        // Restart NetworkManager
+        this.log('restarting NetworkManager')
+        execSync('systemctl restart NetworkManager')
+        this.start()
     }
 }
 

@@ -319,10 +319,12 @@ $(function() {
     .value( (el)=>{ return el.is(':checked') ? 30 : 0     /* 30 minutes */})
     .refresh()
 
-  // APPLY WIFI
-  $('.applywifi').click(function(){
-    hplayer3.wifi.apply()
+
+  // RESTART WIFI
+  $('.resetwifi').click(function(){
+    hplayer3.wifi.reset()
   })
+
 
   // HIDE SECTION
   hplayer3.wifi.isConfigurable()

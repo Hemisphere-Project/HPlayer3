@@ -51,12 +51,8 @@ rm -Rf ~/.pm2
 mkdir -p /data/var/pm2
 ln -s /data/var/pm2 ~/.pm2
 
-
 # INSTALL
 npm install
-
-# AUDIO
-cp ./conf/asound.conf /etc/asound.conf
 
 # PM2 START & SAVE
 # TODO
