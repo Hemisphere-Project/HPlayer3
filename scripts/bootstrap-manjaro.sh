@@ -121,22 +121,30 @@ systemctl enable NetworkManager
 systemctl start NetworkManager
 nmcli con add type ethernet con-name eth0-dhcp ifname eth0
 
-### wifi
+## AP - DHCP
+cp /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
+echo 'listen-address=10.0.0.1                             
+dhcp-range=10.0.1.1,10.0.2.250,255.255.0.0,12h
+dhcp-leasefile=/var/lib/dnsmasq/dnsmasq.leases
+' > /etc/dnsmasq.conf
+
+### NETWORK
 ###
-mkdir /boot/wifi
 # Get current name
 NAME=$(cat /etc/hostname)
 
 # Add wifi profiles
+rm /etc/NetworkManager/system-connections/*
+
 echo "[connection]
 id=wlan0-service
 type=wifi
 interface-name=wlan0
-autoconnect=false
-permissions=
+autoconnect=true
+autoconnect-retries=0
 
 [wifi]
-mac-address-blacklist=
+hidden=false
 mode=infrastructure
 ssid=hmsphr
 
@@ -145,38 +153,48 @@ key-mgmt=wpa-psk
 psk=hemiproject
 
 [ipv4]
-dns-search=
 method=auto
 route-metric=70
-" > /boot/wifi/wlan0-service.nmconnection
+" > /etc/NetworkManager/system-connections/wlan0-service.nmconnection
 
 echo "[connection]
 id=wlan0-hotspot
 type=wifi
-autoconnect=false
 interface-name=wlan0
-permissions=
+autoconnect=false
 
 [wifi]
 hidden=false
-mac-address-blacklist=
 mode=ap
 band=bg
 channel=6
-ssid=$NAME
+ssid=HBerry
 
 [wifi-security]
-group=
 key-mgmt=wpa-psk
-pairwise=
-proto=
-psk=Museo69*
+psk=Gadagne69*
 
 [ipv4]
-address1=10.0.0.1/16,10.0.0.1
-dns-search=
 method=manual
-" > /boot/wifi/wlan0-hotspot.nmconnection
+address1=10.0.0.1/16,10.0.0.1
+" > /etc/NetworkManager/system-connections/wlan0-hotspot.nmconnection
+
+echo "[connection]
+id=eth0-dhcp
+type=ethernet
+interface-name=eth0
+permissions=
+
+[ethernet]
+mac-address-blacklist=
+
+[ipv4]
+dns-search=
+method=auto
+" > /etc/NetworkManager/system-connections/eth0-dhcp.nmconnection
+
+chmod 600 -R /etc/NetworkManager/system-connections/
+
 
 
 ### disable ipv6
@@ -201,6 +219,10 @@ echo "i2c-dev" >> /etc/modules-load.d/raspberrypi.conf
 systemctl disable getty@tty1
 sed -i '$ s/tty1/tty3/' /boot/cmdline.txt
 sed -i '$ s/$/ loglevel=1 vt.global_cursor_default=0/' /boot/cmdline.txt      # logo.nologo vt.global_cursor_default=0 consoleblank=0 quiet vga=current
+
+### touch fix (iiyama)
+sed -i '$ s/$/ usbhid.mousepoll=0/' /boot/cmdline.txt
+rm -f /usr/local/bin/setnet
 
 ### spinner splash
 plymouth-set-default-theme -R spinner
@@ -268,12 +290,43 @@ disable_splash=1                        # Disable the rainbow splash screen
 " > /boot/config.txt
 
 
+# Pi-tools
+##########
+cd /opt
+git clone https://github.com/Hemisphere-Project/Pi-tools.git
+
+# extendfs
+cd /opt/Pi-tools/extendfs
+./install.sh
+systemctl enable extendfs
+
+# audioselect
+cd /opt/Pi-tools/audioselect
+./install.sh
+
+# usbautomount
+cd /opt/Pi-tools/usbautomount
+./install.sh
+
+# kiosk-chromium
+cd /opt/Pi-tools/kiosk-chromium
+./install.sh
+
+# uplink-fwd
+# TODO: split setnet and other network-tools
+ln -sf "/opt/Pi-tools/network-tools/uplink-fwd@.service" /etc/systemd/system/
+ln -sf "/opt/Pi-tools/network-tools/uplink-fwd" /usr/local/bin/
+systemctl daemon-reload
+systemctl enable uplink-fwd@eth0
+
+# rorw
+cd /opt/Pi-tools/rorw
+./install.sh
+
+
 # HPlayer3
+##########
 cd /opt
 git clone https://github.com/Hemisphere-Project/HPlayer3.git
 cd HPlayer3
 ./install.sh
-
-# Pi-tools
-# .. TODO
-
