@@ -1,11 +1,14 @@
 #!/bin/bash
 
-# NodeJS
+# NodeJS / PM2
 pacman -S nodejs npm --noconfirm
 npm install -g n
 n stable
 hash -r
 npm install -g pm2
+rm -Rf ~/.pm2
+mkdir -p /data/var/pm2
+ln -s /data/var/pm2 ~/.pm2
 
 # MPV (RC2)
 pacman -Sy mpv --noconfirm
@@ -22,3 +25,6 @@ npm install
 
 # AUDIO
 cp ./asound.conf /etc/asound.conf
+
+# PM2 START & SAVE
+# TODO
