@@ -161,6 +161,8 @@ permissions=
 hidden=false
 mac-address-blacklist=
 mode=ap
+band=bg
+channel=6
 ssid=$NAME
 
 [wifi-security]
