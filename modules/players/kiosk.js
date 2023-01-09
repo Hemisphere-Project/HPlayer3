@@ -119,12 +119,12 @@ class KioskPI extends Kiosk {
         else 
         {
             this.log('startink kiosk: ', 
-                '--url', `"http://localhost:${this.getConf('webserver.port')}/${this.getConf('kiosk.theme')}"`,
+                '--url', `http://localhost:${this.getConf('webserver.port')}/${this.getConf('kiosk.theme')}`,
                 '--rotate', `${this.getVideomode()}`)
 
 
             this.kioskprocess = spawn('kiosk', [
-                                        '--url', `"http://localhost:${this.getConf('webserver.port')}/${this.getConf('kiosk.theme')}"`,
+                                        '--url', `http://localhost:${this.getConf('webserver.port')}/${this.getConf('kiosk.theme')}`,
                                         '--rotate', `${this.getVideomode()}`])
 
             // Program auto-respawn once terminated
