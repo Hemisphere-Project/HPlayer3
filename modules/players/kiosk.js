@@ -10,7 +10,7 @@ class Kiosk extends Baseplayer {
         this.requires('gpio')
     }
 
-    init() 
+    init()  
     {    
         this.log('starting')
 
@@ -95,15 +95,25 @@ class KioskPI extends Kiosk {
         }
 
         // Stop Weston/Cog/Kiosk
+        // try {
+        //     execSync('pkill weston')
+        //     execSync('pkill cog')
+        //     execSync('pkill kiosk')
+        //     this.log('kiosk killed')
+        // }
+        // catch (error) {
+        //     //this.log(error.status)
+        // }
+
+        // Stop startX
         try {
-            execSync('pkill weston')
-            execSync('pkill cog')
-            execSync('pkill kiosk')
-            this.log('kiosk killed')
+            execSync('pkill Xorg')
+            this.log('Xorg killed')
         }
         catch (error) {
             //this.log(error.status)
         }
+
     }
 
     startProcess() 
@@ -118,14 +128,13 @@ class KioskPI extends Kiosk {
         if (this.kioskprocess) this.restartProcess()
         else 
         {
-            this.log('startink kiosk: ', 
+            var args = [
                 '--url', `http://localhost:${this.getConf('webserver.port')}/${this.getConf('kiosk.theme')}`,
-                '--rotate', `${this.getVideomode()}`)
+                '--rotate', `${this.getVideorotate()}`,
+                '--reflect', `${this.getVideoflip()?'x':'n'}`]
 
-
-            this.kioskprocess = spawn('kiosk', [
-                                        '--url', `http://localhost:${this.getConf('webserver.port')}/${this.getConf('kiosk.theme')}`,
-                                        '--rotate', `${this.getVideomode()}`])
+            this.log('kiosk', ...args)
+            this.kioskprocess = spawn('kiosk', args)
 
             // Program auto-respawn once terminated
             this.kioskprocess.on('exit', (code, signal) => 
@@ -153,52 +162,23 @@ class KioskPI extends Kiosk {
     {
         if (this.kioskprocess) this.stopProcess(true)
         else this.startProcess()
-    }
-
-
-    makeVideomode(degree, flip)
-    {
-        degree = degree % 360
-        if (degree%90 != 0) degree = 0
-        
-        var mode = ''
-        if (degree != 0) 
-        {
-            if (flip) mode = 'flipped-'
-            mode += 'rotate-'+degree
-        }
-        else if (flip) mode = 'flipped'
-        else mode = 'normal'
-
-        return mode
-    }
-
-    getVideomode()
-    {
-        return this.makeVideomode( this.getConf('kiosk.videorotate'), this.getConf('kiosk.videoflip'))
-    }
-    
+    }   
 
     setVideorotate(degree)
     {
         degree = degree % 360
         if (degree%90 != 0) degree = 0
 
-        let currentMode = this.getVideomode()
-        let newMode = this.makeVideomode( degree, this.getConf('kiosk.videoflip'))
-        if (newMode != currentMode) 
+        if (degree != this.getConf('kiosk.videorotate')) 
         {
             this.setConf('kiosk.videorotate', degree)
             this.restartProcess()
         }
     }
 
-
     setVideoflip(doFlip)
     {
-        let currentMode = this.getVideomode()
-        let newMode = this.makeVideomode( this.getConf('kiosk.videorotate'), doFlip)
-        if (newMode != currentMode) 
+        if (doFlip != this.getConf('kiosk.videoflip')) 
         {
             this.setConf('kiosk.videoflip', doFlip)
             this.restartProcess()

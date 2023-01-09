@@ -1,4 +1,6 @@
-
+html {
+  touch-action:none;
+}
 body
 {
   font-family: Helvetica, Sans-Serif;

@@ -1,4 +1,6 @@
-
+html {
+  touch-action:none;
+}
 
 /*HIDE SCROLLBAR*/
 *{
