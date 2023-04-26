@@ -74,7 +74,10 @@ class WifiPI extends Wifi
         this.status = null
 
         this.checkRate = 5000                           // 5s
-        this.discoCounter = 30 * 1000/this.checkRate    // 20s
+        this.discoCounter = 30 * 1000/this.checkRate    // 30s
+
+        // Disable already launched Hotspot
+        this.hotspotOFF().catch(() => {})
 
         // Disable watchers
         if (this.turnoffWatcher) clearTimeout(this.turnoffWatcher)
@@ -100,12 +103,14 @@ class WifiPI extends Wifi
                             if (status['state'] == "disconnected") 
                             {
                                 // Previous state was connected OR maxretry reached => create hotspot
-                                if ((this.status && this.status['state'] == 'connected') || this.discoCounter-- == 0)
+                                if (this.discoCounter >= 0 && ((this.status && this.status['state'] == 'connected') || this.discoCounter-- == 0)) 
                                 {
                                     this.log('wlan0 disconnected -> enabling hotspot')
-                                    this.hotspotMode()
+                                    this.hotspotON()
+                                    this.discoCounter = -1 // disable disco counter
                                 }
-                                else this.log('wlan0 disconnected, waiting for connection..')
+                                else if (this.discoCounter >= 0 || (this.status && this.status['state'] != status['state'])) 
+                                    this.log('wlan0 disconnected, waiting for connection..', this.discoCounter)
                             }
                             
                             // Save status
@@ -122,7 +127,7 @@ class WifiPI extends Wifi
     }
 
     // create AP based on wlan0-hotspot
-    hotspotMode()
+    hotspotON()
     {
         return new Promise((resolve, reject) => 
         {
@@ -144,6 +149,24 @@ class WifiPI extends Wifi
         })
     }
 
+    // Turnoff Hotspot
+    hotspotOFF()
+    {
+        return new Promise((resolve, reject) =>
+        {
+            this.log('turning off hotspot')
+            this.network
+                .connectionDown("wlan0-hotspot")
+                .then((data) => {
+                    this.log('hotspot turned off')
+                    resolve()
+                })
+                .catch((error) => {
+                    this.log('hotspot turn off error:', error)
+                    reject()
+                });
+        })
+    }
 
     // watch for hotspot turnoff
     watchTurnoff()
@@ -155,15 +178,9 @@ class WifiPI extends Wifi
         this.turnoffWatcher = setTimeout(() => {
             this.log('turning off hotspot')
             this.turnoffWatcher = null
-            this.network
-                .connectionDown("wlan0-hotspot")
-                .then((data) => {
-                    this.log('hotspot turned off')
-                })
-                .catch((error) => {
-                    this.log('hotspot turn off error:', error)
-                });
+            this.hotspotOFF()
         }, this.getTurnoff() * 1000 * 60)
+        this.log('hotspot will turn off in', this.getTurnoff(), 'minutes')
     }
 
     isConfigurable() {
