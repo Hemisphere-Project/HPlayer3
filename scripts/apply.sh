@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$#" -ne 2 ]; then
-    echo "USAGE: $0 <hostname> <script-to-execute>"
+    echo "USAGE: $0 <hostname-or-ip> <script-to-execute>"
     exit 1
 fi
 
