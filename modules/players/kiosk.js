@@ -66,6 +66,24 @@ class Kiosk extends Baseplayer {
         this.log("Can't set video flip on this machine...")
     }
 
+    getDevtools() {
+        return this.getConf('kiosk.devtools')
+    }
+    
+    setDevtools(doDevtools)
+    {
+        this.log("Can't set devtools on this machine...")
+    }
+
+    getCursor() {
+        return this.getConf('kiosk.cursor')
+    }
+    
+    setCursor(doCursor)
+    {
+        this.log("Can't set cursor visibility on this machine...")
+    }
+
     getTheme(theme){
         return this.getConf('kiosk.theme')
     }
@@ -131,7 +149,11 @@ class KioskPI extends Kiosk {
             var args = [
                 '--url', `http://localhost:${this.getConf('webserver.port')}/${this.getConf('kiosk.theme')}`,
                 '--rotate', `${this.getVideorotate()}`,
-                '--reflect', `${this.getVideoflip()?'x':'n'}`]
+                '--reflect', `${this.getVideoflip()?'x':'n'}`,
+            ]
+
+            if (this.getConf('kiosk.devtools')) args.push('--devtools')
+            if (!this.getConf('kiosk.cursor')) args.push('--nocursor')
 
             this.log('kiosk', ...args)
             this.kioskprocess = spawn('kiosk', args)
@@ -181,6 +203,24 @@ class KioskPI extends Kiosk {
         if (doFlip != this.getConf('kiosk.videoflip')) 
         {
             this.setConf('kiosk.videoflip', doFlip)
+            this.restartProcess()
+        }
+    }
+
+    setDevtools(doDevtools)
+    {
+        if (doDevtools != this.getConf('kiosk.devtools')) 
+        {
+            this.setConf('kiosk.devtools', doDevtools)
+            this.restartProcess()
+        }
+    }
+
+    setCursor(doCursor)
+    {
+        if (doCursor != this.getConf('kiosk.cursor')) 
+        {
+            this.setConf('kiosk.cursor', doCursor)
             this.restartProcess()
         }
     }
