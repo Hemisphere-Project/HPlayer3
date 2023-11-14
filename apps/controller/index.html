@@ -164,22 +164,42 @@
           <!-- ///////////////////// KIOSK ///////////////////// -->
           <div class="option player kiosk">
             <div class="title_small">Kiosk</div>
-            <label for="videorotate">Video Rotate</label>
-            <select name="videorotate" id="videorotate">
-              <option value="0">0°</option>
-              <option value="90">90°</option>
-              <option value="180">180°</option>
-              <option value="270">270°</option>
-            </select><br>
-            <label for="videoflip">Video Flip</label>
-            <input type="checkbox" name="videoflip" id="videoflip"><br>
-            Thème :
-            <select id="themeSelector">
-              <option value="" selected>Default</option>
-            </select>
-            <a class="themeLink" href="/display" target="_blank"><img class="btn big" src="img/eye.svg"></a>
-            <div id="kioskRestart" ><img class="btn" src="img/loop.svg"></div>
-            <br>
+
+              <label for="themeSelector">Theme</label>
+                  <select id="themeSelector">
+                    <option value="" selected>Default</option>
+                  </select>
+              <a class="themeLink" href="/display" target="_blank"><img class="btn big" src="img/eye.svg"></a>
+              <br />
+
+              <label for="videorotate">Video Rotate</label>
+              <select name="videorotate" id="videorotate">
+                <option value="0">0°</option>
+                <option value="90">90°</option>
+                <option value="180">180°</option>
+                <option value="270">270°</option>
+              </select>
+              <br />
+              
+              
+              
+              <input type="checkbox" name="videoflip" id="videoflip">
+              <label for="videoflip">Video Flip</label>
+              <br />
+              
+              <input type="checkbox" name="devtools" id="devtools">
+              <label for="devtools">Devtools</label>
+              <br />
+              
+              <input type="checkbox" name="cursor" id="cursor">
+              <label for="cursor">Cursor</label>
+              <br />
+              
+              <div id="kioskRestart" >
+                <label for="kioskRestart">Restart Chromium</label>
+                <img class="btn" src="img/loop.svg"></div>
+              <br />
+
             <div class="btn textBtn editCode" file="complement.css" language="css">ADD STYLE</div>
           </div>
 

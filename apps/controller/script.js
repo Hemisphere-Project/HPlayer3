@@ -245,18 +245,30 @@ $(function() {
   })
 
 
+  // VIDEO ROTATE
+  new autoField('#videorotate')
+    .getter(hplayer3.kiosk.getVideorotate)
+    .setter(hplayer3.kiosk.setVideorotate)
+    .refresh()
+
   // VIDEOFLIP
   new autoField('#videoflip')
     .getter(hplayer3.kiosk.getVideoflip)
     .setter(hplayer3.kiosk.setVideoflip)
     .refresh()
 
-
-  // VIDEO ROTATE
-  new autoField('#videorotate')
-    .getter(hplayer3.kiosk.getVideorotate)
-    .setter(hplayer3.kiosk.setVideorotate)
+  // FULLSCREEN
+  new autoField('#devtools')
+    .getter(hplayer3.kiosk.getDevtools)
+    .setter(hplayer3.kiosk.setDevtools)
     .refresh()
+
+  // CURSOR
+  new autoField('#cursor')
+    .getter(hplayer3.kiosk.getCursor)
+    .setter(hplayer3.kiosk.setCursor)
+    .refresh()
+
 
   $('#kioskRestart').click(()=>{
     hplayer3.kiosk.restartProcess()
