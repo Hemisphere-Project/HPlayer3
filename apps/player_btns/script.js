@@ -42,6 +42,11 @@ $(function()
 
   ///////// ON-SCREEN LOGGER /////////////
   // hplayer3.logger.toggle(true)
+  // setInterval(() => {
+  //   console.log('log OK')
+  //   console.warn('warn OK')
+  //   console.error('err OK')
+  // }, 2000) 
 
 
 
