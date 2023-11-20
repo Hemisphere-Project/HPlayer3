@@ -70,7 +70,7 @@ class System extends Module
     this.kiosk = new Kiosk(this)
 
     // MPV
-    this.mpv = new Mpv(this)
+    if(process.platform != 'darwin') this.mpv = new Mpv(this)
   
     
   }
