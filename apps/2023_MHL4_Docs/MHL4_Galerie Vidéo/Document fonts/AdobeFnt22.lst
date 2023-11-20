@@ -1,0 +1,97 @@
+%!Adobe-FontList 1.22
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/Users/macosphere/Desktop/Git/HPlayer3/apps/2023_MHL4_Bornes_temp/MHL4_Galerie Vidéo/Document fonts/AdobeFnt22.lst
+FileLength:37
+FileModTime:722173405
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/Users/macosphere/Desktop/Git/HPlayer3/apps/2023_MHL4_Bornes_temp/MHL4_Galerie Vidéo/Document fonts/AdobeFnt23.lst
+FileLength:2202
+FileModTime:721683204
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:GGcanut-Extra-Bold
+FamilyName:GGcanut
+StyleName:Extra-Bold
+MenuName:GGcanut
+StyleBits:0
+WeightClass:800
+WidthClass:3
+AngleClass:0
+FullName:GGcanut Extra-Bold
+WritingScript:Roman
+OutlineFileName:/Users/macosphere/Desktop/Git/HPlayer3/apps/2023_MHL4_Bornes_temp/MHL4_Galerie Vidéo/Document fonts/GGcanut Extra-Bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:126532
+FileModTime:721663789
+NameArray:0,Mac,18,GGcanut Extra-Bold
+NameArray:0,Mac,4,GGcanut Extra-Bold
+NameArray:0,Win,1,GGcanut
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:GGcanut-Regular
+FamilyName:GGcanut
+StyleName:Regular
+MenuName:GGcanut
+StyleBits:0
+WeightClass:400
+WidthClass:3
+AngleClass:0
+FullName:GGcanut Regular
+WritingScript:Roman
+OutlineFileName:/Users/macosphere/Desktop/Git/HPlayer3/apps/2023_MHL4_Bornes_temp/MHL4_Galerie Vidéo/Document fonts/GGcanut Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:124996
+FileModTime:721663789
+NameArray:0,Mac,18,GGcanut Regular
+NameArray:0,Mac,4,GGcanut Regular
+NameArray:0,Win,1,GGcanut
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:GGcanut-Medium
+FamilyName:GGcanut
+StyleName:Medium
+MenuName:GGcanut
+StyleBits:0
+WeightClass:500
+WidthClass:3
+AngleClass:0
+FullName:GGcanut Medium
+WritingScript:Roman
+OutlineFileName:/Users/macosphere/Desktop/Git/HPlayer3/apps/2023_MHL4_Bornes_temp/MHL4_Galerie Vidéo/Document fonts/GGcanut-Medium.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:129968
+FileModTime:721663789
+NameArray:0,Mac,18,GGcanut Medium
+NameArray:0,Mac,4,GGcanut Medium
+NameArray:0,Win,1,GGcanut
+%EndFont
+
