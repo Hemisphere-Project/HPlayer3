@@ -41,50 +41,17 @@ img{
 /*----------------TYPO----------------*/
 *{
   font-family: 'GGcanut_Medium';
-  color: rgb(242,150,37);
+  color: rgb(212,186,128);
   -webkit-font-smoothing: antialiased;
 }
-.lightyellow{
-  color: rgb(250,222,164);
-}
-.big_extrabold{
-  font-family: 'GGcanut_ExtraBold';
-  font-size: 28pt;
-  line-height:35pt;
-}
-.big_bold{
+
+.carousel .title{
   font-family: 'GGcanut_Bold';
-  font-size: 28pt;
-  line-height:35pt;
+  font-size: 30pt;
 }
-.big_medium{
-  font-family: 'GGcanut_Medium';
-  font-size: 28pt;
-  line-height:35pt;
-}
-.normal_extrabold{
-  font-family: 'GGcanut_ExtraBold';
-  font-size: 22pt;
-  line-height:28pt;
-}
-.normal_bold{
+.carousel .dates{
   font-family: 'GGcanut_Bold';
-  font-size: 22pt;
-  line-height:28pt;
-}
-.normal_medium{
-  font-family: 'GGcanut_Medium';
-  font-size: 22pt;
-  line-height:28pt;
-}
-.normal_regular{
-  font-family: 'GGcanut_Regular';
-  font-size: 22pt;
-  line-height:28pt;
-}
-.little_bold{
-  font-family: 'GGcanut_Bold';
-  font-size: 15pt;
+  font-size: 25pt;
 }
 .capslock{
   text-transform: uppercase;
@@ -123,15 +90,32 @@ body{
   background-image: url("assets/img/BG_gallery.png");
 }
 
+#page_galerie .back{
+  position: fixed;
+  left: 3%;
+  top: 4vh;
+}
+
 #page_galerie .mainTitle{
   position: fixed;
   left: 25%;
   top: 17vh;
 }
 
-#page_galerie .item{
-  margin-left: 7%;
+#page_galerie .carousel {
+  top: 47vh;
+  text-align: center;
 }
+#page_galerie .carousel *{
+  margin-bottom: 10px;
+}
+#page_galerie .carousel .item{
+  margin-left: 5%;
+}
+#page_galerie .carousel img{
+  height:35vh;
+}
+
 
 
 .flickity-button{

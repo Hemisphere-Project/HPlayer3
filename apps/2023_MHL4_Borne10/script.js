@@ -98,9 +98,7 @@ $(function(){
       cellAlign: 'left',
       pageDots: false,
       contain: true,
-      // arrowShape: '',
       selectedAttraction: 0.2,
-      // friction: 1,
       draggable: true,
       lazyLoad: 2,
       freeScroll: true,
@@ -109,7 +107,18 @@ $(function(){
   }
     let carouselDiv = $('.carousel')
     var carouselFlickity = carouselDiv.flickity(options);
+
+    carouselFlickity.on( 'staticClick.flickity', function( event, pointer, cellElement, cellIndex ) {
+      loadItem($(cellElement).attr('id'))
+    });
+
   }
+
+  function loadItem(id){
+    
+  }
+
+
 
 
   //////////////////////////////////////////////
