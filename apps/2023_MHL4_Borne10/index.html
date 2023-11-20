@@ -1,0 +1,102 @@
+
+<!doctype html>
+<HTML>
+  <HEAD>
+    <title>MHL3 - Borne 15</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <!-- LIBS -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/lib/jquery-3.6.0.min.js"></script>
+    <script src="/assets/lib/eventemitter2.js"></script>
+
+    <!-- HPLAYER3 -->
+    <script src="/assets/js/hplayer3.client.js"></script>
+    <link href="/assets/css/hplayer3.client.css" rel="stylesheet" type="text/css">
+
+    <!-- FLICKITY -->
+    <link rel="stylesheet" href="libs/flickity.css" media="screen">
+    <link rel="stylesheet" href="libs/flickity-fade.css" media="screen">
+    <script src="libs/flickity.pkgd.min.js"></script>
+    <script src="libs/flickity-fade.js"></script>
+
+    <!-- MEDIA GRID -->
+    <script src="mediagrid/mediagrid.js"></script>
+    <link href="mediagrid/mediagrid.css" rel="stylesheet" type="text/css">
+
+    <!-- THEME -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="/conf/complement.css">
+    <script src="script.js"></script>
+
+  </HEAD>
+
+  <BODY>
+
+    <!-- PAGE HOME -->
+    <div class="page" id="page_home">
+      <div id="icon_folder1" class="btn folder_icon" dest="page_maires">
+        <img src="assets/img/folder_maires.png">
+      </div>
+      <div id="icon_folder2" class="btn folder_icon" dest="page_galerie">
+        <img src="assets/img/folder_galerie.png">
+      </div>
+    </div>
+
+
+
+    <!-- PAGE GALERIE -->
+    <div class="page" id="page_galerie" type="custom">
+      
+      <img class="mainTitle" src="assets/img/title_galerie.png">
+      <img class="back" src="assets/img/back.png">
+
+      <div class="carousel">
+
+        <div class="carousel-cell item" id="preview1">
+          <img src="assets/img/galerie/portrait1.png">
+          <div class="title">Portrait 1</div>
+          <div class="dates">1870 - 1967</div>
+        </div>
+
+        <div class="carousel-cell item" id="preview2">
+          <img src="assets/img/galerie/portrait2.png">
+          <div class="title">Portrait 2</div>
+          <div class="dates">1200 - 1967</div>
+        </div>
+
+        <div class="carousel-cell item" id="preview3">
+          <img src="assets/img/galerie/portrait3.png">
+          <div class="title">Portrait 3</div>
+          <div class="dates">1980 - 2000</div>
+        </div>
+
+        <div class="carousel-cell item" id="preview4">
+          <img src="assets/img/galerie/portrait4.png">
+          <div class="title">Portrait 4</div>
+          <div class="dates">1950 - 1965</div>
+        </div>
+
+        <div class="carousel-cell item" id="preview5">
+          <img src="assets/img/galerie/portrait5.png">
+          <div class="title">Portrait 5</div>
+          <div class="dates">1950 - 1965</div>
+        </div>
+
+      </div>
+
+      <!-- <div class="feuille" id="feuille1">
+        <div class="content">
+        </div>
+      </div> -->
+
+    </div>
+
+
+    <!-- VIDEO PLAYER -->
+    <div class="page" id="page_video" type="player"></div>
+
+  </BODY>
+
+</HTML>
