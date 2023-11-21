@@ -34,45 +34,46 @@ $(function(){
   $('#page_home').show()
 
   
-  /// BUILD GRIDS ///
+  /// BUILD GALLERY ///
   ///
-  $("div[type='mediagrid']").each((i, page) => {
-
+  $("div[type='gallery']").each((i, page) => {
     // Folder from id
     let folder = $(page).attr('id')
+    
+    // Clear destination (page must be visible while constructing flickity carrousel)
+    $(page).empty().show()  
 
-    // Clear destination
-    $(page).empty()
+    // Fill Galleries
+    carrouselFolder(hplayer3, page, folder, {wrapAround: false})
+    .then((carrousel) => {
+        // hide page once carrousel is ready
+        $(page).hide()  
 
-    // Close BTN
-    $('<div class="closeBtn">').appendTo(page)
-
-    // Fill Grid
-    mediaGrid(hplayer3, page, folder)
-      .then((grid) => {
-
-        // onCLICK => PLAY VIDEO
-        grid.find('.item-video').on('click', function ()
-        {
-          $("#page_video").fadeIn(0)
-          player.play('/media/'+folder+'/'+$(this).data("media"))
-        })
-
+        // flickity close button (rewind) becomes our closeBtn
+        carrousel.find('.carrousel-close-button').on('click', closePages)
       })
-
   })
+
 
   /// ACTIONS ///
   ///
   $('.folder_icon').click(function()
   {
+
+    // VIDEO: PLAY
+    var video = $(this).attr("video")
+    if (video) {
+      $("#page_video").fadeIn(0)
+      player.play('/media/'+video+'.mp4')
+    }
+
     // DEST: SHOW PAGE
     var dest = $(this).attr("dest")
     if (dest) {
       $('#page_home').fadeOut(0)
       $("#"+dest).fadeIn(fadeTime)
     }
-    
+
   })
 
   /// CLOSE ///
