@@ -53,6 +53,44 @@ img{
   font-family: 'GGcanut_Bold';
   font-size: 25pt;
 }
+
+.bigTitle{
+  font-family: 'GGcanut_ExtraBold';
+  font-size: 50pt;
+}
+.textTitle{
+  font-family: 'GGcanut_Bold';
+  font-size: 24pt;
+}
+.textMain{
+  font-family: 'GGcanut_Medium';
+  font-size: 20pt;
+  line-height: 26pt;
+}
+.textLegend1{
+  font-family: 'GGcanut_Bold';
+  font-size: 22pt;
+}
+.textLegend2{
+  font-family: 'GGcanut_Bold';
+  font-size: 15pt;
+}
+
+
+
+.violet{
+  color: rgb(142,66,146);
+}
+.violetclair{
+  color: rgb(198,163,204);
+}
+.dore{
+  color: rgb(212,186,128)
+}
+.doreclair{
+  color: rgb(226,211,182)
+}
+
 .capslock{
   text-transform: uppercase;
 }
@@ -122,13 +160,82 @@ body{
   display:none;
 }
 
+/*---------------- PAGE PORTRAITS ----------------*/
+
+#page_portraits{
+  display: none;
+  background-image: url("assets/img/BG_galleryitem.png");
+}
+#page_portraits .portrait{
+  display: none;
+}
+
+#page_portraits .bigTitle{
+  position: fixed;
+  left: 5%;
+  top: 3vh;
+}
+#page_portraits .bigSpacer{
+  height: 2px;
+  background-color: rgb(142,66,146);
+  margin-bottom: 20px;
+  position: fixed;
+  left: 1%;
+  top: 12vh;
+  width: 98%;
+}
+
+#page_portraits .portraitTitle{
+  position: fixed;
+  left: 7%;
+  top: 12vh;
+}
+
+#page_portraits .portraitImg{
+  position: fixed;
+  left: 16%;
+  top: 33vh;
+  width: 32%;
+}
+#page_portraits p{
+  margin-top: 0;
+  margin-bottom:12px;
+}
+#page_portraits .text{
+  position: fixed;
+  left: 53%;
+  top: 33vh;
+  width: 32%;
+}
+#page_portraits .textSpacer{
+  height: 2px;
+  background-color: rgb(212,186,128);
+  margin-bottom: 20px;
+}
+
+#page_portraits .prev{
+  position: fixed;
+  top: 53vh;
+  left: 5%;
+}
+#page_portraits .next{
+  position: fixed;
+  top: 53vh;
+  right: 5%;
+}
+
+#page_portraits .closePortrait{
+  position: fixed;
+  top: 32px;
+  right: 3%;
+}
 
 
 
 
-/*---------------- CLOSE ----------------*/
+
+
 .closeBtn {
-  /* display: none; */
   z-index: 12;
   position: absolute;
   background-color: transparent;
@@ -139,5 +246,5 @@ body{
   width: 66px;
   height: 66px;
   top: 32px;
-  right: 32px;
+  right: 3%;
 }
