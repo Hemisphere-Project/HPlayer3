@@ -137,11 +137,11 @@ body{
 #page_galerie .mainTitle{
   position: fixed;
   left: 25%;
-  top: 17vh;
+  top: 10vh;
 }
 
 #page_galerie .carousel {
-  top: 47vh;
+  top: 43vh;
   text-align: center;
 }
 #page_galerie .carousel *{
@@ -151,7 +151,7 @@ body{
   margin-left: 5%;
 }
 #page_galerie .carousel img{
-  height:35vh;
+  height:38vh;
 }
 
 
@@ -160,7 +160,7 @@ body{
   display:none;
 }
 
-/*---------------- PAGE PORTRAITS ----------------*/
+/*---------------- PAGE PORTRAITS & PAGE MAIRES----------------*/
 
 #page_portraits{
   display: none;
@@ -169,13 +169,16 @@ body{
 #page_portraits .portrait{
   display: none;
 }
+#page_maires .maire{
+  display: none;
+}
 
-#page_portraits .bigTitle{
+.pageFeuilletoir .bigTitle{
   position: fixed;
   left: 5%;
   top: 3vh;
 }
-#page_portraits .bigSpacer{
+.pageFeuilletoir .bigSpacer{
   height: 2px;
   background-color: rgb(142,66,146);
   margin-bottom: 20px;
@@ -185,46 +188,46 @@ body{
   width: 98%;
 }
 
-#page_portraits .portraitTitle{
+.pageFeuilletoir .portraitTitle{
   position: fixed;
   left: 7%;
-  top: 12vh;
+  top: 14vh;
 }
 
-#page_portraits .portraitImg{
+.pageFeuilletoir .portraitImg{
   position: fixed;
   left: 16%;
-  top: 33vh;
+  top: 35vh;
   width: 32%;
 }
-#page_portraits p{
+.pageFeuilletoir p{
   margin-top: 0;
   margin-bottom:12px;
 }
-#page_portraits .text{
+.pageFeuilletoir .text{
   position: fixed;
   left: 53%;
-  top: 33vh;
+  top: 35vh;
   width: 32%;
 }
-#page_portraits .textSpacer{
+.pageFeuilletoir .textSpacer{
   height: 2px;
   background-color: rgb(212,186,128);
   margin-bottom: 20px;
 }
 
-#page_portraits .prev{
+.pageFeuilletoir .prev{
   position: fixed;
-  top: 53vh;
+  top: 57vh;
   left: 5%;
 }
-#page_portraits .next{
+.pageFeuilletoir .next{
   position: fixed;
-  top: 53vh;
+  top: 57vh;
   right: 5%;
 }
 
-#page_portraits .closePortrait{
+.closePortrait, .closeMaires{
   position: fixed;
   top: 32px;
   right: 3%;

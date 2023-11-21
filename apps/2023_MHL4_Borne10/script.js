@@ -35,6 +35,9 @@ $(function(){
     $('#page_home').fadeOut(0)
     $("#"+dest).fadeIn(fadeTime)
     if(dest=="page_galerie"){ loadGalerie() }
+    if(dest=="page_maires"){ 
+      indexMaire = 0
+      showMaire() }
   })
 
   /// CLOSE ///
@@ -44,12 +47,11 @@ $(function(){
     $('.displayed').removeClass('displayed').hide()
     $('#page_home').fadeIn(fadeTime)
   }
-  $('.back,.closeBtn').click( closePages )
+  $('.back,.closeBtn,.closeMaires').click( closePages )
 
   $('.closePortrait').click(function(){
     $("#page_portraits").fadeOut(fadeTime)
     $('.displayed').removeClass('displayed').fadeOut(fadeTime)
-
   })
 
 
@@ -73,8 +75,10 @@ $(function(){
     let carouselDiv = $('.carousel')
     var carouselFlickity = carouselDiv.flickity(options);
 
+    carouselFlickity.flickity( 'selectCell', 0.5, false, true );
+
     carouselFlickity.on( 'staticClick.flickity', function( event, pointer, cellElement, cellIndex ) {
-      loadItem($(cellElement).attr('href'))
+      if($(cellElement).hasClass('item')) {loadItem($(cellElement).attr('href'))}
     });
   }
 
@@ -88,15 +92,15 @@ $(function(){
   // PAGE PORTRAITS
   //////////////////////////////////////////////
 
-  $('.next').click(() => {
+  $('#page_portraits .next').click(() => {
     showPortrait(1)
   })
-  $('.prev').click(() => {
+  $('#page_portraits .prev').click(() => {
     showPortrait(-1)
   })
 
-  document.addEventListener('swipeleft', () => $('.next').click())
-  document.addEventListener('swiperight', () => $('.prev').click())
+  document.addEventListener('swipeleft', () => $('#page_portraits .next').click())
+  document.addEventListener('swiperight', () => $('#page_portraits .prev').click())
 
   function showPortrait(increment){
     var list =   $('.portrait')
@@ -104,10 +108,42 @@ $(function(){
     var target = (index + increment) % list.length; 
     $('.portrait.displayed').removeClass('displayed').hide()
     list.eq(target).addClass('displayed').fadeIn(fadeTime)
-
   }
 
 
+  //////////////////////////////////////////////
+  // PAGE MAIRES
+  //////////////////////////////////////////////
+
+  var indexMaire
+
+  $('#page_maires .next').click(() => {
+    indexMaire ++
+    showMaire()
+  })
+  $('#page_maires .prev').click(() => {
+    indexMaire --
+    showMaire()
+  })
+
+  document.addEventListener('swipeleft', () => $('#page_maires .next').click())
+  document.addEventListener('swiperight', () => $('#page_maires .prev').click())
+
+  function showMaire(){
+
+    // if(indexMaire >= $('.maire').length){ indexMaire=0 }
+    // else if(indexMaire==-1){ indexMaire=$('.maire').length-1 }
+
+    if(indexMaire==0){ $('#page_maires .prev').hide() }
+    else{ $('#page_maires .prev').show() }
+    if(indexMaire >= $('.maire').length){ closePages() }
+    
+
+    $('.maire.displayed').removeClass('displayed').hide()
+    $('.maire').eq(indexMaire).addClass('displayed').fadeIn(fadeTime)
+
+
+  }
 
 
 
