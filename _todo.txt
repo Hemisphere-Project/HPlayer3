@@ -49,3 +49,4 @@ H: 01-GadagneA -> switch to hmsphr wifi
 H: 02-GadagneB -> upgrade HPlayer3 / Pi-tools / wifi profiles
 H: 03-GadagneC -> webplayer upgrade / boot plymouth / full system update
 H: 04-GadagneD -> upgrade HPlayer3 / Pi-tools / wifi profiles / XORG/CHROMIUM Kiosk 
+H: 05-GadagneE -> asound fix
