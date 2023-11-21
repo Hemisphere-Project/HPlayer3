@@ -67,7 +67,7 @@ $(function(){
       draggable: true,
       lazyLoad: 2,
       freeScroll: true,
-      freeScrollFriction: 0.08,
+      freeScrollFriction: 0.2,
       wrapAround: true
   }
     let carouselDiv = $('.carousel')
