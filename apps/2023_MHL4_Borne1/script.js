@@ -2,6 +2,8 @@
 // /media subdirectory
 var mediaSubfolder = ""
 
+var fadeTime = 200;
+
 $(function(){
 
   /// HPLAYER3 ///
@@ -97,7 +99,7 @@ $(function(){
     var dest = $(this).attr("dest")
     if (dest) {
       $('#page_home').fadeOut(0)
-      $("#"+dest).fadeIn(0)
+      $("#"+dest).fadeIn(fadeTime)
     }
 
   })
@@ -106,51 +108,10 @@ $(function(){
   function closePages() {
     player.stop()
     $(".page").hide()
-    $('#page_home').fadeIn(400)
+    $('#page_home').fadeIn(fadeTime)
   }
   
   $('.closeBtn').click( closePages )
 
-  // //////////////////////////////////////////////
-  // // PAGE DEVENIRS D'USINES
-  // //////////////////////////////////////////////
-
-  // var sheet
-  // var interval
-
-  // $('.next').click(() => {
-  //   sheet ++
-  //   showFeuille()
-  // })
-  // $('.prev').click(() => {
-  //   sheet --
-  //   showFeuille()
-  // })
-
-  // document.addEventListener('swipeleft', () => $('.next').click())
-  // document.addEventListener('swiperight', () => $('.prev').click())
-
-  // function showFeuille(){
-
-  //   if(sheet>12){ sheet=1 }
-  //   else if(sheet==0){ sheet=12 }
-  //   $('.feuille.visible').removeClass('visible').hide()
-  //   $('#feuille'+sheet).addClass('visible').show()
-
-  //   $('.after').fadeOut(0)
-  //   $('.before').fadeIn(0)
-  //   clearInterval(interval)
-
-  //   interval = setInterval(function(){
-  //     console.log('GO')
-  //     if($('#feuille'+sheet+' img.after').is(':visible')){
-  //      $('#feuille'+sheet+' img.after').fadeOut(0)
-  //      $('#feuille'+sheet+' img.before').fadeIn(0)
-  //     }else{
-  //       $('#feuille'+sheet+' img.before').fadeOut(0)
-  //       $('#feuille'+sheet+' img.after').fadeIn(0)
-  //     }
-  //   }, 3000);
-  // }
 
 });
