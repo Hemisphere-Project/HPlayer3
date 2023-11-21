@@ -15,7 +15,7 @@ $(function(){
   hplayer3.disableZoom()
 
   /// ENABLE SWIPE EVENTS ///
-  hplayer3.swiper()
+  hplayer3.swiper(100)
 
   // /// GO HOME WHEN INACTIVE ///
   hplayer3.inactivity( 60, ()=> {
@@ -67,7 +67,7 @@ $(function(){
       draggable: true,
       lazyLoad: 2,
       freeScroll: true,
-      freeScrollFriction: 0.2,
+      freeScrollFriction: 0.1,
       wrapAround: true
   }
     let carouselDiv = $('.carousel')
