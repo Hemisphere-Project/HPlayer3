@@ -1,0 +1,67 @@
+
+<!doctype html>
+<HTML>
+  <HEAD>
+    <title>MHL4 - Borne 1</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <!-- LIBS -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/lib/jquery-3.6.0.min.js"></script>
+    <script src="/assets/lib/eventemitter2.js"></script>
+
+    <!-- HPLAYER3 -->
+    <script src="/assets/js/hplayer3.client.js"></script>
+    <link href="/assets/css/hplayer3.client.css" rel="stylesheet" type="text/css">
+
+    <!-- MEDIA GRID -->
+    <script src="mediagrid/mediagrid.js"></script>
+    <link href="mediagrid/mediagrid.css" rel="stylesheet" type="text/css">
+
+    <!-- CARROUSEL -->
+    <link rel="stylesheet" href="carrousel/flickity.css" media="screen">
+    <link rel="stylesheet" href="carrousel/flickity-fade.css" media="screen">
+    <script src="carrousel/flickity.pkgd.min.js"></script>
+    <script src="carrousel/flickity-fade.js"></script>
+    <script src="carrousel/carrousel.js"></script>
+    <link href="carrousel/carrousel.css" rel="stylesheet" type="text/css">
+
+    <!-- THEME -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="/conf/complement.css">
+    <script src="script.js"></script>
+
+  </HEAD>
+
+  <BODY>
+
+    <!-- PAGE HOME -->
+    <div class="page" id="page_home">
+      <div id="icon_folder1" class="btn folder_icon" dest="B06_lyon">
+        <img src="assets/img/folder_lyon.png">
+      </div>
+      <div id="icon_folder2" class="btn folder_icon" dest="B06_faireface">
+        <img src="assets/img/folder_faireface.png">
+      </div>
+      <div id="icon_folder3" class="btn folder_icon" dest="B06_sengager">
+        <img src="assets/img/folder_sengager.png">
+      </div>
+    </div>
+
+    <!-- B06_lyon -->
+    <div class="page" id="B06_lyon" type="mediagrid"></div>
+
+    <!-- B06_faireface -->
+    <div class="page" id="B06_faireface" type="mediagrid"></div>
+
+    <!-- B06_sengager -->
+    <div class="page" id="B06_sengager" type="mediagrid"></div>
+    
+
+    <!-- VIDEO PLAYER -->
+    <div class="page" id="page_video" type="player"></div>
+
+  </BODY>
+
+</HTML>
