@@ -99,9 +99,6 @@ $(function(){
     showPortrait(-1)
   })
 
-  document.addEventListener('swipeleft', () => $('#page_portraits .next').click())
-  document.addEventListener('swiperight', () => $('#page_portraits .prev').click())
-
   function showPortrait(increment){
     var list =   $('.portrait')
     var index =  list.index($('.displayed'))
@@ -122,14 +119,9 @@ $(function(){
     showMaire()
   })
   $('#page_maires .prev').click(() => {
-    if(indexMaire>0){ //prevent swiping prev on first page
-      indexMaire --
-      showMaire()
-    }
+    indexMaire --
+    showMaire()
   })
-
-  document.addEventListener('swipeleft', () => $('#page_maires .next').click())
-  document.addEventListener('swiperight', () => $('#page_maires .prev').click())
 
   function showMaire(){
     if(indexMaire==0){ $('#page_maires .prev').hide() }
