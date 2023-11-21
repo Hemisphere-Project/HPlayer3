@@ -80,8 +80,8 @@ $(function(){
 
   function loadItem(id){
     $("#page_portraits").fadeIn(fadeTime)
+    $('.displayed').removeClass('displayed').hide() // sécu
     $("#"+id).addClass('displayed').fadeIn(fadeTime)
-    activePortrait = id
   }
 
   //////////////////////////////////////////////
