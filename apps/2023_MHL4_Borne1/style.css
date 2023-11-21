@@ -107,18 +107,18 @@ body{
 /*---------------- PAGE HOME ----------------*/
 #page_home #icon_folder1{
   position: fixed;
-  left: 0;
-  top: 8vh;
+  left: calc(371px - 144px);
+  top: calc(200px - 13px);
 }
 #page_home #icon_folder2{
   position: fixed;
-  left: 9.5%;
-  top: 52vh;
+  left: calc(371px - 142px);
+  top: calc(657px - 34px);
 }
 #page_home #icon_folder3{
   position: fixed;
-  left: 57%;
-  top: 52vh;
+  left: calc(1140px - 128px);
+  top: calc(689px - 89px);
 }
 
 /*---------------- PAGE PLAYER ----------------*/
@@ -147,7 +147,7 @@ body{
 }
 
 
-/*---------------- PAGE ARCHIVES ----------------*/
+/*---------------- PAGE ARCHIVES (MEDIAGRID) ----------------*/
 
 #B01_archives {
   background-color: rgb(198,163,204);
@@ -162,54 +162,28 @@ body{
 }
 
 
+/*---------------- PAGE PANORAMA (GALLERY) ----------------*/
 
-/*---------------- PAGE DEVENIRS ----------------*/
-#page_devenirs .feuille{
-  display: none;
-}
-#page_devenirs .before, #page_devenirs .after{
-  position: absolute;
-  margin-left: 7%;
-  top: 10vh;
-  width: 49%;
-  max-height: 86vh;
-}
-#page_devenirs .content{
-  position: absolute;
-  margin-left: 58%;
-  top: 10vh;
-  width: 35%;
-}
-#page_devenirs .text{
-  margin-top: 25px;
-  white-space: pre-line;
+#B01_panorama .flickity-prev-next-button {
+  width: 90px;
+  height: 90px;
 }
 
-#page_devenirs .prev{
-  position: fixed;
-  top:46vh;
-  left:2%;
-  opacity:0.5;
-  width:2.5%;
+#B01_panorama .flickity-prev-next-button.previous {
+  left: 35px;
+  background-image: url('assets/img/btn_prev.png');
 }
-#page_devenirs .next{
-  position: fixed;
-  top:46vh;
-  right:2%;
-  opacity:0.5;
-  width:2.5%;
+
+#B01_panorama .flickity-prev-next-button.next {
+  right: 35px;
+  background-image: url('assets/img/btn_next.png');
 }
-#page_devenirs .close{
-  position: fixed;
-  top:0;
-  right: 0;
+
+#B01_panorama .carrousel-close-button {
+  background-image: url('assets/img/cross.png');
 }
-#page_devenirs .feuille.credits{
-  position: absolute;
-  margin-left: 7%;
-  top: 10vh;
-  width: 85%;
-}
+
+
 
 /*---------------- CLOSE ----------------*/
 .closeBtn {
