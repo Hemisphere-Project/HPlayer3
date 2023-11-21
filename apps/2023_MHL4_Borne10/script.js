@@ -122,31 +122,21 @@ $(function(){
     showMaire()
   })
   $('#page_maires .prev').click(() => {
-    if(indexMaires>0){ //prevent swiping prev on first page
+    if(indexMaire>0){ //prevent swiping prev on first page
       indexMaire --
       showMaire()
     }
-
   })
 
   document.addEventListener('swipeleft', () => $('#page_maires .next').click())
   document.addEventListener('swiperight', () => $('#page_maires .prev').click())
 
   function showMaire(){
-
-    // if(indexMaire >= $('.maire').length){ indexMaire=0 }
-    // else if(indexMaire==-1){ indexMaire=$('.maire').length-1 }
-
     if(indexMaire==0){ $('#page_maires .prev').hide() }
     else{ $('#page_maires .prev').show() }
-    // if(indexMaire==-1){ closePages() } // swipe left still active
     if(indexMaire >= $('.maire').length){ closePages() }
-
-
     $('.maire.displayed').removeClass('displayed').hide()
     $('.maire').eq(indexMaire).addClass('displayed').fadeIn(fadeTime)
-
-
   }
 
 
