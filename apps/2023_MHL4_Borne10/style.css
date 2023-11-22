@@ -47,13 +47,12 @@ img{
 
 .carousel .title{
   font-family: 'GGcanut_Bold';
-  font-size: 30pt;
+  font-size: 20pt;
 }
 .carousel .dates{
   font-family: 'GGcanut_Bold';
-  font-size: 25pt;
+  font-size: 18pt;
 }
-
 .bigTitle{
   font-family: 'GGcanut_ExtraBold';
   font-size: 50pt;
@@ -70,10 +69,11 @@ img{
 .textLegend1{
   font-family: 'GGcanut_Bold';
   font-size: 22pt;
+  line-height: 26pt;
 }
 .textLegend2{
   font-family: 'GGcanut_Bold';
-  font-size: 15pt;
+  font-size: 14pt;
 }
 
 
@@ -145,13 +145,14 @@ body{
   text-align: center;
 }
 #page_galerie .carousel *{
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 #page_galerie .carousel .item{
   margin-left: 5%;
 }
 #page_galerie .carousel img{
   height:38vh;
+  margin-bottom: 20px;
 }
 
 
@@ -191,7 +192,7 @@ body{
 .pageFeuilletoir .portraitTitle{
   position: fixed;
   left: 7%;
-  top: 14vh;
+  top: 13vh;
 }
 
 .pageFeuilletoir .portraitImg{
