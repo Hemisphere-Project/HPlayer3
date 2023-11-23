@@ -141,6 +141,19 @@ body{
   height: 10px; /* if you change this size, also adjust bottom position of .scrollbar .scrollbar_container */
 }
 
+/*---------------- PAGE ARCHIVES (MEDIAGRID) ----------------*/
+
+#B09_revolution {
+  background-color: rgb(198,163,204);
+}
+
+#B09_revolution .mediagrid .item .infos .title {
+  font-family: 'GGcanut_Extrabold';
+}
+
+#B09_revolution .mediagrid .item .image_wrapper {
+  filter: sepia(100%) hue-rotate(220deg) saturate(254%);
+}
 
 /*---------------- PAGE PANORAMA (GALLERY) ----------------*/
 

@@ -33,6 +33,33 @@ $(function(){
   $('.page').hide()
   $('#page_home').show()
 
+  /// BUILD GRIDS ///
+  ///
+  $("div[type='mediagrid']").each((i, page) => {
+
+    // Folder from id
+    let folder = $(page).attr('id')
+
+    // Clear destination
+    $(page).empty()
+
+    // Close BTN
+    $('<div class="closeBtn">').appendTo(page)
+
+    // Fill Grid
+    mediaGrid(hplayer3, page, folder)
+      .then((grid) => {
+
+        // onCLICK => PLAY VIDEO
+        grid.find('.item-video').on('click', function ()
+        {
+          $("#page_video").fadeIn(0)
+          player.play('/media/'+folder+'/'+$(this).data("media"))
+        })
+
+      })
+
+  })
   
   /// BUILD GALLERY ///
   ///
