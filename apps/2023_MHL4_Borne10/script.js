@@ -15,7 +15,7 @@ $(function(){
   hplayer3.disableZoom()
 
   /// ENABLE SWIPE EVENTS ///
-  hplayer3.swiper()
+  hplayer3.swiper(100)
 
   // /// GO HOME WHEN INACTIVE ///
   hplayer3.inactivity( 60, ()=> {
@@ -35,6 +35,9 @@ $(function(){
     $('#page_home').fadeOut(0)
     $("#"+dest).fadeIn(fadeTime)
     if(dest=="page_galerie"){ loadGalerie() }
+    if(dest=="page_maires"){ 
+      indexMaire = 0
+      showMaire() }
   })
 
   /// CLOSE ///
@@ -44,12 +47,11 @@ $(function(){
     $('.displayed').removeClass('displayed').hide()
     $('#page_home').fadeIn(fadeTime)
   }
-  $('.back,.closeBtn').click( closePages )
+  $('.back,.closeBtn,.closeMaires').click( closePages )
 
   $('.closePortrait').click(function(){
     $("#page_portraits").fadeOut(fadeTime)
     $('.displayed').removeClass('displayed').fadeOut(fadeTime)
-
   })
 
 
@@ -67,36 +69,35 @@ $(function(){
       draggable: true,
       lazyLoad: 2,
       freeScroll: true,
-      freeScrollFriction: 0.08,
+      freeScrollFriction: 0.1,
       wrapAround: true
   }
     let carouselDiv = $('.carousel')
     var carouselFlickity = carouselDiv.flickity(options);
 
+    carouselFlickity.flickity( 'selectCell', 0.5, false, true );
+
     carouselFlickity.on( 'staticClick.flickity', function( event, pointer, cellElement, cellIndex ) {
-      loadItem($(cellElement).attr('href'))
+      if($(cellElement).hasClass('item')) {loadItem($(cellElement).attr('href'))}
     });
   }
 
   function loadItem(id){
     $("#page_portraits").fadeIn(fadeTime)
+    $('.displayed').removeClass('displayed').hide() // sécu
     $("#"+id).addClass('displayed').fadeIn(fadeTime)
-    activePortrait = id
   }
 
   //////////////////////////////////////////////
   // PAGE PORTRAITS
   //////////////////////////////////////////////
 
-  $('.next').click(() => {
+  $('#page_portraits .next').click(() => {
     showPortrait(1)
   })
-  $('.prev').click(() => {
+  $('#page_portraits .prev').click(() => {
     showPortrait(-1)
   })
-
-  document.addEventListener('swipeleft', () => $('.next').click())
-  document.addEventListener('swiperight', () => $('.prev').click())
 
   function showPortrait(increment){
     var list =   $('.portrait')
@@ -104,10 +105,31 @@ $(function(){
     var target = (index + increment) % list.length; 
     $('.portrait.displayed').removeClass('displayed').hide()
     list.eq(target).addClass('displayed').fadeIn(fadeTime)
-
   }
 
 
+  //////////////////////////////////////////////
+  // PAGE MAIRES
+  //////////////////////////////////////////////
+
+  var indexMaire
+
+  $('#page_maires .next').click(() => {
+    indexMaire ++
+    showMaire()
+  })
+  $('#page_maires .prev').click(() => {
+    indexMaire --
+    showMaire()
+  })
+
+  function showMaire(){
+    if(indexMaire==0){ $('#page_maires .prev').hide() }
+    else{ $('#page_maires .prev').show() }
+    if(indexMaire >= $('.maire').length){ closePages() }
+    $('.maire.displayed').removeClass('displayed').hide()
+    $('.maire').eq(indexMaire).addClass('displayed').fadeIn(fadeTime)
+  }
 
 
 
