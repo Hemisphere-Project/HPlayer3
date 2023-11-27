@@ -59,27 +59,33 @@ $(function(){
   // PAGE GALERIE DE PORTRAITS
   //////////////////////////////////////////////
 
+  var isLoaded = false
+  var carouselFlickity
+
   function loadGalerie(){
-    // Flickity
-    var options = {
-      cellAlign: 'left',
-      pageDots: false,
-      contain: true,
-      selectedAttraction: 0.2,
-      draggable: true,
-      lazyLoad: 2,
-      freeScroll: true,
-      freeScrollFriction: 0.1,
-      wrapAround: true
-  }
-    let carouselDiv = $('.carousel')
-    var carouselFlickity = carouselDiv.flickity(options);
 
-    carouselFlickity.flickity( 'selectCell', 0.5, false, true );
+    if(!isLoaded){
+      isLoaded = true
+      var options = {
+        cellAlign: 'left',
+        pageDots: false,
+        contain: true,
+        selectedAttraction: 0.2,
+        draggable: true,
+        lazyLoad: 2,
+        freeScroll: true,
+        freeScrollFriction: 0.1,
+        wrapAround: true
+    }
+      let carouselDiv = $('.carousel')
+      carouselFlickity = carouselDiv.flickity(options);
+      carouselFlickity.on( 'staticClick.flickity', function( event, pointer, cellElement, cellIndex ) {
+        if($(cellElement).hasClass('item')) {loadItem($(cellElement).attr('href'))}
+      });
+    }else{
+      carouselFlickity.flickity( 'selectCell', 0, false, true );
+    }
 
-    carouselFlickity.on( 'staticClick.flickity', function( event, pointer, cellElement, cellIndex ) {
-      if($(cellElement).hasClass('item')) {loadItem($(cellElement).attr('href'))}
-    });
   }
 
   function loadItem(id){
