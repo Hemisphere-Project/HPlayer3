@@ -164,6 +164,10 @@ body{
 
 /*---------------- PAGE PANORAMA (GALLERY) ----------------*/
 
+#B01_panorama {
+  background-color: black;
+}
+
 #B01_panorama .flickity-prev-next-button {
   width: 90px;
   height: 90px;

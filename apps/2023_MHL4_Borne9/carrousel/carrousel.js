@@ -65,7 +65,7 @@ function carrouselFolder( hplayer3, dest, folder, opts )
                     pageDots: false,
                     contain: true,
                     selectedAttraction: 0.2,
-                    friction: 1,
+                    friction: 0.7,
                     draggable: false,
                     lazyLoad: 2,
                     // fade: true
