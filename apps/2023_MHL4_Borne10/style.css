@@ -81,7 +81,7 @@ img{
 .violet{
   color: rgb(142,66,146);
 }
-.violetclair{
+.violetclair, .violetclair > i{
   color: rgb(198,163,204);
 }
 .dore{
