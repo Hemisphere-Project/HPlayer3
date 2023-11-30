@@ -81,13 +81,13 @@ img{
 .violet{
   color: rgb(142,66,146);
 }
-.violetclair, .violetclair > i{
+.violetclair, .violetclair > i, .violetclair > sup{
   color: rgb(198,163,204);
 }
 .dore{
   color: rgb(212,186,128)
 }
-.doreclair{
+.doreclair, .doreclair > sup{
   color: rgb(226,211,182)
 }
 
