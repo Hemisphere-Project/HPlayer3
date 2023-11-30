@@ -20,7 +20,7 @@ for FILE in *.{mov,mp4,mp3}; do
         # if image missing, create image from video
         if test ! -f ./output/"$IMAGEOUT"; then
         
-            ffmpeg -y -i "$FILE" -vframes 1 -vf "scale=720:480:force_original_aspect_ratio=decrease,pad=720:480:(ow-iw)/2:(oh-ih)/2" ./output/"$IMAGEOUT"
+            ffmpeg -y -i "$FILE" -vframes 1 -ss 00:00:01 -vf "scale=720:480:force_original_aspect_ratio=decrease,pad=720:480:(ow-iw)/2:(oh-ih)/2" ./output/"$IMAGEOUT"
         fi
     fi
 done
