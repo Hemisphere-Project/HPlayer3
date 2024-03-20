@@ -79,12 +79,15 @@ class System extends Module
   {
     this.hp3 = this
 
-    // MAIN PLAYER 
-    this.player = this.getPlayerType() == 'mpv' ? this.mpv : this.kiosk
-    this.on('config.player.type', (type)=>{
-      this.player = type == 'mpv' ? this.mpv : this.kiosk
+    // MAIN PLAYER Select
+    this.on('config.ready', ()=>{
+      this.player = this.getPlayerType() == 'mpv' ? this.mpv : this.kiosk
+      this.on('config.player.type', (type)=>{
+        this.player = type == 'mpv' ? this.mpv : this.kiosk
+        this.log('player type set to', type)
+      })
+      this.log('player type:', this.getPlayerType())
     })
-    
 
     this.emit('ready')
     this.log('READY\n')

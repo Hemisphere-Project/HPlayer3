@@ -2,6 +2,7 @@ const Baseplayer = require('./baseplayer.js')
 const isPi = require('detect-rpi');
 const { execSync } = require('child_process');
 const { spawn } = require('child_process');
+const glob = require('glob');
 
 class Kiosk extends Baseplayer {
 
@@ -223,6 +224,96 @@ class KioskPI extends Kiosk {
             this.setConf('kiosk.cursor', doCursor)
             this.restartProcess()
         }
+    }
+
+    ///////////// PLAYER COMMANDS /////////////
+
+    play(url) {
+        if (!url.startsWith('/')) 
+            url = this.hp3.files.media.path + '/' + url
+        
+        this.log('PLAY', url)
+        var files = glob.sync(url)
+
+        if (files.length > 0) {
+            var media = files[0].replace(this.hp3.files.media.path, '')
+            this.emit('play', media)
+        }
+        else {
+            this.log('No file found: ' + url)
+        }      
+    }
+
+    pause() {
+        this.emit('pause')
+    }
+
+    resume() {
+        this.emit('resume')
+    }
+
+    stop() {
+        this.emit('stop')
+    }
+
+    seek(seconds) {
+        this.emit('seek', seconds)
+    }
+
+    volume(vol) {
+        this.emit('volume', vol)
+    }
+
+    mute() {
+        this.emit('mute')
+    }
+
+    unmute() {
+        this.emit('unmute')
+    }
+
+    toggleMute() {
+        this.emit('toggleMute')
+    }
+
+    setLoop(loop) {
+        this.emit('setLoop', loop)
+    }
+
+    setSpeed(speed) {
+        this.emit('setSpeed')
+    }
+
+    setProperty(prop, value) {
+        this.emit('setProperty', prop, value)
+    }
+
+    getProperty(prop) {
+        this.emit('getProperty', prop)
+    }
+
+    getDuration() {
+        this.emit('getDuration')
+    }
+
+    getTimePosition() {
+        this.emit('getTimePosition')
+    }
+
+    getVolume() {
+        this.emit('getVolume')
+    }
+
+    getMute() {
+        this.emit('getMute')
+    }
+
+    getLoop() {
+        this.emit('getLoop')
+    }
+
+    getSpeed() {
+        this.emit('getSpeed')
     }
 
 }
