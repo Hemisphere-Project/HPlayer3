@@ -46,7 +46,7 @@ class Socketio extends Module
             // Method call: data = ['path.to.method', arg1, arg2, ...]
             //
             socket.on('call', (data, callback) => {
-                // this.log('sio-call', data)
+                this.log('sio-call', data)
                 try {
                     if (!Array.isArray(data)) data = [data]
                     // this.log(data)

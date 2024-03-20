@@ -108,7 +108,7 @@ class Mpv extends Baseplayer {
       if (!url.startsWith('/')) 
         url = this.hp3.files.media.path + '/' + url
 
-      console.log('PLAY', url)
+      this.log('PLAY', url)
       var files = glob.sync(url)
 
       if (files.length > 0) {

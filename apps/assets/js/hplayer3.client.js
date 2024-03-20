@@ -110,6 +110,25 @@ class HPlayer3 extends HModule {
             if (!this.serverUUID) this.serverUUID = uuid
             else if (this.serverUUID != uuid) location.reload()
         });
+
+        // Subscribe to kiosk.* event from backend
+        //
+        this.on('kiosk.play', (data) => {
+            // get first player
+            var player = Object.values(this._players)[0]
+            if (player) player.play('/media'+data)
+        })
+        this.on('kiosk.stop', () => {
+            // get first player
+            var player = Object.values(this._players)[0]
+            if (player) player.stop()
+        })
+        this.on('kiosk.resume', () => {
+            // get first player
+            var player = Object.values(this._players)[0]
+            if (player) player.play()
+        })
+
         
         return new Proxy(this, this);
     }
@@ -281,7 +300,7 @@ class VideoPlayer extends EventTarget {
         this.div = $(div)
         
         // VIDEO ELEMENT
-        this.videoEl = $('<video id="videoplayer" src=""></video>').appendTo(div)
+        this.videoEl = $('<video id="videoplayer" src="" muted></video>').appendTo(div)
         this.video = this.videoEl[0]
         this.video.loop = false
         this.video.mute = false
@@ -455,6 +474,7 @@ class VideoPlayer extends EventTarget {
     // CMD PLAY
     play(media) 
     {
+        console.log('PLAY', media)
         if (media == null) media = this.lastmedia
         else this.lastmedia = media
 
@@ -465,6 +485,7 @@ class VideoPlayer extends EventTarget {
         else if (this.state != 'stop') {
             this.on('stop', ()=>{ this.play(media) }, {once: true})
             this.stop()
+            console.log('rearming play')
             return
         }
 
@@ -508,6 +529,7 @@ class VideoPlayer extends EventTarget {
         else {
             this.state = 'stopping'
             this.video.pause()
+            console.log('['+this.name+'/player] stopping');
         }
     }
 
