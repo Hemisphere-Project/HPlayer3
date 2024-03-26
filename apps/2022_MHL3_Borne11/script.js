@@ -23,7 +23,7 @@ $(function(){
 
   /// VIDEO PLAYER ///
   var player = hplayer3.videoPlayer( "#page_video", { closer: 'touch', scrollbar: false })
-  player.on('stop', () => $("#page_video").fadeOut(0) )
+  player.on('stopped', () => $("#page_video").fadeOut(0) )
 
   /// BUILD GRIDS ///
   $("div[type='mediagrid']").each((i, page) => {

@@ -27,6 +27,7 @@ class GpioPI extends Gpio {
             "T1": 5,
             "T2": 6,
             "T3": 13,
+            "T4": 19,
         }
 
         this.gpio = {}
@@ -38,7 +39,7 @@ class GpioPI extends Gpio {
             Hcon(this.hp3)
             this.log(path+' loaded')
         } catch (e) {
-            this.log('WARNING: '+path+' not found')
+            this.log('ERROR loading '+path+'..', e)
         }
     }
 
@@ -56,11 +57,10 @@ class GpioPI extends Gpio {
         else if (pullUpDown == 'down') pullUpDown = this.PIGPIO.PUD_DOWN
         else if (pullUpDown == 'up') pullUpDown = this.PIGPIO.PUD_UP
 
-        this.gpio[Tnum] = new this.PIGPIO(this.pinout[Tnum], { mode: this.PIGPIO.INPUT, pullUpDown: pullUpDown, alert: true })
+        this.gpio[Tnum] = new this.PIGPIO(pin, { mode: this.PIGPIO.INPUT, pullUpDown: pullUpDown, alert: true })
         this.gpio[Tnum].glitchFilter(10000)
         this.gpio[Tnum].on('alert', (level, tick) => 
         {
-            // this.emit('state.'+Tnum, level == 0)
             this.emit('state', Tnum, level == 0)
             if (callback) {
                 try {
@@ -71,6 +71,21 @@ class GpioPI extends Gpio {
                 }
             }
         })
+    }
+
+    setOutput(Tnum, state) 
+    {
+        let pin = Tnum
+        if (Tnum in this.pinout) pin = this.pinout[Tnum]
+
+        if (!Number.isInteger(pin)) {
+            this.log('setOutput = Invalid pin number: '+pin)
+            return
+        }
+
+        if (!this.gpio[Tnum]) this.gpio[Tnum] = new this.PIGPIO(pin, { mode: this.PIGPIO.OUTPUT })
+        this.gpio[Tnum].digitalWrite(state)
+        this.log('GPIO', Tnum, state)
     }
 
 }

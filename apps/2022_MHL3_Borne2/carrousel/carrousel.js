@@ -46,7 +46,7 @@ function carrouselFolder( hplayer3, dest, folder, opts )
                             lastTime = now
                         })
 
-                        player.on('stop', () => {
+                        player.on('stopped', () => {
                             bar.finish().css({ 'width': '0%' })
                         })
 

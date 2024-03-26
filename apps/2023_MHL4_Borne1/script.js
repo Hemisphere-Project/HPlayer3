@@ -14,7 +14,7 @@ $(function(){
 
   /// VIDEO PLAYER ///
   var player = hplayer3.videoPlayer( "#page_video", { closer: 'touch', scrollbar: true })
-  player.on('stop', () => $("#page_video").fadeOut(300))
+  player.on('stopped', () => $("#page_video").fadeOut(300))
 
   // /// DISABLE ZOOM ///
   hplayer3.disableZoom()

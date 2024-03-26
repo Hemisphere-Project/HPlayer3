@@ -46,7 +46,7 @@ class Socketio extends Module
             // Method call: data = ['path.to.method', arg1, arg2, ...]
             //
             socket.on('call', (data, callback) => {
-                this.log('sio-call', data)
+                // this.log('sio-call', data)
                 try {
                     if (!Array.isArray(data)) data = [data]
                     // this.log(data)
@@ -70,6 +70,21 @@ class Socketio extends Module
                 catch(err) {
                     this.log(err)
                     if (callback) callback( false, String(err) )
+                }
+            })
+
+            // 
+            // Event emit: data = ['event', arg1, arg2, ...]
+            //
+            socket.on('event', (data) => {
+                // this.log('sio-event', data)
+                try {
+                    if (!Array.isArray(data)) data = [data]
+                    var event = data.shift()
+                    this.hp3.player.emit(event, ...data)
+                } 
+                catch(err) {
+                    this.log(err)
                 }
             })
 

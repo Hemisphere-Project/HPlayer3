@@ -14,7 +14,7 @@ $(function()
       $("#page_video").removeClass('fadeout').removeClass('fadein')
   })
 
-  player.on('stop', () => {
+  player.on('stopped', () => {
       $("#page_video").removeClass('fadein').addClass('fadeout')
   })
 
@@ -68,7 +68,7 @@ $(function()
       player.on('playing', simTouch, {once:true})
       
       // Display homepage
-      player.on('stop',  ()=>{
+      player.on('stopped',  ()=>{
         player.off('playing', simTouch)
         setTimeout(()=>{ $('#page_black').hide() }, waveShareTouchFix )
       }, {once:true})

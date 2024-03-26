@@ -2,21 +2,12 @@
 // SYSTEM
 //
 
-- RW bash indication broken
 - Zyre: discover and sync
 - Portail captif 10.0.0.1
 
 //
-// GPIO:
-//
-
-- debounce (wait 300ms for next trigger)
-
-//
 // CONTROLLER:
 //
-
-- modules enable/disable
 
 - live player ctrls 
     => state linked to hp3.player
