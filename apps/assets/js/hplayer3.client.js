@@ -192,7 +192,7 @@ class HPlayer3 extends HModule {
             return this._players[opts.name]
         }
 
-        this._players[opts.name] = new VideoPlayer(div, opts)
+        this._players[opts.name] = new VideoPlayer(div, opts, this)
         return this._players[opts.name]
     }
 
@@ -281,7 +281,7 @@ class HPlayer3 extends HModule {
 //
 class VideoPlayer extends EventTarget {
 
-    constructor(div, opts) 
+    constructor(div, opts, hp3) 
     {
         super()
 
@@ -298,6 +298,7 @@ class VideoPlayer extends EventTarget {
         this.lastmedia = options.media
 
         this.div = $(div)
+        this.hp3 = hp3
         
         // VIDEO ELEMENT
         this.videoEl = $('<video id="videoplayer" src="" muted></video>').appendTo(div)
@@ -335,7 +336,7 @@ class VideoPlayer extends EventTarget {
                     }, 20)
                 this.scrollBar.show()
             })
-            this.on('stop', ()=>{ 
+            this.on('stopped', ()=>{ 
                 clearInterval(this.scrollBarUpdate)
                 this.scrollBar.hide() 
                 $('.scrollbar_left').css('width', '0%')
@@ -349,7 +350,7 @@ class VideoPlayer extends EventTarget {
             this.videoCloser = $('<div class="closer">').appendTo(div).hide()
             this.videoCloser.on('click', ()=>{ this.stop() })
             this.on('playing', ()=>{ this.videoCloser.show() })
-            this.on('stop', ()=>{ this.videoCloser.hide() })
+            this.on('stopped', ()=>{ this.videoCloser.hide() })
         }
         else if (options.closer == 'touch') {
             this.videoEl.on('click', () => { this.stop() });
@@ -396,7 +397,7 @@ class VideoPlayer extends EventTarget {
             }
             // STOPPING
             else if (this.state == 'stopping') {
-                this.state = 'stop'
+                this.state = 'stopped'
                 this.dispatchEvent(new Event(this.state));
             } 
             // PAUSED
@@ -409,8 +410,8 @@ class VideoPlayer extends EventTarget {
         // ENDED
         this.video.addEventListener("ended", () => {
             this.dispatchEvent(new Event('ended'));
-            if (this.state != 'stop') {
-                this.state = 'stop'
+            if (this.state != 'stopped') {
+                this.state = 'stopped'
                 this.dispatchEvent(new Event(this.state));
             }
         }, false);
@@ -437,37 +438,44 @@ class VideoPlayer extends EventTarget {
             this.timeClick = Date.now()
             console.log('['+this.name+'/player] loading');
             this.videoEl.css('visibility','hidden') // Prevent pause image display before video is ready
+            this.hp3.sio.emit('event', ['loading', this.video.getAttribute('src').replace('/media','')])
+            console.log(this.video.getAttribute('src'))
         })
 
         this.on('playing', () => {
             this.endWatchCounter = 0
             this.videoEl.css('visibility', 'visible')
             console.log('['+this.name+'/player] playing (load time = '+(Date.now()-this.timeClick)+'ms)');
+            this.hp3.sio.emit('event', ['playing', this.video.getAttribute('src').replace('/media','')])
         })
 
         this.on('paused', () => {
             console.log('['+this.name+'/player] paused');
+            this.hp3.sio.emit('event', ['paused', this.video.getAttribute('src').replace('/media','')])
         })
 
         this.on('stalled', () => {
             console.log('['+this.name+'/player] stalled');
+            this.hp3.sio.emit('event', ['stalled', this.video.getAttribute('src').replace('/media','')])
         })
 
         this.on('ended', () => {
             console.log('['+this.name+'/player] ended');
+            this.hp3.sio.emit('event', ['ended', this.video.getAttribute('src').replace('/media','')])
         })
 
-        this.on('stop', () => {
-            console.log('['+this.name+'/player] stop');
+        this.on('stopped', () => {
+            console.log('['+this.name+'/player] stopped');
             this.endWatchCounter = 0
             this.videoEl.css('visibility','hidden')
+            this.hp3.sio.emit('event', ['stopped', this.video.getAttribute('src').replace('/media','')])
         })
 
         //
         // STATE INIT
         //
 
-        this.state = 'stop'     // stop - loading - playing - paused - stalled - (stopping)
+        this.state = 'stopped'     // stopped - loading - playing - paused - stalled - (stopping)
         this.dispatchEvent(new Event(this.state));
     }
 
@@ -482,8 +490,8 @@ class VideoPlayer extends EventTarget {
             console.warn("Player already loading/stopping, sorry can't play a new media right now ...")
             return
         } 
-        else if (this.state != 'stop') {
-            this.on('stop', ()=>{ this.play(media) }, {once: true})
+        else if (this.state != 'stopped') {
+            this.on('stopped', ()=>{ this.play(media) }, {once: true})
             this.stop()
             console.log('rearming play')
             return
@@ -499,7 +507,7 @@ class VideoPlayer extends EventTarget {
         // Play
         this.video.play()
             .catch((error) => {
-                this.state = 'stop'
+                this.state = 'stopped'
                 this.dispatchEvent(new Event(this.state));
                 console.error(error)
             })
@@ -509,7 +517,7 @@ class VideoPlayer extends EventTarget {
     // CMD PAUSE
     pause() 
     {
-        if (this.state == 'stop' || this.state == 'stopping') return
+        if (this.state == 'stopped' || this.state == 'stopping') return
 
         if (this.state == 'loading')
             this.on('playing', ()=>{ this.pause() }, {once: true})
@@ -521,7 +529,7 @@ class VideoPlayer extends EventTarget {
     // CMD STOP
     stop() 
     {
-        if (this.state == 'stop' || this.state == 'stopping') return
+        if (this.state == 'stopped' || this.state == 'stopping') return
         
         if (this.state == 'loading') {
             this.on('playing', ()=>{ this.stop() }, {once: true})
