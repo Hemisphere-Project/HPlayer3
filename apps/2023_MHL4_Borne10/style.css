@@ -87,12 +87,20 @@ img{
 .dore{
   color: rgb(212,186,128)
 }
-.doreclair, .doreclair > sup{
+.doreclair, .doreclair > i, .doreclair > sup{
   color: rgb(226,211,182)
 }
 
 .capslock{
   text-transform: uppercase;
+}
+
+/*Hack to maintain line-height correct with sup tags*/
+sup { 
+  vertical-align: top; 
+  position: relative; 
+  top: -0.5em; 
+  font-size: 0.7em;
 }
 
 body{
@@ -213,7 +221,7 @@ body{
 }
 .pageFeuilletoir .textSpacer{
   height: 2px;
-  background-color: rgb(212,186,128);
+  background-color: #e2d3b6;
   margin-bottom: 20px;
 }
 
