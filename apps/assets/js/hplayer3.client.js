@@ -301,7 +301,7 @@ class VideoPlayer extends EventTarget {
         this.hp3 = hp3
         
         // VIDEO ELEMENT
-        this.videoEl = $('<video id="videoplayer" src="" muted></video>').appendTo(div)
+        this.videoEl = $('<video id="videoplayer" src=""></video>').appendTo(div)
         this.video = this.videoEl[0]
         this.video.loop = false
         this.video.mute = false
