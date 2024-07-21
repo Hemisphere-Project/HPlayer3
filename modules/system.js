@@ -12,7 +12,6 @@ const Files = require('./files.js');
 const { EventEmitter2 } = require('eventemitter2')
 const Kiosk = require('./players/kiosk.js')
 const Mpv = require('./players/mpv.js')
-var isPi = require('detect-rpi');
 
 
 class System extends Module

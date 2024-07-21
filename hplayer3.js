@@ -1,11 +1,9 @@
 
 var System = require('./modules/system.js')
-var isPi = require('detect-rpi');
-
 
 // CONFIG
 var config
-if (isPi()) 
+if (System.isPi()) 
     config = {
         'path.conf':  '/data/conf',
         'path.media': '/data/media',

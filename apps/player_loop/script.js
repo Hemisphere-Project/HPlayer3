@@ -13,7 +13,7 @@ $( document ).ready(function()
         .then( data => {
             console.log(data)
 
-            video = data.fileTree.filter((item) => item.type === 'video')[0]
+            video = data.fileTree.filter((item) => (item.type === 'video') || (item.type === 'audio'))[0]
             player.play('/media'+video.path)
         })
     

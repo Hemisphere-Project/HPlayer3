@@ -1,7 +1,6 @@
 
 const Module = require('./module.js')
 const os = require("os");
-const isPi = require('detect-rpi');
 const { execSync } = require('child_process');
 
 class Audio extends Module{
@@ -67,6 +66,13 @@ class AudioPI extends Audio {
 
     init() {
         this.jackCard = parseInt(String(execSync(`aplay -l | grep Headphone | awk '{print $2}' `)).substring(0, 1))
+        
+        this.jackCtrlName = `Headphone`
+        
+        // get name from amixer -c2 scontrols
+        let jackCtrl = String(execSync(`amixer -c`+String(this.jackCard)+` scontrols`)).trim().split("'")[1]
+        if (jackCtrl != '') this.jackCtrlName = jackCtrl
+
         super.init()
     }
 
@@ -109,7 +115,7 @@ class AudioPI extends Audio {
         var vol = 100
         if (this.getOutput() == 'jack') {
             this.log('get jack volume')
-            vol = execSync(`amixer -c`+String(this.jackCard)+` get 'Headphone',0  |grep % |awk '{print $4}'`).toString()
+            vol = execSync(`amixer -c`+String(this.jackCard)+` get '`+String(this.jackCtrlName)+`',0  |grep % |awk '{print $4}'`).toString()
             vol = parseInt(vol.substring(1, vol.length-3))
             this.log('volume is', vol)
         }
@@ -121,7 +127,7 @@ class AudioPI extends Audio {
         if (vol < 0) vol = 0
         
         if (this.getOutput() == 'jack')
-            execSync(`amixer -c`+String(this.jackCard)+` set 'Headphone',0 ${vol}%`)
+            execSync(`amixer -c`+String(this.jackCard)+` set '`+String(this.jackCtrlName)+`',0 ${vol}%`)
 
         vol = this.getVolume()
         this.setConf('audio.volume', vol)
@@ -133,4 +139,4 @@ class AudioPI extends Audio {
 
 
 module.exports = Audio
-if (isPi()) module.exports = AudioPI
+if (Module.isPi()) module.exports = AudioPI

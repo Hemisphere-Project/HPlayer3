@@ -1,7 +1,6 @@
 
 const Module = require('./module.js')
 const os = require("os");
-const isPi = require('detect-rpi');
 const { execSync } = require('child_process');
 const { Stats } = require('fs');
 
@@ -243,4 +242,4 @@ class WifiPI extends Wifi
 }
 
 module.exports = Wifi
-if (isPi()) module.exports = WifiPI
+if (Module.isPi()) module.exports = WifiPI

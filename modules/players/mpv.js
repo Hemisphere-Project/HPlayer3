@@ -1,5 +1,4 @@
 const Baseplayer = require('./baseplayer.js')
-const isPi = require('detect-rpi');
 const mpvAPI = require('node-mpv');
 
 const glob = require('glob');
