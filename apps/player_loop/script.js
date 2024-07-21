@@ -5,7 +5,7 @@ $( document ).ready(function()
     var hplayer3 = new HPlayer3({divlogger:false, controls:true})
 
     //////////////// PLAYER ////////////////
-    var player = hplayer3.videoPlayer( "#videoplayer", { closer: false, scrollbar: false })
+    var player = hplayer3.videoPlayer( "#videoplayer", { closer: false, scrollbar: false, loop: true })
 
     /////////////// MEDIA LIST ///////////////
     let video

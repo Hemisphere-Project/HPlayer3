@@ -10,22 +10,22 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "chokidar": "^3.5.3",
-    "cli-color": "^2.0.3",
+    "chokidar": "^3.6.0",
+    "cli-color": "^2.0.4",
     "detect-rpi": "^1.5.0",
-    "directory-tree": "^3.5.1",
+    "directory-tree": "^3.5.2",
     "eventemitter2": "^6.4.9",
-    "express": "^4.18.2",
-    "express-fileupload": "^1.4.0",
-    "glob": "^8.0.3",
-    "glob-promise": "^6.0.1",
+    "express": "^4.19.2",
+    "express-fileupload": "^1.5.1",
+    "glob": "^8.1.0",
+    "glob-promise": "^6.0.7",
     "node-mpv": "^2.0.0-beta.2",
     "node-wifi": "^2.0.16",
     "pigpio": "^3.3.1",
-    "socket.io": "^4.5.4",
+    "socket.io": "^4.7.5",
     "wifi-name": "^3.1.1"
   },
   "optionalDependencies": {
-    "node-network-manager": "^1.0.10"
+    "node-network-manager": "^1.0.14"
   }
 }

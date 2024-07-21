@@ -291,7 +291,8 @@ class VideoPlayer extends EventTarget {
             name: undefined,
             closer: 'cross',    // cross, touch or false
             scrollbar: true,
-            media: null
+            media: null, 
+            loop: false
         }, ...opts}
 
         this.name = (options.name)?options.name:'player'
@@ -303,7 +304,7 @@ class VideoPlayer extends EventTarget {
         // VIDEO ELEMENT
         this.videoEl = $('<video id="videoplayer" src=""></video>').appendTo(div)
         this.video = this.videoEl[0]
-        this.video.loop = false
+        this.video.loop = options.loop
         this.video.mute = false
         
         // SCROLLBAR
