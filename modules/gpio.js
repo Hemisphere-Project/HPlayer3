@@ -1,7 +1,6 @@
 
 const Module = require('./module.js')
 const os = require("os");
-const isPi = require('detect-rpi');
 
 class Gpio extends Module{
 
@@ -92,4 +91,4 @@ class GpioPI extends Gpio {
 
 
 module.exports = Gpio
-if (isPi()) module.exports = GpioPI
+if (Module.isPi()) module.exports = GpioPI

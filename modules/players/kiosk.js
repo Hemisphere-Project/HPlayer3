@@ -1,5 +1,4 @@
 const Baseplayer = require('./baseplayer.js')
-const isPi = require('detect-rpi');
 const { execSync } = require('child_process');
 const { spawn } = require('child_process');
 const glob = require('glob');
@@ -319,4 +318,4 @@ class KioskPI extends Kiosk {
 }
 
 module.exports = Kiosk
-if (isPi()) module.exports = KioskPI
+if (Baseplayer.isPi()) module.exports = KioskPI
