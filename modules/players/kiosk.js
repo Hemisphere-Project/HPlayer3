@@ -100,6 +100,7 @@ class Kiosk extends Baseplayer {
     }
 
     setThemeGit(theme_git) {
+        theme_git = theme_git.trim()
         this.setConf('kiosk.theme_git', theme_git)
         this.refreshThemeGit()
     }
