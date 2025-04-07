@@ -367,13 +367,19 @@ $(function() {
     .refresh()
 
   // WIFI OFF
-  new autoField('#wifiOff')
+  // new autoField('#wifiOff')
+  //   .getter(hplayer3.wifi.getTurnoff)
+  //   .setter(hplayer3.wifi.setTurnoff)
+  //   .value( (el)=>{ return el.is(':checked') ? 30 : 0     /* 30 minutes */})
+  //   .refresh()
+
+  // WIFI OFF TIME
+  new autoField('#wifiOffTime')
     .getter(hplayer3.wifi.getTurnoff)
     .setter(hplayer3.wifi.setTurnoff)
-    .value( (el)=>{ return el.is(':checked') ? 30 : 0     /* 30 minutes */})
     .refresh()
 
-
+    
   // RESTART WIFI
   $('.resetwifi').click(function(){
     hplayer3.wifi.reset()
@@ -383,7 +389,7 @@ $(function() {
   // HIDE SECTION
   hplayer3.wifi.isConfigurable()
     .then(data => {
-      if(!data) $('#sectionwifi').hide()
+      // if(!data) $('#sectionwifi').hide()
     })
 
     

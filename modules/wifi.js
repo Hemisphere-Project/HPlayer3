@@ -75,6 +75,9 @@ class WifiPI extends Wifi
         this.checkRate = 5000                           // 5s
         this.discoCounter = 30 * 1000/this.checkRate    // 30s
 
+        // Disable hotspot if -1 timeout
+        if (this.getTurnoff() == -1) this.discoCounter = -1
+
         // Disable already launched Hotspot
         this.hotspotOFF().catch(() => {})
 
