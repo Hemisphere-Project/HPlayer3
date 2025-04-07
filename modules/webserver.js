@@ -39,8 +39,12 @@ class Webserver extends Module {
         res.redirect(307, '/controller');
       });
 
-      // WEBAPPS
-      this.app.use(express.static(this.hp3.files.apps.path))
+      // APPS BUILTIN 
+      this.app.use(express.static(this.hp3.files.apps_builtin.path))
+
+      // APPS EXTERNAL
+      if (this.hp3.files.apps_external)
+        this.app.use(express.static(this.hp3.files.apps_external.path))
 
       // MEDIAS
       if (this.hp3.files.media)

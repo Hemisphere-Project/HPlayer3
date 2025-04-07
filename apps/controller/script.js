@@ -115,8 +115,15 @@ $(function() {
 
   ////////////////// AUTO FIELD: automatted setter / getter with hplayer3 ////////////////////////
 
+  var allFields = {}
+
   function autoField(div)
   {
+    if (allFields[div] !== undefined) return allFields[div]  // INFO: if already defined, return it
+    
+    // register this into allFields
+    allFields[div] = this
+
     this.element = $(div)   // NEEDED: div is the base selector which is watched for change (which triggers the setter)
 
     // PRIVATE
@@ -144,12 +151,12 @@ $(function() {
     // INTERNAL
     this.refresh = function() {                                                                       // NEEDED: call it at least one time to populate field with server value (can't be automated yet)
       this._getter(...this._getter_args).then((data) => {
-        // console.log('getter',  data)
+        console.log('getter',  data)
         this.element.off('change')
         this._update(this.element, data)
         this.element.on('change', ()=>{
             let value = this._value(this.element)
-            // console.log('setter ', this.element, value)
+            console.log('setter ', this.element, value)
             this._setter(...this._setter_args, value).then(()=>{this.refresh()})
         })
       })
@@ -222,28 +229,63 @@ $(function() {
   //////////////// KIOSK CONFIG ////////////////
 
   // THEME LIST
-  hplayer3.files.apps.getTree()
-  .then(data =>
-  {
-    // BUILD LIST
-    $('#themeSelector').empty()
-    data.fileTree.forEach((item, i) => {
-      if((item.type =='folder')&&(item.name!='controller')&&(item.name!='assets')){
-        $('#themeSelector').append('<option value="'+item.name+'" >'+item.name+'</option>')
-      }
-    });
+  function themeSelector() {
+    hplayer3.files.apps_builtin.getTree()
+      .then(data =>
+      {
+        // BUILTIN THEMES LIST
+        $('#themeSelector').empty()
+        data.fileTree.forEach((item, i) => {
+          if((item.type =='folder')&&(item.name!='controller')&&(item.name!='assets')){
+            $('#themeSelector').append('<option value="'+item.name+'" >'+item.name+'</option>')
+          }
+        });
 
-    // THEME SELECTOR
-    new autoField("#themeSelector")
-      .getter(hplayer3.kiosk.getTheme)
-      .setter(hplayer3.kiosk.setTheme)
-      .update( (el, data)=>{
-        el.val(data)
-        $(".themeLink").attr('href', '/'+data)
+        // EXTERNAL THEMES
+        hplayer3.files.apps_external.getTree()
+          .then(data => {
+            console.log('EXTERNAL THEMES', data)
+            data.fileTree.forEach((item, i) => {
+              if (item.type =='folder') 
+                $('#themeSelector').append('<option value="'+item.name+'" >'+item.name+'</option>')
+            })
+          })
+          .catch(data => {
+            console.warn('EXTERNAL THEME: FAIL', data)
+          })
+
+          // THEME SELECTOR
+          .finally(() => {
+            new autoField("#themeSelector")
+              .getter(hplayer3.kiosk.getTheme)
+              .setter(hplayer3.kiosk.setTheme)
+              .update( (el, data)=>{
+                el.val(data)
+                $(".themeLink").attr('href', '/'+data)
+              })
+              .refresh()
+          })
       })
-      .refresh()
-  })
+  }
+  themeSelector()
 
+  // EXTERNAL URL
+  new autoField('#themeGit')
+    .getter(hplayer3.kiosk.getThemeGit)
+    .setter(hplayer3.kiosk.setThemeGit)
+    .update( (el, data)=>{
+      themeSelector()
+      console.log('Theme refreshed')
+    })
+    .refresh()
+
+  $('#themeGitPull').click(()=>{
+    hplayer3.kiosk.refreshThemeGit()
+      .then(()=>{
+        themeSelector()
+        console.log('Theme refreshed')
+      })
+  })
 
   // VIDEO ROTATE
   new autoField('#videorotate')

@@ -2,6 +2,7 @@ const Baseplayer = require('./baseplayer.js')
 const { execSync } = require('child_process');
 const { spawn } = require('child_process');
 const glob = require('glob');
+const fs = require('fs')
 
 class Kiosk extends Baseplayer {
 
@@ -92,6 +93,75 @@ class Kiosk extends Baseplayer {
     {
         // TODO : check if theme is valid !
         if ( this.setConf('kiosk.theme', theme) ) this.restartProcess()
+    }
+
+    getThemeGit() {
+        return this.getConf('kiosk.theme_git')
+    }
+
+    setThemeGit(theme_git) {
+        this.setConf('kiosk.theme_git', theme_git)
+        this.refreshThemeGit()
+    }
+
+    refreshThemeGit() {
+        this.log('Refreshing theme git repository')
+        // theme_git = this.getConf('kiosk.theme_git') 
+        // theme git must be cloned in this.files.apps_external (if not null)
+        // if folder exists, check if it is a git repository and that .git/config url match, 
+        // otherwise remove it and re-clone it
+        // if it matches, do a git pull
+
+        if (!this.hp3.files.apps_external) {
+            this.log('No external apps folder set, please set "path.apps_external" in config')
+            return
+        }
+        
+        let theme_git = this.getConf('kiosk.theme_git')
+        let theme_path = this.hp3.files.apps_external.path
+
+        // If the folder exists, check if it is a git repository, and that .git/config url match
+        if (fs.existsSync(theme_path)) {
+            if (fs.existsSync(theme_path + '/.git')) {
+                // Check if the url matches
+                let config = fs.readFileSync(theme_path + '/.git/config', 'utf8')
+                if (!theme_git || !config.includes(theme_git)) {
+                    this.log('git URL changed, removing theme current theme repository')
+                    execSync('rm -rf ' + theme_path)
+                }
+            }
+            else {
+                // if folder empty: remove it
+                if (fs.readdirSync(theme_path).length == 0) {
+                    this.log('Theme folder is empty, removing it')
+                    execSync('rm -rf ' + theme_path)
+                }
+                else {
+                    this.log('Theme folder '+theme_path+' is not empty and not a git repo, please remove it manually')
+                    return
+                }
+            }
+        }
+
+        // Git set ?
+        if (!theme_git) {
+            this.log('No theme git repository set, please set "kiosk.theme_git" in config')
+            return
+        }
+
+        // Clone the repository
+        if (!fs.existsSync(theme_path)) {
+            this.log('Cloning theme git repository')
+            execSync('git clone ' + theme_git + ' ' + theme_path)
+        }
+
+        // Pull the repository
+        else {
+            this.log('Pulling theme git repository')
+            execSync('cd ' + theme_path + ' && git pull')
+        }
+        this.log('Theme git repository refreshed')
+        
     }
 }
 

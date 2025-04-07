@@ -353,6 +353,14 @@ input[type="file"]{
   margin-bottom: 10px;
 }
 
+/*THEMES*/
+#themeGit{
+  background-color: rgb(40, 40, 40);
+  border: 1px solid white;
+  color: white;
+  
+}
+
 
 
 

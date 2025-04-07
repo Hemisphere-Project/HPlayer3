@@ -3,6 +3,7 @@ const fs = require('fs')
 const { get } = require('http')
 const fspath = require('path')
 const chokidar = require('chokidar')
+const path = require('path')
 
 const ext_images = ['jpg', 'jpeg', 'png', 'gif']
 const ext_videos = ['mp4', 'webm', 'mov', 'ogv', 'mkv']
@@ -65,6 +66,12 @@ class Directory extends Module {
 
         var fileTree = []
         var full_path = fspath.join(this.path, relative_path)
+        
+        // Check if path is valid
+        if (!fs.existsSync(full_path)) {
+            this.log('Invalid path', full_path)
+            return []
+        }
 
         // Read directory content
         //
@@ -193,8 +200,9 @@ class Directory extends Module {
         this.log('Error while saving file: ', error);
       }
     }
-
 }
+
+
 
 class Files extends Module {
   
@@ -209,15 +217,19 @@ class Files extends Module {
   {
     // CONF path
     var confpath = this.getConf('path.conf', __dirname+'/../conf')
-    this.conf = new Directory('conf', confpath)
+    this.conf = new Directory('conf', path.resolve(confpath))
 
-    // APPS path
-    var appspath = this.getConf('path.apps', __dirname+'/../apps')
-    this.apps = new Directory('apps', appspath)
+    // BUILTIN APPS path
+    this.apps_builtin = new Directory('apps_builtin', path.join(__dirname, '../apps'))
+
+    // EXTERNAL APPS path
+    this.apps_external = null
+    var appspath = this.getConf('path.apps_external', null)
+    if (appspath != null) this.apps_external = new Directory('apps_external', path.resolve(appspath))
 
     // MEDIA path
     var mediapath = this.getConf('path.media', __dirname+'/../media')
-    this.media = new Directory('media', mediapath)
+    this.media = new Directory('media', path.resolve(mediapath))
   }
 
 }

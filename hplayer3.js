@@ -5,15 +5,16 @@ var System = require('./modules/system.js')
 var config
 if (System.isPi()) 
     config = {
-        'path.conf':  '/data/conf',
-        'path.media': '/data/media',
-
-        'webserver.port':   80,
-        'webserver.tmp':    '/data/var/tmp'
+        'path.conf':            '/data/conf',
+        'path.media':           '/data/media',
+        'path.apps_external':   '/data/apps',
+        'webserver.port':       80,
+        'webserver.tmp':        '/data/var/tmp'
     }
 else 
     config = {
-        'webserver.port':   5000
+        'webserver.port':       5000,
+        'path.apps_external':   '/data/apps'      // path to clone external apps
     }
 
 // SYSTEM
