@@ -182,18 +182,7 @@ class KioskPI extends Kiosk {
         catch (error) {
             //this.log(error.status)
         }
-
-        // Stop Weston/Cog/Kiosk
-        // try {
-        //     execSync('pkill weston')
-        //     execSync('pkill cog')
-        //     execSync('pkill kiosk')
-        //     this.log('kiosk killed')
-        // }
-        // catch (error) {
-        //     //this.log(error.status)
-        // }
-
+        
         // Stop startX
         try {
             execSync('pkill Xorg')
@@ -240,6 +229,11 @@ class KioskPI extends Kiosk {
                     this.startProcess()
                 }
             });
+
+            this.kioskprocess.on('error', (error) => {
+                this.log('kioskprocess error: ' + error);
+                this.kioskprocess = null
+            })
 
             // LOGS
             this.kioskprocess.stdout.setEncoding('utf8');
