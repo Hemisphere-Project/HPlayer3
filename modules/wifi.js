@@ -92,12 +92,12 @@ class WifiPI extends Wifi
                 .deviceStatus()
                 .then((result) => {
                     for (var status of result) {
-                        if (status['device'] == "wint") 
+                        if (status['device'] == "wlan0") 
                         {
                             // State changed
                             if (!this.status || this.status['state'] != status['state'] || this.status['connection'] != status['connection']) {
                                 var s =  status['state'].split(' ')[0]
-                                this.log('wint status:', s, status['connection'])
+                                this.log('wlan0 status:', s, status['connection'])
                                 this.emit(s, status['connection'])
                             }
                             
@@ -107,7 +107,7 @@ class WifiPI extends Wifi
                                 // Previous state was connected OR maxretry reached => create hotspot
                                 if (this.discoCounter >= 0 && ((this.status && this.status['state'] == 'connected') || this.discoCounter-- == 0)) 
                                 {
-                                    this.log('wint disconnected -> enabling hotspot')
+                                    this.log('wlan0 disconnected -> enabling hotspot')
                                     this.hotspotON()
                                         .catch(() => {
                                             this.log('hotspot creation failed')
@@ -115,7 +115,7 @@ class WifiPI extends Wifi
                                     this.discoCounter = -1 // disable disco counter
                                 }
                                 else if (this.discoCounter >= 0 || (this.status && this.status['state'] != status['state'])) 
-                                    this.log('wint disconnected, waiting for connection..', this.discoCounter)
+                                    this.log('wlan0 disconnected, waiting for connection..', this.discoCounter)
                             }
                             
                             // Save status
@@ -131,14 +131,14 @@ class WifiPI extends Wifi
 
     }
 
-    // create AP based on wint-hotspot
+    // create AP based on wlan0-hotspot
     hotspotON()
     {
         return new Promise((resolve, reject) => 
         {
-            this.log('creating wint-hotspot Access point..')
+            this.log('creating wlan0-hotspot Access point..')
             this.network
-                .connectionUp("wint-hotspot")
+                .connectionUp("wlan0-hotspot")
                 .then((data) => {
                     this.log('Access Point created:', this.getName())
                     
@@ -161,7 +161,7 @@ class WifiPI extends Wifi
         {
             this.log('turning off hotspot')
             this.network
-                .connectionDown("wint-hotspot")
+                .connectionDown("wlan0-hotspot")
                 .then((data) => {
                     this.log('hotspot turned off')
                     resolve()
@@ -196,10 +196,10 @@ class WifiPI extends Wifi
     setName(name) {
         if (!name) return false
         execSync('rw')
-        execSync(`sed -i -E 's/^ssid=.*/ssid='${name}'/' /boot/wifi/wint-hotspot.nmconnection`)
+        execSync(`sed -i -E 's/^ssid=.*/ssid='${name}'/' /etc/NetworkManager/system-connections/wlan0-hotspot.nmconnection`)
         execSync(`hostnamectl set-hostname ${name}`)
         execSync('systemctl restart avahi-daemon')
-        execSync('setnet')
+        execSync('ro')
 
         this.log("hotspot ssid updated to", name)
         this.log("hostname changed to ", this.getName())
@@ -207,15 +207,15 @@ class WifiPI extends Wifi
     }
 
     getPass() {
-        var pass = execSync("sed -n -e '/^psk=/p' /boot/wifi/wint-hotspot.nmconnection").toString().split('psk=')
+        var pass = execSync("sed -n -e '/^psk=/p' /etc/NetworkManager/system-connections/wlan0-hotspot.nmconnection").toString().split('psk=')
         if (pass.length > 1) return pass[1]
         else return ''
     }
 
     setPass(pass) {
         execSync('rw')
-        execSync(`sed -i -E 's/^psk=.*/psk='${pass}'/' /boot/wifi/wint-hotspot.nmconnection`)
-        execSync('setnet')
+        execSync(`sed -i -E 's/^psk=.*/psk='${pass}'/' /etc/NetworkManager/system-connections/wlan0-hotspot.nmconnection`)
+        execSync('ro')
         this.log("hotspot password updated to", this.getPass())
         return true
     }
@@ -230,7 +230,7 @@ class WifiPI extends Wifi
         this.log('set turnoff', timeout)
 
         if (this.getTurnoff() == -1) return this.start() 
-        else if (this.status['connection'] == "wint-hotspot") this.watchTurnoff()
+        else if (this.status['connection'] == "wlan0-hotspot") this.watchTurnoff()
         else if (timeout >= 0) this.discoCounter = 1
 
         return false

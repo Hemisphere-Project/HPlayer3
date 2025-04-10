@@ -96,6 +96,7 @@ class Kiosk extends Baseplayer {
     }
 
     getThemeGit() {
+        console.log('getThemeGit', this.getConf('kiosk.theme_git'))
         return this.getConf('kiosk.theme_git')
     }
 
@@ -158,6 +159,8 @@ class Kiosk extends Baseplayer {
 
         // Pull the repository
         else {
+            this.log('Updating clock')
+            execSync('/opt/Pi-tools/datesync')
             this.log('Pulling theme git repository')
             execSync('cd ' + theme_path + ' && git pull')
         }

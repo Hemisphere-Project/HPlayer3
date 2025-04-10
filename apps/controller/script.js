@@ -275,7 +275,7 @@ $(function() {
     .setter(hplayer3.kiosk.setThemeGit)
     .update( (el, data)=>{
       themeSelector()
-      console.log('Theme refreshed')
+      el.val(data)
     })
     .refresh()
 
@@ -283,7 +283,6 @@ $(function() {
     hplayer3.kiosk.refreshThemeGit()
       .then(()=>{
         themeSelector()
-        console.log('Theme refreshed')
       })
   })
 
