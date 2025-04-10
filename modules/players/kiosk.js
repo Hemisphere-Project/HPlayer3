@@ -159,9 +159,9 @@ class Kiosk extends Baseplayer {
 
         // Pull the repository
         else {
-            this.log('Updating clock')
+            this.log(' - Updating clock')
             execSync('/opt/Pi-tools/datesync')
-            this.log('Pulling theme git repository')
+            this.log(' - Pulling theme git repository')
             execSync('cd ' + theme_path + ' && git pull')
         }
         this.log('Theme git repository refreshed')
