@@ -73,6 +73,10 @@ class AudioPI extends Audio {
         let jackCtrl = String(execSync(`amixer -c`+String(this.jackCard)+` scontrols`)).trim().split("'")[1]
         if (jackCtrl != '') this.jackCtrlName = jackCtrl
 
+        // alsa mixer min/max volume %
+        this.minVol = 50
+        this.maxVol = 100
+
         super.init()
     }
 
@@ -117,6 +121,7 @@ class AudioPI extends Audio {
             this.log('get jack volume')
             vol = execSync(`amixer -c`+String(this.jackCard)+` get '`+String(this.jackCtrlName)+`',0  |grep % |awk '{print $4}'`).toString()
             vol = parseInt(vol.substring(1, vol.length-3))
+            if (vol > 0) vol = Math.round(100 * (vol - this.minVol) / (this.maxVol - this.minVol))
             this.log('volume is', vol)
         }
         return vol
@@ -126,8 +131,11 @@ class AudioPI extends Audio {
         if (vol > 100) vol = 100
         if (vol < 0) vol = 0
         
-        if (this.getOutput() == 'jack')
-            execSync(`amixer -c`+String(this.jackCard)+` set '`+String(this.jackCtrlName)+`',0 ${vol}%`)
+        if (this.getOutput() == 'jack') {
+            let v = 0
+            if (vol > 0) v = Math.round(this.minVol + (vol * (this.maxVol-this.minVol) / 100))
+            execSync(`amixer -c`+String(this.jackCard)+` set '`+String(this.jackCtrlName)+`',0 ${v}%`)
+        }
 
         vol = this.getVolume()
         this.setConf('audio.volume', vol)

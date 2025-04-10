@@ -96,6 +96,7 @@ class Kiosk extends Baseplayer {
     }
 
     getThemeGit() {
+        console.log('getThemeGit', this.getConf('kiosk.theme_git'))
         return this.getConf('kiosk.theme_git')
     }
 
@@ -158,6 +159,8 @@ class Kiosk extends Baseplayer {
 
         // Pull the repository
         else {
+            this.log('Updating clock')
+            execSync('/opt/Pi-tools/datesync')
             this.log('Pulling theme git repository')
             execSync('cd ' + theme_path + ' && git pull')
         }
@@ -182,18 +185,7 @@ class KioskPI extends Kiosk {
         catch (error) {
             //this.log(error.status)
         }
-
-        // Stop Weston/Cog/Kiosk
-        // try {
-        //     execSync('pkill weston')
-        //     execSync('pkill cog')
-        //     execSync('pkill kiosk')
-        //     this.log('kiosk killed')
-        // }
-        // catch (error) {
-        //     //this.log(error.status)
-        // }
-
+        
         // Stop startX
         try {
             execSync('pkill Xorg')
@@ -240,6 +232,11 @@ class KioskPI extends Kiosk {
                     this.startProcess()
                 }
             });
+
+            this.kioskprocess.on('error', (error) => {
+                this.log('kioskprocess error: ' + error);
+                this.kioskprocess = null
+            })
 
             // LOGS
             this.kioskprocess.stdout.setEncoding('utf8');

@@ -109,6 +109,9 @@ class WifiPI extends Wifi
                                 {
                                     this.log('wlan0 disconnected -> enabling hotspot')
                                     this.hotspotON()
+                                        .catch(() => {
+                                            this.log('hotspot creation failed')
+                                        })
                                     this.discoCounter = -1 // disable disco counter
                                 }
                                 else if (this.discoCounter >= 0 || (this.status && this.status['state'] != status['state'])) 
@@ -174,8 +177,9 @@ class WifiPI extends Wifi
     watchTurnoff()
     {
         if (this.turnoffWatcher) clearTimeout(this.turnoffWatcher)
-
-        if (this.getTurnoff() == 0) return
+        
+        
+        if (this.getTurnoff() <= 0) return
 
         this.turnoffWatcher = setTimeout(() => {
             this.log('turning off hotspot')
@@ -225,8 +229,9 @@ class WifiPI extends Wifi
         this.setConf('wifi.off', timeout)
         this.log('set turnoff', timeout)
 
-        if (this.status['connection'] == "wlan0-hotspot")
-            this.watchTurnoff()
+        if (this.getTurnoff() == -1) return this.start() 
+        else if (this.status['connection'] == "wlan0-hotspot") this.watchTurnoff()
+        else if (timeout >= 0) this.discoCounter = 1
 
         return false
     }
