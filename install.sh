@@ -30,7 +30,7 @@ elif [[ $(command -v pacman) ]]; then
     pacman -S llvm-libs --noconfirm
 
     # PIGPIO
-    pikaur -Sy --noconfirm pigpio
+    yay -S --noconfirm pigpio
 
 ## Plateform not detected ...
 else
