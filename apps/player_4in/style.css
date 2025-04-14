@@ -11,30 +11,6 @@ html {
   display: none;
 }
 
-/*FONTS*/
-@font-face {
-    font-family: 'Heimat-Stencil-SemiBold';
-    src: url('fonts/Heimat-Stencil-SemiBold.otf');
-}
-@font-face {
-    font-family: 'MinionPro-Regular';
-    src: url('fonts/MinionPro-Regular.otf');
-}
-@font-face {
-    font-family: 'Akkurat';
-    src: url('fonts/Akkurat.ttf');
-}
-
-/*TYPO*/
-*{
-  font-family: 'Akkurat';
-  font-size: 24px;
-}
-.title{
-  font-family: 'Heimat-Stencil-SemiBold';
-  font-size: 28px;
-}
-
 
 /* PAGES */
 .pages{
@@ -87,4 +63,23 @@ html {
   visibility: visible;
   opacity: 1;
   transition: opacity 0.5s linear;
+}
+
+/* CONTROLS*/
+#controls{
+  display: none;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(20,20,20,0.5);
+  border: 1px solid rgba(255,255,255,0.5);
+  color: white;
+}
+
+#controls .btn{
+  border: rgba(212, 212, 212, 0.5) solid 1px;
+  color: white;
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
 }

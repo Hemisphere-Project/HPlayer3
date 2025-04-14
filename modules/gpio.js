@@ -12,6 +12,16 @@ class Gpio extends Module{
     init() {
         this.log("Can't set GPIO on this machine...")
     }
+
+    setInput(Tnum, callback, pullUpDown)
+    {
+        this.log('setInput = Not implemented', Tnum, callback, pullUpDown)
+    }
+
+    setOutput(Tnum, state)
+    {
+        this.log('setOutput = Not implemented', Tnum, state)
+    }
     
 }
 
@@ -40,6 +50,15 @@ class GpioPI extends Gpio {
         } catch (e) {
             this.log('ERROR loading '+path+'..', e)
         }
+
+        // Bind external GPIO events
+        this.hp3.events.on('gpio.setInput', (pin, callback, pullUpDown) => {
+            this.setInput(pin, callback, pullUpDown)
+        })
+        this.hp3.events.on('gpio.setOutput', (pin, state) => {
+            this.setOutput(pin, state)
+        })
+
     }
 
     setInput(Tnum, callback, pullUpDown) 
@@ -70,6 +89,7 @@ class GpioPI extends Gpio {
                 }
             }
         })
+        this.log('GPIO', Tnum, 'input', pullUpDown)
     }
 
     setOutput(Tnum, state) 
@@ -84,7 +104,7 @@ class GpioPI extends Gpio {
 
         if (!this.gpio[Tnum]) this.gpio[Tnum] = new this.PIGPIO(pin, { mode: this.PIGPIO.OUTPUT })
         this.gpio[Tnum].digitalWrite(state)
-        this.log('GPIO', Tnum, state)
+        this.log('GPIO', Tnum, 'output', state)
     }
 
 }

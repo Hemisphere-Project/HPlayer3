@@ -96,7 +96,6 @@ class Kiosk extends Baseplayer {
     }
 
     getThemeGit() {
-        console.log('getThemeGit', this.getConf('kiosk.theme_git'))
         return this.getConf('kiosk.theme_git')
     }
 

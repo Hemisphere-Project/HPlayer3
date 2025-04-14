@@ -1,0 +1,85 @@
+html {
+  touch-action:none;
+}
+
+/*HIDE SCROLLBAR*/
+*{
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* PAGES */
+.pages{
+  position: absolute;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  background-color: black;
+  overflow-y: hidden;
+}
+
+/* PAGE GRID */
+#page_grid{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: scroll;
+  flex-wrap: wrap;
+}
+
+#page_grid .mediagrid .item{
+  background-color: rgb(216,97,99);
+}
+
+
+/* PAGE PLAYER */
+#page_video{
+  position:absolute;
+  width: 100%;
+  height: 100%;
+}
+
+/* PAGE BLACK */
+#page_black{
+  color:white;
+  z-index:100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* PAGES ANIMATIONS */
+.fadeout{
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.5s, opacity 0.5s linear;
+}
+.fadein{
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.5s linear;
+}
+
+/* CONTROLS*/
+#controls{
+  display: none;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(20,20,20,0.5);
+  border: 1px solid rgba(255,255,255,0.5);
+  color: white;
+}
+
+#controls .btn{
+  border: rgba(212, 212, 212, 0.5) solid 1px;
+  color: white;
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+}

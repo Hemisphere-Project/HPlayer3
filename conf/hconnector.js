@@ -1,5 +1,11 @@
 // PINOUT = "T1": 5, "T2": 6, "T3": 13, "T4": 19,
 
+/* NOTES:
+this SCENARIO is intended for MPV use,
+in Kiosk mode, everything can be handled in client Theme
+see player_4in / ... to get usage exemple
+*/
+
 // HCONNECTOR v1 => 3x inputs
 /*
 module.exports = (hp3) => 
@@ -22,7 +28,9 @@ module.exports = (hp3) =>
 }
 */
 
+
 // HCONNECTOR v2 => 2x inputs // 2x outputs
+/*
 module.exports = (hp3) => 
 {
   // Initial state
@@ -48,4 +56,4 @@ module.exports = (hp3) =>
     hp3.gpio.setOutput('T3', 0)
     hp3.gpio.setOutput('T4', 0)
   })
-}
+}*/
