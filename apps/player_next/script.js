@@ -99,8 +99,11 @@ $(function()
   //////////////// STANDBY VIDEO ////////////////
   //
   player.on('ended', () => {
-    if (playState) playList(playlistIndex+1)
-    else playStandby(standbyIndex+1)
+    if (playState) {
+      if (playlistIndex+1 < playlist.length) playList(playlistIndex+1) // playlist next
+      else playStandby(0) // playlist done
+    }
+    else playStandby(standbyIndex+1) // standbylist next
   })
 
   ////////////// SHOW CONTROLS ON ctrl-c ///////////
