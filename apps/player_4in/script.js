@@ -32,7 +32,6 @@ $(function()
   hplayer3.gpio.setInput('T1')
   hplayer3.gpio.setInput('T2') 
   hplayer3.gpio.setInput('T3')
-  hplayer3.gpio.setInput('T4')
 
   hplayer3.on('gpio.state', (pinName, value) => 
   {

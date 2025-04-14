@@ -67,7 +67,6 @@ $(function()
   hplayer3.gpio.setInput('T1')
   hplayer3.gpio.setInput('T2') 
   hplayer3.gpio.setInput('T3')
-  hplayer3.gpio.setInput('T4')
 
   hplayer3.on('gpio.state', (pinName, value) => 
   {
@@ -82,12 +81,8 @@ $(function()
     else if (pinName == 'T2') 
       playList(playlistIndex+1)
     
-    // T3 - PREV
-    if (pinName == 'T3') 
-      playList(playlistIndex-1)
-
-    // T4 - STOP / STANDBY
-    else if (pinName == 'T4') 
+    // T3 - STOP / STANDBY
+    else if (pinName == 'T3') 
       playStandby(0)
 
   })
