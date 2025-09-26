@@ -8,18 +8,26 @@ $( document ).ready(function()
     var player = hplayer3.videoPlayer( "#videoplayer", { closer: false, scrollbar: false, loop: true })
 
     /////////////// MEDIA LIST ///////////////
-    let video
+    let videolist = []
+    let videoindex = -1
+
     hplayer3.files.media.getTree()
         .then( data => {
             console.log(data)
 
-            video = data.fileTree.filter((item) => (item.type === 'video') || (item.type === 'audio'))[0]
-            player.play('/media'+video.path)
+            videolist = data.fileTree.filter((item) => (item.type === 'video') || (item.type === 'audio'))
+            if (videolist.length > 0) {
+                console.log(videolist)
+                videoindex = 0
+                player.play('/media'+videolist[0].path)
+            }
         })
     
     // LOOP
     player.on('ended',() => {
-        player.play('/media'+video.path)
+        videoindex++
+        if (videoindex >= videolist.length) videoindex = 0
+        player.play('/media'+videolist[videoindex].path)
     });
 
 });
